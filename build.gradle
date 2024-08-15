@@ -31,7 +31,12 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-web-services')
     developmentOnly('org.springframework.boot:spring-boot-devtools')
     testImplementation('org.springframework.boot:spring-boot-starter-test')
-    runtimeOnly ('com.h2database:h2')
+    runtimeOnly ('com.h2database:h2')   //h2 test용 의존추가
+
+
+    implementation ('org.springframework.boot:spring-boot-starter-oauth2-client')  //google-login 의존성 추가 #2
+    implementation ('org.projectlombok:lombok')
+
 }
 
 tasks.withType(Test) {

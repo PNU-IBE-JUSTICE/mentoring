@@ -12,6 +12,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
 import java.util.Set;
+
+import lombok.Builder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -204,4 +206,21 @@ public class User {
         this.lastUpdated = lastUpdated;
     }
 
+    public User update(String name, String email) {
+        this.name = name;
+        this.email = email;
+
+        return this;
+    }
+
+    public String getRoleKey() {
+        return this.role.getKey();
+    }
+
+    @Builder
+    public User(String name, String email, Role role) {
+        setName(name);
+        this.email = email;
+        this.role = role;
+    }
 }

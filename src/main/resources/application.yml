@@ -10,6 +10,11 @@ spring:
 #      maximum-pool-size: 10
 #
 
+
+#google login oauth profiles 설정_ #1
+  profiles:
+    include: oauth
+
   h2:
     console:
       enabled: true
