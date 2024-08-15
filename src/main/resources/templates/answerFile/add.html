@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title>[[#{answerFile.add.headline}]]</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 class="flex-grow-1">[[#{answerFile.add.headline}]]</h1>
+                <div>
+                    <a th:href="@{/answerFiles}" class="btn btn-secondary">[[#{answerFile.add.back}]]</a>
+                </div>
+            </div>
+            <div th:replace="~{fragments/forms::globalErrors('answerFile')}" />
+            <form th:action="${requestUri}" method="post">
+                <div th:replace="~{fragments/forms::inputRow(object='answerFile', field='fileSrc')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='answerFile', field='type')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='answerFile', field='userSeqId', type='number')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='answerFile', field='answer', type='select')}" />
+                <input type="submit" th:value="#{answerFile.add.headline}" class="btn btn-primary mt-4" />
+            </form>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title>[[#{notice.edit.headline}]]</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 class="flex-grow-1">[[#{notice.edit.headline}]]</h1>
+                <div>
+                    <a th:href="@{/notices}" class="btn btn-secondary">[[#{notice.edit.back}]]</a>
+                </div>
+            </div>
+            <div th:replace="~{fragments/forms::globalErrors('notice')}" />
+            <form th:action="${requestUri}" method="post">
+                <div th:replace="~{fragments/forms::inputRow(object='notice', field='seqId', disabled=true, type='number')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='notice', field='title', required=true)}" />
+                <div th:replace="~{fragments/forms::inputRow(object='notice', field='content', required=true, type='textarea')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='notice', field='isPopup', type='checkbox')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='notice', field='isMust', type='checkbox')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='notice', field='users', type='select')}" />
+                <input type="submit" th:value="#{notice.edit.headline}" class="btn btn-primary mt-4" />
+            </form>
+        </div>
+    </body>
+</html>

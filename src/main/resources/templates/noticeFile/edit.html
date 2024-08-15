@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+    <head>
+        <title>[[#{noticeFile.edit.headline}]]</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 class="flex-grow-1">[[#{noticeFile.edit.headline}]]</h1>
+                <div>
+                    <a th:href="@{/noticeFiles}" class="btn btn-secondary">[[#{noticeFile.edit.back}]]</a>
+                </div>
+            </div>
+            <div th:replace="~{fragments/forms::globalErrors('noticeFile')}" />
+            <form th:action="${requestUri}" method="post">
+                <div th:replace="~{fragments/forms::inputRow(object='noticeFile', field='seqId', disabled=true, type='number')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='noticeFile', field='fileSrc')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='noticeFile', field='type')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='noticeFile', field='userSeqId', type='number')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='noticeFile', field='notice', type='select')}" />
+                <input type="submit" th:value="#{noticeFile.edit.headline}" class="btn btn-primary mt-4" />
+            </form>
+        </div>
+    </body>
+</html>

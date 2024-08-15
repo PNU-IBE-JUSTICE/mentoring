@@ -1,0 +1,39 @@
+plugins {
+    id 'org.springframework.boot' version '3.3.2'
+    id 'io.spring.dependency-management' version '1.1.6'
+    id 'java'
+}
+
+group = 'pnu.ibe.justice'
+version = '0.0.1-SNAPSHOT'
+
+java.sourceCompatibility = '21'
+
+bootRun {
+    environment SPRING_PROFILES_ACTIVE: environment.SPRING_PROFILES_ACTIVE ?: 'local'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation('org.springframework.boot:spring-boot-starter-validation')
+    implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+    runtimeOnly('com.mysql:mysql-connector-j')
+    implementation('io.github.wimdeblauwe:error-handling-spring-boot-starter:4.3.0')
+    implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
+    implementation('nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect')
+    implementation('org.webjars:bootstrap:5.3.3')
+    implementation('org.webjars.npm:htmx.org:1.9.12')
+    implementation('org.webjars.npm:flatpickr:4.6.13')
+    implementation('org.springframework.boot:spring-boot-starter-web-services')
+    developmentOnly('org.springframework.boot:spring-boot-devtools')
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+    runtimeOnly ('com.h2database:h2')
+}
+
+tasks.withType(Test) {
+    useJUnitPlatform()
+}
