@@ -2,9 +2,9 @@ package pnu.ibe.justice.mentoring.config.auth;
 
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.security.core.userdetails.User;
+import lombok.Setter;
 import pnu.ibe.justice.mentoring.model.Role;
-
+import pnu.ibe.justice.mentoring.domain.User;
 import java.util.Map;
 
 @Getter
@@ -49,10 +49,9 @@ public class OAuthAttributes {
 
     // User 엔티티 생성
     public User toEntity() {
-        return User.builder()
-                .name(name)
-                .email(email)
-                .role(Role.GUEST)
-                .build();
+        User user = new User();
+        user.setEmail(email);
+        user.setRole(Role.GUEST);
+        return user;
     }
 }
