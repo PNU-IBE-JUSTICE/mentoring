@@ -37,3 +37,5 @@ bin/
 /dist/
 /nbdist/
 /.nb-gradle/
+
+settings.gradle
