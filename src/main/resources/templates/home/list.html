@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+        <div th:if="${userName}">
+            <a th:href="@{/logout}" class="btn btn-info active" role="button">로그아웃</a>
+            <label th:text="${userName} + 님"></label>
+        </div>
+        <div th:if="!${userName}">
+            <a th:href="@{/oauth2/authorization/google}" class="btn btn-primary me-2 active" role="button">Google Login</a>
+        </div>
+    </body>
+</html>

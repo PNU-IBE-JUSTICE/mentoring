@@ -12,6 +12,9 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
 import java.util.Set;
+
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -21,6 +24,8 @@ import pnu.ibe.justice.mentoring.model.Role;
 @Entity
 @Table(name = "Users")
 @EntityListeners(AuditingEntityListener.class)
+@Getter
+@Setter
 public class User {
 
     @Id
@@ -46,8 +51,9 @@ public class User {
     @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false, name = "\"role\"")
+
     @Enumerated(EnumType.STRING)
+    @NotNull
     private Role role;
 
     @Column
@@ -204,4 +210,14 @@ public class User {
         this.lastUpdated = lastUpdated;
     }
 
+    public User update(String name, String email) {
+        this.name = name;
+        this.email = email;
+
+        return this;
+    }
+
+    public String getRoleKey() {
+        return this.role.getKey();
+    }
 }
