@@ -35,7 +35,9 @@ dependencies {
 
 
     implementation ('org.springframework.boot:spring-boot-starter-oauth2-client')  //google-login 의존성 추가 #2
-    implementation ('org.projectlombok:lombok')
+    //implementation ('org.projectlombok:lombok')
+    compileOnly ('org.projectlombok:lombok')
+    annotationProcessor ('org.projectlombok:lombok')
 
 }
 
