@@ -47,10 +47,15 @@ public class QuestionService {
                 .orElseThrow(NotFoundException::new);
     }
 
-    public Integer create(final QuestionDTO questionDTO) {
-        final Question question = new Question();
-        mapToEntity(questionDTO, question);
-        return questionRepository.save(question).getSeqId();
+    public Question create(QuestionDTO questionDTO) {
+        Question question = new Question();
+        // questionDTO의 내용을 question 엔티티로 변환하는 로직 (예: 제목, 내용 설정)
+        question.setTitle(questionDTO.getTitle());
+        question.setContent(questionDTO.getContent());
+        // 기타 필요한 설정들...
+
+        questionRepository.save(question);  // 엔티티 저장
+        return question;  // 저장된 Question 객체 반환
     }
 
     public void update(final Integer seqId, final QuestionDTO questionDTO) {

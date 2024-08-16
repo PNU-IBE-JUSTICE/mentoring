@@ -1,8 +1,18 @@
 package pnu.ibe.justice.mentoring.service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import pnu.ibe.justice.mentoring.domain.Question;
 import pnu.ibe.justice.mentoring.domain.QuestionFile;
 import pnu.ibe.justice.mentoring.model.QuestionFileDTO;
@@ -14,13 +24,57 @@ import pnu.ibe.justice.mentoring.util.NotFoundException;
 @Service
 public class QuestionFileService {
 
+    @Autowired
     private final QuestionFileRepository questionFileRepository;
+
+    @Autowired
     private final QuestionRepository questionRepository;
+
+    @Value("${file.upload-dir}")
+    private String uploadDir;
+
+    @Value("${file.web-dir}")
+    private String webDir;
 
     public QuestionFileService(final QuestionFileRepository questionFileRepository,
             final QuestionRepository questionRepository) {
         this.questionFileRepository = questionFileRepository;
         this.questionRepository = questionRepository;
+    }
+
+    public void saveFile(QuestionFileDTO questionFileDTO, MultipartFile file) throws IOException {
+        // 날짜 기반 폴더 생성 (예: 20240815)
+        String datePath = LocalDate.now().toString().replace("-", "");
+        Path targetLocation = Paths.get(uploadDir, datePath);
+
+        // 폴더가 존재하지 않으면 생성
+        if (!Files.exists(targetLocation)) {
+            Files.createDirectories(targetLocation);
+        }
+
+        String fileName = file.getOriginalFilename();
+        Path filePath = targetLocation.resolve(fileName);
+
+        // 파일 저장
+        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+        // 웹 경로 설정
+        String fileWebPath = Paths.get(webDir, datePath, fileName).toString();
+
+        // DTO에 경로 설정
+        questionFileDTO.setFileSrc(fileWebPath);
+
+        // 데이터베이스에 저장 로직
+        // questionFileRepository.save(...);
+    }
+
+    public void save(QuestionFileDTO questionFileDTO) throws IOException {
+        QuestionFile questionFile = new QuestionFile();
+        questionFile.setFileSrc(questionFileDTO.getFileSrc());
+        questionFile.setType(questionFileDTO.getType());
+        questionFile.setData(questionFileDTO.getData());  // 파일의 바이너리 데이터를 저장
+
+        questionFileRepository.save(questionFile);
     }
 
     public List<QuestionFileDTO> findAll() {

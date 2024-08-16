@@ -35,6 +35,13 @@ spring:
       date: yyyy-MM-dd
       date-time: yyyy-MM-dd'T'HH:mm:ss
       time: HH:mm:ss
+  servlet:
+    multipart:
+      max-file-size: 10MB  # 파일 하나의 최대 크기
+      max-request-size: 10MB  # 전체 요청의 최대 크기
+file:
+  upload-dir: \Users\\User\\workspace\\ch01\\mentoring\\uploads  # 서버에서 파일이 저장되는 기본 경로
+  web-dir: /web/uploads  # 웹에서 접근 가능한 기본 경로
 error:
   handling:
     http-status-in-json-response: true

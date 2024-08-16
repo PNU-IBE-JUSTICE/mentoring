@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pnu.ibe.justice.mentoring.domain.Question;
 import pnu.ibe.justice.mentoring.model.QuestionDTO;
 import pnu.ibe.justice.mentoring.service.QuestionService;
 import pnu.ibe.justice.mentoring.util.ReferencedException;
@@ -41,11 +42,17 @@ public class QuestionResource {
     }
 
     @PostMapping
-    public ResponseEntity<Integer> createQuestion(
-            @RequestBody @Valid final QuestionDTO questionDTO) {
-        final Integer createdSeqId = questionService.create(questionDTO);
+    public ResponseEntity<Integer> createQuestion(@RequestBody QuestionDTO questionDTO) {
+        // create 메서드 호출하여 Question 객체 반환
+        Question createdQuestion = questionService.create(questionDTO);
+
+        // 생성된 Question 객체에서 ID 추출
+        Integer createdSeqId = createdQuestion.getSeqId();
+
+        // 추출된 ID를 사용하여 ResponseEntity 생성
         return new ResponseEntity<>(createdSeqId, HttpStatus.CREATED);
     }
+
 
     @PutMapping("/{seqId}")
     public ResponseEntity<Integer> updateQuestion(@PathVariable(name = "seqId") final Integer seqId,

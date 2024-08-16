@@ -1,31 +1,49 @@
 package pnu.ibe.justice.mentoring.controller;
 
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pnu.ibe.justice.mentoring.domain.Question;
+import pnu.ibe.justice.mentoring.domain.QuestionFile;
 import pnu.ibe.justice.mentoring.domain.User;
 import pnu.ibe.justice.mentoring.model.QuestionDTO;
+import pnu.ibe.justice.mentoring.model.QuestionFileDTO;
+import pnu.ibe.justice.mentoring.repos.QuestionFileRepository;
 import pnu.ibe.justice.mentoring.repos.UserRepository;
+import pnu.ibe.justice.mentoring.service.QuestionFileService;
 import pnu.ibe.justice.mentoring.service.QuestionService;
 import pnu.ibe.justice.mentoring.util.CustomCollectors;
 import pnu.ibe.justice.mentoring.util.ReferencedWarning;
 import pnu.ibe.justice.mentoring.util.WebUtils;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
 
+    @Autowired
     private final QuestionService questionService;
+
+    @Autowired
     private final UserRepository userRepository;
+
+    @Autowired
+    private QuestionFileRepository questionFileRepository;
+
+    @Autowired
+    private QuestionFileService questionFileService;
 
     public QuestionController(final QuestionService questionService,
             final UserRepository userRepository) {
@@ -53,12 +71,30 @@ public class QuestionController {
 
     @PostMapping("/add")
     public String add(@ModelAttribute("question") @Valid final QuestionDTO questionDTO,
-            final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
+                      @RequestParam("file") MultipartFile file,
+                      final BindingResult bindingResult,
+                      final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return "question/add";
         }
-        questionService.create(questionDTO);
-        redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("question.create.success"));
+
+        try {
+            Question createdQuestion = questionService.create(questionDTO);
+
+            if (!file.isEmpty()) {
+                QuestionFileDTO questionFileDTO = new QuestionFileDTO();
+                questionFileService.saveFile(questionFileDTO, file);
+
+                questionFileDTO.setQuestion(createdQuestion.getSeqId());
+                questionFileService.save(questionFileDTO);
+            }
+
+            redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("question.create.success"));
+        } catch (IOException e) {
+            redirectAttributes.addFlashAttribute(WebUtils.MSG_ERROR, "File upload failed: " + e.getMessage());
+            return "question/add";
+        }
+
         return "redirect:/questions";
     }
 
