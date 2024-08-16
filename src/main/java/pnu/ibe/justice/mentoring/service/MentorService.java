@@ -1,8 +1,14 @@
 package pnu.ibe.justice.mentoring.service;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import pnu.ibe.justice.mentoring.domain.Mentor;
 import pnu.ibe.justice.mentoring.domain.MentorFile;
 import pnu.ibe.justice.mentoring.domain.User;
@@ -20,6 +26,8 @@ public class MentorService {
     private final MentorRepository mentorRepository;
     private final UserRepository userRepository;
     private final MentorFileRepository mentorFileRepository;
+//    private String uploadFolder = "/Users/munkyeong/Desktop/mentoring/upload/";
+
 
     public MentorService(final MentorRepository mentorRepository,
             final UserRepository userRepository, final MentorFileRepository mentorFileRepository) {
@@ -33,6 +41,26 @@ public class MentorService {
         return mentors.stream()
                 .map(mentor -> mapToDTO(mentor, new MentorDTO()))
                 .toList();
+    }
+
+    public String saveFile(MultipartFile multipartFile, String uploadFolder){
+        String fileUrl="";
+        String dateFolder = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+        Path folderPath = Paths.get(uploadFolder + dateFolder);
+//        File saveFile = new File(uploadFolder, multipartFile.getOriginalFilename());
+
+        try {
+            Files.createDirectories(folderPath);
+            Path filePath = folderPath.resolve(multipartFile.getOriginalFilename());
+            multipartFile.transferTo(filePath.toFile());
+
+            fileUrl = "/files/" + dateFolder + "/" + multipartFile.getOriginalFilename();
+            System.out.println("File saved at: " + fileUrl);
+//            multipartFile.transferTo(saveFile);
+        }catch(Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return fileUrl;
     }
 
     public MentorDTO get(final Long seqId) {

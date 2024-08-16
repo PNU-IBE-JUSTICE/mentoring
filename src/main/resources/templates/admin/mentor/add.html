@@ -13,16 +13,16 @@
                 </div>
             </div>
             <div th:replace="~{fragments/forms::globalErrors('mentor')}" />
-            <form th:action="${requestUri}" method="post">
+            <form th:action="${requestUri}" method="post" enctype="multipart/form-data">
                 <div th:replace="~{fragments/forms::inputRow(object='mentor', field='title', required=true)}" />
                 <div th:replace="~{fragments/forms::inputRow(object='mentor', field='category', required=true)}" />
                 <div th:replace="~{fragments/forms::inputRow(object='mentor', field='minMent', required=true, type='number')}" />
                 <div th:replace="~{fragments/forms::inputRow(object='mentor', field='maxMent', required=true, type='number')}" />
                 <div th:replace="~{fragments/forms::inputRow(object='mentor', field='content', type='textarea')}" />
                 <div th:replace="~{fragments/forms::inputRow(object='mentor', field='team', required=true)}" />
-                <div th:replace="~{fragments/forms::inputRow(object='mentor', field='mFId', type='number')}" />
                 <div th:replace="~{fragments/forms::inputRow(object='mentor', field='status', type='number')}" />
                 <div th:replace="~{fragments/forms::inputRow(object='mentor', field='users', required=true, type='select')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='mentor', field='file', required=true, type='file')}" />
                 <input type="submit" th:value="#{mentor.add.headline}" class="btn btn-primary mt-4" />
             </form>
         </div>

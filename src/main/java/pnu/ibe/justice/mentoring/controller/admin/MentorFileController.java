@@ -1,7 +1,9 @@
 package pnu.ibe.justice.mentoring.controller.admin;
 
 import jakarta.validation.Valid;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pnu.ibe.justice.mentoring.domain.Mentor;
 import pnu.ibe.justice.mentoring.model.MentorFileDTO;
@@ -39,11 +42,23 @@ public class MentorFileController {
                 .collect(CustomCollectors.toSortedMap(Mentor::getSeqId, Mentor::getTitle)));
     }
 
+    @GetMapping("/{mFId}/download")
+    public String get(@PathVariable Long mFId, Model model) {
+//        MentorFileDTO mentorFile = mentorFileService.downloadFile(mFId);
+//        model.addAttribute("mentorFile", mentorFile);
+        return "mentor/list";
+    }
+
     @GetMapping
     public String list(final Model model) {
         model.addAttribute("mentorFiles", mentorFileService.findAll());
         return "/admin/mentorFile/list";
     }
+
+//    @GetMapping
+//    public String FileDetail(){
+//        return "mentorFile/detail";
+//    }
 
     @GetMapping("/add")
     public String add(@ModelAttribute("mentorFile") final MentorFileDTO mentorFileDTO) {
@@ -52,10 +67,11 @@ public class MentorFileController {
 
     @PostMapping("/add")
     public String add(@ModelAttribute("mentorFile") @Valid final MentorFileDTO mentorFileDTO,
-            final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
+                      final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return "/admin/mentorFile/add";
         }
+
         mentorFileService.create(mentorFileDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("mentorFile.create.success"));
         return "redirect:/admin/mentorFiles";

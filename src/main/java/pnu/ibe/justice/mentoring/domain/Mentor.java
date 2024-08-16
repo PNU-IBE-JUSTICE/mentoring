@@ -47,7 +47,7 @@ public class Mentor {
     private String team;
 
     @Column
-    private Integer mFId;
+    private Long mFId;
 
     @Column
     private Integer status;
@@ -123,11 +123,11 @@ public class Mentor {
         this.team = team;
     }
 
-    public Integer getMFId() {
+    public Long getMFId() {
         return mFId;
     }
 
-    public void setMFId(final Integer mFId) {
+    public void setMFId(final Long mFId) {
         this.mFId = mFId;
     }
 

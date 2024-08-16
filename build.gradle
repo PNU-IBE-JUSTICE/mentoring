@@ -17,6 +17,7 @@ repositories {
     mavenCentral()
 }
 
+
 dependencies {
     implementation('org.springframework.boot:spring-boot-starter-web')
     implementation('org.springframework.boot:spring-boot-starter-validation')
@@ -29,6 +30,8 @@ dependencies {
     implementation('org.webjars.npm:htmx.org:1.9.12')
     implementation('org.webjars.npm:flatpickr:4.6.13')
     implementation('org.springframework.boot:spring-boot-starter-web-services')
+    implementation ('org.projectlombok:lombok')
+    annotationProcessor ('org.projectlombok:lombok')
     developmentOnly('org.springframework.boot:spring-boot-devtools')
     testImplementation('org.springframework.boot:spring-boot-starter-test')
     runtimeOnly ('com.h2database:h2')   //h2 test용 의존추가

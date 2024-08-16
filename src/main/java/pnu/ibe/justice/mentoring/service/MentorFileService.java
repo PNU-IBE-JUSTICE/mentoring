@@ -49,14 +49,19 @@ public class MentorFileService {
         mentorFileRepository.save(mentorFile);
     }
 
+//    public Men downloadFile(long mFid){
+//
+//    }
+
     public void delete(final Long seqId) {
         mentorFileRepository.deleteById(seqId);
     }
 
     private MentorFileDTO mapToDTO(final MentorFile mentorFile, final MentorFileDTO mentorFileDTO) {
-        mentorFileDTO.setSeqId(mentorFile.getSeqId());
+//        mentorFileDTO.setSeqId(mentorFile.getSeqId());
         mentorFileDTO.setFileSrc(mentorFile.getFileSrc());
         mentorFileDTO.setMentor(mentorFile.getMentor() == null ? null : mentorFile.getMentor().getSeqId());
+
         return mentorFileDTO;
     }
 
@@ -67,5 +72,7 @@ public class MentorFileService {
         mentorFile.setMentor(mentor);
         return mentorFile;
     }
+
+
 
 }

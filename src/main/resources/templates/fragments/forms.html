@@ -4,6 +4,7 @@
         <div th:fragment="inputRow(object, field)" th:with="type=${type} ?: 'text', required=${required}, disabled=${disabled},
                 inputClassappend=${#fields.hasErrors(field) || (type == 'textarea' && #fields.hasErrors(field + '*')) ? 'is-invalid ' : ''} + ${inputClass ?: ''}"
                 th:object="${__${object}__}" class="row mb-3">
+
             <div th:if="${type == 'checkbox'}" class="col-md-10 offset-md-2">
                 <div class="form-check">
                     <input th:type="${type}" th:field="*{__${field}__}" th:disabled="${disabled}"
@@ -14,6 +15,9 @@
                 </div>
                 <div th:replace="~{:: fieldErrors(${object}, ${field})}" />
             </div>
+
+
+
             <label th:if="${type != 'checkbox'}" th:for="${type == 'radio' ? '' : field}" class="col-md-2 col-form-label">
                 <span>[[#{__${object}__.__${field}__.label} + ${required == true ? '*' : ''}]]</span>
             </label>
@@ -23,6 +27,7 @@
                         th:classappend="${inputClassappend}" class="form-control" />
                 <textarea th:if="${type == 'textarea'}" th:field="*{__${field}__}" th:disabled="${disabled}"
                         th:classappend="${inputClassappend}" class="form-control" />
+                <input th:if="${type == 'file'}" th:field="*{__${field}__}" type="file" class="form-control" th:disabled="${disabled}" multiple />
                 <select th:if="${type == 'select' || type == 'multiselect'}" th:field="*{__${field}__}" th:disabled="${disabled}"
                         th:multiple="${type == 'multiselect'}" th:classappend="${inputClassappend}" class="form-select">
                     <option th:if="${type == 'select'}" value="">[[#{select.empty.label}]]</option>

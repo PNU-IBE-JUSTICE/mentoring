@@ -3,8 +3,12 @@ package pnu.ibe.justice.mentoring.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.ToString;
+import org.springframework.web.multipart.MultipartFile;
 
-
+@ToString
+@Getter
 public class MentorDTO {
 
     private Long seqId;
@@ -30,12 +34,23 @@ public class MentorDTO {
     private String team;
 
     @JsonProperty("mFId")
-    private Integer mFId;
+    private Long mFId;
 
     private Integer status;
 
     @NotNull
     private Integer users;
+
+//    private MentorFileDTO mentorFile;
+    private MultipartFile file;
+
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
+    }
 
     public Long getSeqId() {
         return seqId;
@@ -93,11 +108,11 @@ public class MentorDTO {
         this.team = team;
     }
 
-    public Integer getMFId() {
+    public Long getMFId() {
         return mFId;
     }
 
-    public void setMFId(final Integer mFId) {
+    public void setMFId(final Long mFId) {
         this.mFId = mFId;
     }
 

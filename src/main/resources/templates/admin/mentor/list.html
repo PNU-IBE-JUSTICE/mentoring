@@ -25,6 +25,7 @@
                             <th scope="col">[[#{mentor.team.label}]]</th>
                             <th scope="col">[[#{mentor.mFId.label}]]</th>
                             <th scope="col">[[#{mentor.status.label}]]</th>
+                            <th scope="col">file</th>
                             <th><!-- --></th>
                         </tr>
                     </thead>
@@ -38,6 +39,7 @@
                             <td>[[${mentor.team}]]</td>
                             <td>[[${mentor.mFId}]]</td>
                             <td>[[${mentor.status}]]</td>
+                            <td><a th:href="@{'/mentorFiles/' + ${mentor.mFId}}">[[${mentor.mFId}]]</a></td>
                             <td>
                                 <div class="float-end text-nowrap">
                                     <a th:href="@{/admin/mentors/edit/{seqId}(seqId=${mentor.seqId})}" class="btn btn-sm btn-secondary">[[#{mentor.list.edit}]]</a>
@@ -47,6 +49,7 @@
                                     </form>
                                 </div>
                             </td>
+
                         </tr>
                     </tbody>
                 </table>
