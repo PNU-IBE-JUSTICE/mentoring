@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{admin/layout}">
+    <head>
+        <title>[[#{mentor.list.headline}]]</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 class="flex-grow-1">[[#{mentor.list.headline}]]</h1>
+                <div>
+                    <a th:href="@{/admin/mentors/add}" class="btn btn-primary ms-2">[[#{mentor.list.createNew}]]</a>
+                </div>
+            </div>
+            <div th:if="${mentors.empty}">[[#{mentor.list.empty}]]</div>
+            <div th:if="${!mentors.empty}" class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">[[#{mentor.seqId.label}]]</th>
+                            <th scope="col">[[#{mentor.title.label}]]</th>
+                            <th scope="col">[[#{mentor.category.label}]]</th>
+                            <th scope="col">[[#{mentor.minMent.label}]]</th>
+                            <th scope="col">[[#{mentor.maxMent.label}]]</th>
+                            <th scope="col">[[#{mentor.team.label}]]</th>
+                            <th scope="col">[[#{mentor.mFId.label}]]</th>
+                            <th scope="col">[[#{mentor.status.label}]]</th>
+                            <th><!-- --></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="mentor : ${mentors}">
+                            <td>[[${mentor.seqId}]]</td>
+                            <td>[[${mentor.title}]]</td>
+                            <td>[[${mentor.category}]]</td>
+                            <td>[[${mentor.minMent}]]</td>
+                            <td>[[${mentor.maxMent}]]</td>
+                            <td>[[${mentor.team}]]</td>
+                            <td>[[${mentor.mFId}]]</td>
+                            <td>[[${mentor.status}]]</td>
+                            <td>
+                                <div class="float-end text-nowrap">
+                                    <a th:href="@{/admin/mentors/edit/{seqId}(seqId=${mentor.seqId})}" class="btn btn-sm btn-secondary">[[#{mentor.list.edit}]]</a>
+                                    <form th:action="@{/mentors/delete/{seqId}(seqId=${mentor.seqId})}"
+                                            th:hx-confirm="#{delete.confirm}" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-secondary">[[#{mentor.list.delete}]]</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

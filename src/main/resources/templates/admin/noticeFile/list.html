@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{admin/layout}">
+    <head>
+        <title>[[#{noticeFile.list.headline}]]</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 class="flex-grow-1">[[#{noticeFile.list.headline}]]</h1>
+                <div>
+                    <a th:href="@{/admin/noticeFiles/add}" class="btn btn-primary ms-2">[[#{noticeFile.list.createNew}]]</a>
+                </div>
+            </div>
+            <div th:if="${noticeFiles.empty}">[[#{noticeFile.list.empty}]]</div>
+            <div th:if="${!noticeFiles.empty}" class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">[[#{noticeFile.seqId.label}]]</th>
+                            <th scope="col">[[#{noticeFile.fileSrc.label}]]</th>
+                            <th scope="col">[[#{noticeFile.type.label}]]</th>
+                            <th scope="col">[[#{noticeFile.userSeqId.label}]]</th>
+                            <th scope="col">[[#{noticeFile.notice.label}]]</th>
+                            <th><!-- --></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="noticeFile : ${noticeFiles}">
+                            <td>[[${noticeFile.seqId}]]</td>
+                            <td>[[${noticeFile.fileSrc}]]</td>
+                            <td>[[${noticeFile.type}]]</td>
+                            <td>[[${noticeFile.userSeqId}]]</td>
+                            <td>[[${noticeFile.notice}]]</td>
+                            <td>
+                                <div class="float-end text-nowrap">
+                                    <a th:href="@{/admin/noticeFiles/edit/{seqId}(seqId=${noticeFile.seqId})}" class="btn btn-sm btn-secondary">[[#{noticeFile.list.edit}]]</a>
+                                    <form th:action="@{/noticeFiles/delete/{seqId}(seqId=${noticeFile.seqId})}"
+                                            th:hx-confirm="#{delete.confirm}" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-secondary">[[#{noticeFile.list.delete}]]</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{admin/layout}">
+    <head>
+        <title>[[#{home.index.headline}]]</title>
+        <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <h1 class="mb-4">[[#{home.index.headline}]]</h1>
+            <p class="mb-5">[(#{home.index.text})]</p>
+            <div class="col-md-4 mb-5">
+                <h4 class="mb-3">[[#{home.index.exploreEntities}]]</h4>
+                <div class="list-group">
+                    <a th:href="@{/admin/users}" class="list-group-item list-group-item-action">[[#{user.list.headline}]]</a>
+                    <a th:href="@{/admin/mentors}" class="list-group-item list-group-item-action">[[#{mentor.list.headline}]]</a>
+                    <a th:href="@{/admin/mentorFiles}" class="list-group-item list-group-item-action">[[#{mentorFile.list.headline}]]</a>
+                    <a th:href="@{/admin/questions}" class="list-group-item list-group-item-action">[[#{question.list.headline}]]</a>
+                    <a th:href="@{/admin/answers}" class="list-group-item list-group-item-action">[[#{answer.list.headline}]]</a>
+                    <a th:href="@{/admin/notices}" class="list-group-item list-group-item-action">[[#{notice.list.headline}]]</a>
+                    <a th:href="@{/admin/noticeFiles}" class="list-group-item list-group-item-action">[[#{noticeFile.list.headline}]]</a>
+                    <a th:href="@{/admin/questionFiles}" class="list-group-item list-group-item-action">[[#{questionFile.list.headline}]]</a>
+                    <a th:href="@{/admin/answerFiles}" class="list-group-item list-group-item-action">[[#{answerFile.list.headline}]]</a>
+                    <a th:href="@{/admin/userFiles}" class="list-group-item list-group-item-action">[[#{userFile.list.headline}]]</a>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
