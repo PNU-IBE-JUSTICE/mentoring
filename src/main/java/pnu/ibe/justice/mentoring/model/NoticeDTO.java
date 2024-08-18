@@ -3,6 +3,7 @@ package pnu.ibe.justice.mentoring.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import pnu.ibe.justice.mentoring.domain.User;
 
 
 public class NoticeDTO {
@@ -22,7 +23,7 @@ public class NoticeDTO {
     @JsonProperty("isMust")
     private Boolean isMust;
 
-    private Integer users;
+    private User users;
 
     public Integer getSeqId() {
         return seqId;
@@ -64,11 +65,11 @@ public class NoticeDTO {
         this.isMust = isMust;
     }
 
-    public Integer getUsers() {
+    public User getUsers() {
         return users;
     }
 
-    public void setUsers(final Integer users) {
+    public void setUsers(final User users) {
         this.users = users;
     }
 

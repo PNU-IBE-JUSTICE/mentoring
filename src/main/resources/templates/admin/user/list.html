@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{admin/layout}">
+    <head>
+        <title>[[#{user.list.headline}]]</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 class="flex-grow-1">[[#{user.list.headline}]]</h1>
+                <div>
+                    <a th:href="@{/admin/users/add}" class="btn btn-primary ms-2">[[#{user.list.createNew}]]</a>
+                </div>
+            </div>
+            <div th:if="${users.empty}">[[#{user.list.empty}]]</div>
+            <div th:if="${!users.empty}" class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">[[#{user.seqId.label}]]</th>
+                            <th scope="col">[[#{user.sdNum.label}]]</th>
+                            <th scope="col">[[#{user.name.label}]]</th>
+                            <th scope="col">[[#{user.grade.label}]]</th>
+                            <th scope="col">[[#{user.depart.label}]]</th>
+                            <th scope="col">[[#{user.phone.label}]]</th>
+                            <th scope="col">[[#{user.email.label}]]</th>
+                            <th scope="col">[[#{user.role.label}]]</th>
+                            <th><!-- --></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="user : ${users}">
+                            <td>[[${user.seqId}]]</td>
+                            <td>[[${user.sdNum}]]</td>
+                            <td>[[${user.name}]]</td>
+                            <td>[[${user.grade}]]</td>
+                            <td>[[${user.depart}]]</td>
+                            <td>[[${user.phone}]]</td>
+                            <td>[[${user.email}]]</td>
+                            <td>[[${user.role}]]</td>
+                            <td>
+                                <div class="float-end text-nowrap">
+                                    <a th:href="@{/admin/users/edit/{seqId}(seqId=${user.seqId})}" class="btn btn-sm btn-secondary">[[#{user.list.edit}]]</a>
+                                    <form th:action="@{/users/delete/{seqId}(seqId=${user.seqId})}"
+                                            th:hx-confirm="#{delete.confirm}" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-secondary">[[#{user.list.delete}]]</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

@@ -43,6 +43,9 @@ public class User {
     private Integer grade;
 
     @Column
+    private String campus;
+
+    @Column
     private String depart;
 
     @Column
@@ -81,134 +84,6 @@ public class User {
     @LastModifiedDate
     @Column(nullable = false)
     private OffsetDateTime lastUpdated;
-
-    public Integer getSeqId() {
-        return seqId;
-    }
-
-    public void setSeqId(final Integer seqId) {
-        this.seqId = seqId;
-    }
-
-    public Integer getSdNum() {
-        return sdNum;
-    }
-
-    public void setSdNum(final Integer sdNum) {
-        this.sdNum = sdNum;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    public Integer getGrade() {
-        return grade;
-    }
-
-    public void setGrade(final Integer grade) {
-        this.grade = grade;
-    }
-
-    public String getDepart() {
-        return depart;
-    }
-
-    public void setDepart(final String depart) {
-        this.depart = depart;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(final String phone) {
-        this.phone = phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(final String email) {
-        this.email = email;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(final Role role) {
-        this.role = role;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(final String status) {
-        this.status = status;
-    }
-
-    public Set<UserFile> getUserFiles() {
-        return userFiles;
-    }
-
-    public void setUserFiles(final Set<UserFile> userFiles) {
-        this.userFiles = userFiles;
-    }
-
-    public Set<Mentor> getMentors() {
-        return mentors;
-    }
-
-    public void setMentors(final Set<Mentor> mentors) {
-        this.mentors = mentors;
-    }
-
-    public Set<Notice> getNotices() {
-        return notices;
-    }
-
-    public void setNotices(final Set<Notice> notices) {
-        this.notices = notices;
-    }
-
-    public Set<Question> getQuestions() {
-        return questions;
-    }
-
-    public void setQuestions(final Set<Question> questions) {
-        this.questions = questions;
-    }
-
-    public Set<Answer> getAnswers() {
-        return answers;
-    }
-
-    public void setAnswers(final Set<Answer> answers) {
-        this.answers = answers;
-    }
-
-    public OffsetDateTime getDateCreated() {
-        return dateCreated;
-    }
-
-    public void setDateCreated(final OffsetDateTime dateCreated) {
-        this.dateCreated = dateCreated;
-    }
-
-    public OffsetDateTime getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(final OffsetDateTime lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
 
     public User update(String name, String email) {
         this.name = name;

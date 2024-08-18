@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{admin/layout}">
+    <head>
+        <title>[[#{user.add.headline}]]</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 class="flex-grow-1">[[#{user.add.headline}]]</h1>
+                <div>
+                    <a th:href="@{/admin/users}" class="btn btn-secondary">[[#{user.add.back}]]</a>
+                </div>
+            </div>
+            <div th:replace="~{fragments/forms::globalErrors('user')}" />
+            <form th:action="${requestUri}" method="post">
+                <div th:replace="~{fragments/forms::inputRow(object='user', field='sdNum', type='number')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='user', field='name')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='user', field='grade', type='number')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='user', field='depart')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='user', field='phone')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='user', field='email', required=true)}" />
+                <div th:replace="~{fragments/forms::inputRow(object='user', field='role', required=true, type='select')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='user', field='status')}" />
+                <input type="submit" th:value="#{user.add.headline}" class="btn btn-primary mt-4" />
+            </form>
+        </div>
+    </body>
+</html>
+
+

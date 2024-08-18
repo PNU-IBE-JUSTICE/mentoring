@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout-main}">
+<head>
+  <title>Mem</title>
+</head>
+<body>
+
+  <div layout:fragment="content" >
+  <!-- 회원정보입력 Start -->
+  <div class="container-fluid pt-5">
+    <div class="container">
+      <div class="text-center pb-2">
+        <p class="section-title px-5">
+          <span class="px-2">회원 정보 입력</span>
+        </p>
+        <h1 class="mb-4">필 수</h1>
+      </div>
+      <div>
+        <div >
+          <div class="contact-form" >
+            <div id="success"></div>
+            <form th:action="@{/MemberIfForm/edit}" th:object="${modifyUser}" method="post">
+
+              <div class="control-group">
+                <input
+                        type="text"
+                        class="form-control"
+                        th:field="*{name}"
+                        placeholder="이 름"
+                        required="required"
+                        data-validation-required-message="Please enter your name"
+                />
+                <p class="help-block text-danger"></p>
+              </div>
+              <div class="control-group">
+                <input
+                        type="text"
+                        class="form-control"
+                        th:field="*{email}"
+                        placeholder="Your Email(@pusan.ac.kr)"
+                        required="required"
+                        data-validation-required-message="Please enter your email"
+                />
+                <p class="help-block text-danger"></p>
+              </div>
+              <div class="control-group">
+                <input
+                        type="text"
+                        class="form-control"
+                        placeholder="학번 (000000000)"
+                        required="required"
+                        th:field="*{sdNum}"
+                        data-validation-required-message="Please enter your studentnumber"
+                />
+                <input type="hidden" th:field="*{role}" />
+                <p class="help-block text-danger"></p>
+              </div>
+
+              <div class="control-group">
+                <input
+                        type="text"
+                        class="form-control"
+                        th:field="*{phone}"
+                        placeholder="연락처 (000-0000-0000)"
+                        required="required"
+                        data-validation-required-message="Please enter your phonenumber"
+                />
+                <p class="help-block text-danger"></p>
+              </div>
+
+              <div class="control-group">
+                <select class="form-control" th:field="*{grade}">
+                  <option value="" disabled selected>학년을 선택해주세요</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                </select>
+                <p class="help-block text-danger"></p>
+              </div>
+              <div class="control-group">
+                  <select class="form-control" th:field="*{depart}">
+                    <option value="" disabled selected>학부를 선택해주세요.</option>
+                    <option value="1">정보의생명공학대학 정보컴퓨터공학부</option>
+                    <option value="2">정보의생명공학대학 의생명융합공학부</option>
+                    <option value="3">공과대학 전기컴퓨터공학부 정보컴퓨터공학전공</option>
+                  </select>
+                <p class="help-block text-danger"></p>
+              </div>
+              <div class="control-group">
+                  <select class="form-control" th:field="*{campus}">
+                    <option value="" disabled selected>캠퍼스 위치를 선택해주세요.</option>
+                    <option value="yangsan">양산캠퍼스</option>
+                    <option value="pusan">장전캠퍼스</option>
+                  </select>
+                <p class="help-block text-danger"></p>
+              </div>
+
+              <input
+                      class="btn btn-primary"
+                      type="submit"
+                      id="sendMessageButton"
+              />
+
+
+
+            </form>
+          </div>
+        </div >
+      </div>
+    </div>
+  </div>
+  </div>
+  <!-- 회원정보입력 End -->
+</body>
+</html>

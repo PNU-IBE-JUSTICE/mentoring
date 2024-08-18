@@ -55,6 +55,12 @@ public class UserService {
                 .orElseThrow(NotFoundException::new);
     }
 
+    public UserDTO get(final String email) {
+        return userRepository.findByEmail(email)
+                .map(user -> mapToDTO(user, new UserDTO()))
+                .orElseThrow(NotFoundException::new);
+    }
+
     public Integer create(final UserDTO userDTO) {
         final User user = new User();
         mapToEntity(userDTO, user);
@@ -82,6 +88,7 @@ public class UserService {
         userDTO.setEmail(user.getEmail());
         userDTO.setRole(user.getRole());
         userDTO.setStatus(user.getStatus());
+        userDTO.setCampus(user.getCampus());
         return userDTO;
     }
 
@@ -94,6 +101,7 @@ public class UserService {
         user.setEmail(userDTO.getEmail());
         user.setRole(userDTO.getRole());
         user.setStatus(userDTO.getStatus());
+        user.setCampus(userDTO.getCampus());
         return user;
     }
 

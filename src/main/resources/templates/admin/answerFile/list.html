@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{admin/layout}">
+    <head>
+        <title>[[#{answerFile.list.headline}]]</title>
+    </head>
+    <body>
+        <div layout:fragment="content">
+            <div class="d-flex flex-wrap mb-4">
+                <h1 class="flex-grow-1">[[#{answerFile.list.headline}]]</h1>
+                <div>
+                    <a th:href="@{/admin/answerFiles/add}" class="btn btn-primary ms-2">[[#{answerFile.list.createNew}]]</a>
+                </div>
+            </div>
+            <div th:if="${answerFiles.empty}">[[#{answerFile.list.empty}]]</div>
+            <div th:if="${!answerFiles.empty}" class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">[[#{answerFile.seqId.label}]]</th>
+                            <th scope="col">[[#{answerFile.fileSrc.label}]]</th>
+                            <th scope="col">[[#{answerFile.type.label}]]</th>
+                            <th scope="col">[[#{answerFile.userSeqId.label}]]</th>
+                            <th scope="col">[[#{answerFile.answer.label}]]</th>
+                            <th><!-- --></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="answerFile : ${answerFiles}">
+                            <td>[[${answerFile.seqId}]]</td>
+                            <td>[[${answerFile.fileSrc}]]</td>
+                            <td>[[${answerFile.type}]]</td>
+                            <td>[[${answerFile.userSeqId}]]</td>
+                            <td>[[${answerFile.answer}]]</td>
+                            <td>
+                                <div class="float-end text-nowrap">
+                                    <a th:href="@{/admin/answerFiles/edit/{seqId}(seqId=${answerFile.seqId})}" class="btn btn-sm btn-secondary">[[#{answerFile.list.edit}]]</a>
+                                    <form th:action="@{/answerFiles/delete/{seqId}(seqId=${answerFile.seqId})}"
+                                            th:hx-confirm="#{delete.confirm}" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-secondary">[[#{answerFile.list.delete}]]</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>
