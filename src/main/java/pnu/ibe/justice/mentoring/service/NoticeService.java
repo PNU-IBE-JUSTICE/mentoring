@@ -64,7 +64,7 @@ public class NoticeService {
         noticeDTO.setContent(notice.getContent());
         noticeDTO.setIsPopup(notice.getIsPopup());
         noticeDTO.setIsMust(notice.getIsMust());
-        noticeDTO.setUsers(notice.getUsers() == null ? null : notice.getUsers().getSeqId());
+        noticeDTO.setUsers(notice.getUsers() == null ? null : notice.getUsers());
         return noticeDTO;
     }
 
@@ -73,7 +73,7 @@ public class NoticeService {
         notice.setContent(noticeDTO.getContent());
         notice.setIsPopup(noticeDTO.getIsPopup());
         notice.setIsMust(noticeDTO.getIsMust());
-        final User users = noticeDTO.getUsers() == null ? null : userRepository.findById(noticeDTO.getUsers())
+        final User users = noticeDTO.getUsers() == null ? null : userRepository.findById(noticeDTO.getUsers().getSeqId())
                 .orElseThrow(() -> new NotFoundException("users not found"));
         notice.setUsers(users);
         return notice;

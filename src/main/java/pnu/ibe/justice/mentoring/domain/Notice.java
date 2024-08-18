@@ -43,7 +43,7 @@ public class Notice {
     @OneToMany(mappedBy = "notice")
     private Set<NoticeFile> noticeFiles;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "users_id")
     private User users;
 

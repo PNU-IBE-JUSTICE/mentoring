@@ -5,7 +5,7 @@
     <title layout:title-pattern="$CONTENT_TITLE | $LAYOUT_TITLE">[[#{app.title}]]</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon" />
+    <link href="/img/favicon.ico" rel="icon" />
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link
@@ -18,12 +18,12 @@
       rel="stylesheet"
     />
     <!-- Flaticon Font -->
-    <link href="lib/flaticon/font/flaticon.css" rel="stylesheet" />
+    <link href="/lib/flaticon/font/flaticon.css" rel="stylesheet" />
     <!-- Libraries Stylesheet -->
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet" />
-    <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet" />
+    <link href="/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet" />
+    <link href="/lib/lightbox/css/lightbox.min.css" rel="stylesheet" />
     <!-- Customized Bootstrap Stylesheet -->
-    <link href="css/style.css" rel="stylesheet" />
+    <link href="/css/style.css" rel="stylesheet" />
   </head>
   <body>
     <!-- Navbar Start -->
@@ -35,7 +35,7 @@
               class="navbar-brand font-weight-bold text-secondary"
               style="font-size: 50px"
       >
-        <span class="text-primary">Mentoring</span>
+        <span class="text-primary">Mentoring_수정중</span>
       </a>
       <button
               type="button"
@@ -59,8 +59,8 @@
                     class="nav-link dropdown-toggle active"
                     data-toggle="dropdown">마이페이지</a>
             <div class="dropdown-menu rounded-0 m-0">
-              <a th:href="@{/}" class="dropdown-item">회원정보</a>
-              <a th:href="@{/}" class="dropdown-item">신청내역</a>
+              <a th:href="@{/MemberIfForm/edit}" class="dropdown-item">회원정보</a>
+              <a th:href="@{/mentor}" class="dropdown-item">신청내역</a>
             </div>
           </div>
 
@@ -114,36 +114,28 @@
             style="font-size: 40px; line-height: 40px"
           >
             <i class="flaticon-043-teddy-bear"></i>
-            <span class="text-white">KidKinder</span>
+            <span class="text-white">IBE_JUSTICE</span>
           </a>
           <p>
-            Labore dolor amet ipsum ea, erat sit ipsum duo eos. Volup amet ea
-            dolor et magna dolor, elitr rebum duo est sed diam elitr. Stet elitr
-            stet diam duo eos rebum ipsum diam ipsum elitr.
+            현 사업은 정보의생명공학대학 학생회 정의 1기에서 하반기 사업으로 진행되는 사업안입니다.
           </p>
           <div class="d-flex justify-content-start mt-4">
             <a
               class="btn btn-outline-primary rounded-circle text-center mr-2 px-0"
               style="width: 38px; height: 38px"
-              href="#"
-              ><i class="fab fa-twitter"></i
+              href="mailto:pnuibe.justice1@gmail.com ?subject=멘토링문의사항 "
+              ><i class="fa fa-envelope fa-1x"></i
             ></a>
             <a
               class="btn btn-outline-primary rounded-circle text-center mr-2 px-0"
               style="width: 38px; height: 38px"
-              href="#"
-              ><i class="fab fa-facebook-f"></i
+              href="https://ibe.pusan.ac.kr/ibe/index..do"
+              ><i class="fa fa-graduation-cap fa-1x"></i
             ></a>
             <a
               class="btn btn-outline-primary rounded-circle text-center mr-2 px-0"
               style="width: 38px; height: 38px"
-              href="#"
-              ><i class="fab fa-linkedin-in"></i
-            ></a>
-            <a
-              class="btn btn-outline-primary rounded-circle text-center mr-2 px-0"
-              style="width: 38px; height: 38px"
-              href="#"
+              href="https://www.instagram.com/pnu_ibe/"
               ><i class="fab fa-instagram"></i
             ></a>
           </div>
@@ -154,21 +146,22 @@
             <h4 class="fa fa-map-marker-alt text-primary"></h4>
             <div class="pl-3">
               <h5 class="text-white">Address</h5>
-              <p>123 Street, New York, USA</p>
+              <p>경상남도 양산시 물금읍 부산대학로 49 경암공학관,</p>
+              <p> 부산광역시 금정구 부산대학로63번길 2(장전동) 제6공학관(컴퓨터공학관)</p>
             </div>
           </div>
           <div class="d-flex">
             <h4 class="fa fa-envelope text-primary"></h4>
             <div class="pl-3">
               <h5 class="text-white">Email</h5>
-              <p>info@example.com</p>
+              <p>pnuibe.justice1@gmail.com</p>
             </div>
           </div>
           <div class="d-flex">
             <h4 class="fa fa-phone-alt text-primary"></h4>
             <div class="pl-3">
               <h5 class="text-white">Phone</h5>
-              <p>+012 345 67890</p>
+              <p>none</p>
             </div>
           </div>
         </div>
@@ -178,51 +171,13 @@
             <a class="text-white mb-2" href="#"
               ><i class="fa fa-angle-right mr-2"></i>Home</a
             >
-            <a class="text-white mb-2" href="#"
-              ><i class="fa fa-angle-right mr-2"></i>About Us</a
+            <a class="text-white mb-2" th:href="@{/notice}"
+              ><i class="fa fa-angle-right mr-2"></i>공지 사항</a
             >
-            <a class="text-white mb-2" href="#"
-              ><i class="fa fa-angle-right mr-2"></i>Our Classes</a
-            >
-            <a class="text-white mb-2" href="#"
-              ><i class="fa fa-angle-right mr-2"></i>Our Teachers</a
-            >
-            <a class="text-white mb-2" href="#"
-              ><i class="fa fa-angle-right mr-2"></i>Our Blog</a
-            >
-            <a class="text-white" href="#"
-              ><i class="fa fa-angle-right mr-2"></i>Contact Us</a
+            <a class="text-white mb-2" th:href="@{/mentor}"
+              ><i class="fa fa-angle-right mr-2"></i>강의 목록</a
             >
           </div>
-        </div>
-        <div class="col-lg-3 col-md-6 mb-5">
-          <h3 class="text-primary mb-4">Newsletter</h3>
-          <form action="">
-            <div class="form-group">
-              <input
-                type="text"
-                class="form-control border-0 py-4"
-                placeholder="Your Name"
-                required="required"
-              />
-            </div>
-            <div class="form-group">
-              <input
-                type="email"
-                class="form-control border-0 py-4"
-                placeholder="Your Email"
-                required="required"
-              />
-            </div>
-            <div>
-              <button
-                class="btn btn-primary btn-block border-0 py-3"
-                type="submit"
-              >
-                Submit Now
-              </button>
-            </div>
-          </form>
         </div>
       </div>
       <div
@@ -231,17 +186,18 @@
       >
         <p class="m-0 text-center text-white">
           &copy;
-          <a class="text-primary font-weight-bold" href="#">Your Site Name</a>.
+          <a class="text-primary font-weight-bold" href="#">Mentoring</a>.
           All Rights Reserved.
 
           <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
           Designed by
-          <a class="text-primary font-weight-bold" href="https://htmlcodex.com"
-            >HTML Codex</a
+          <a class="text-primary font-weight-bold" href="https://www.instagram.com/pnu_ibe/"
+            >정보의생명공학대학 학생회</a
           >
-          <br />Distributed By:
-          <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
+          <br />담당자:
+          <a href="mailto:pnuibe.justice1@gmail.com ?subject=멘토링문의사항 " target="_blank">정의</a>
         </p>
+
       </div>
     </div>
     <!-- Footer End -->
@@ -254,16 +210,16 @@
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-    <script src="lib/isotope/isotope.pkgd.min.js"></script>
-    <script src="lib/lightbox/js/lightbox.min.js"></script>
+    <script src="/lib/easing/easing.min.js"></script>
+    <script src="/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="/lib/isotope/isotope.pkgd.min.js"></script>
+    <script src="/lib/lightbox/js/lightbox.min.js"></script>
 
     <!-- Contact Javascript File -->
-    <script src="mail/jqBootstrapValidation.min.js"></script>
-    <script src="mail/contact.js"></script>
+    <script src="/mail/jqBootstrapValidation.min.js"></script>
+    <script src="/mail/contact.js"></script>
 
     <!-- Template Javascript -->
-    <script src="js/main.js"></script>
+    <script src="/js/main.js"></script>
   </body>
 </html>

@@ -22,6 +22,7 @@ public class MenNoticeController {
 
     @ModelAttribute("user")
     public SessionUser getSettings(@LoginUser SessionUser user) {
+        System.out.println("success");
         return user;
     }
 
