@@ -10,6 +10,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pnu.ibe.justice.mentoring.config.auth.LoginUser;
+import pnu.ibe.justice.mentoring.config.auth.SessionUser;
 import pnu.ibe.justice.mentoring.domain.Mentor;
 import pnu.ibe.justice.mentoring.domain.MentorFile;
 import pnu.ibe.justice.mentoring.domain.User;
@@ -18,6 +20,7 @@ import pnu.ibe.justice.mentoring.model.MentorFileDTO;
 import pnu.ibe.justice.mentoring.repos.UserRepository;
 import pnu.ibe.justice.mentoring.service.MentorFileService;
 import pnu.ibe.justice.mentoring.service.MentorService;
+import pnu.ibe.justice.mentoring.service.UserService;
 import pnu.ibe.justice.mentoring.util.CustomCollectors;
 import pnu.ibe.justice.mentoring.util.ReferencedWarning;
 import pnu.ibe.justice.mentoring.util.WebUtils;
@@ -36,15 +39,21 @@ public class MentorController {
 
     private final MentorService mentorService;
     private final UserRepository userRepository;
+    private final UserService userService;
     private final MentorFileService mentorFileService;
     private String uploadFolder = "/Users/munkyeong/Desktop/mentoring/upload/";
 
+    @ModelAttribute("user")
+    public SessionUser getSetting(@LoginUser SessionUser user) {
+        return user;
+    }
 
     public MentorController(final MentorService mentorService,
-                            final UserRepository userRepository, MentorFileService mentorFileService) {
+                            final UserRepository userRepository, MentorFileService mentorFileService, final UserService userService) {
         this.mentorService = mentorService;
         this.userRepository = userRepository;
         this.mentorFileService = mentorFileService;
+        this.userService = userService;
     }
 
     @ModelAttribute
@@ -61,26 +70,37 @@ public class MentorController {
     }
 
     @GetMapping("/add")
-    public String add(@ModelAttribute("mentor") final MentorDTO mentorDTO) {
+    public String add(@ModelAttribute("mentor") final MentorDTO mentorDTO, final Model model, @LoginUser SessionUser sessionUser) {
+        model.addAttribute("userId", sessionUser.getSeqId());
         return "/admin/mentor/add";
     }
 
     @PostMapping("/add")
     public String add(@ModelAttribute("mentor") @Valid final MentorDTO mentorDTO,
-                      final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
+                      final BindingResult bindingResult, final RedirectAttributes redirectAttributes,
+                      @LoginUser SessionUser sessionUser) {
         if (bindingResult.hasErrors()) {
             return "/admin/mentor/add";
         }
+        System.out.println("1");
 
-        String fileUrl = mentorService.saveFile(mentorDTO.getFile(), uploadFolder);
-        Integer mentorId = mentorDTO.getUsers();
-        MentorFileDTO mentorFileDTO = new MentorFileDTO(fileUrl, mentorId);
-        Integer mentorFileId = mentorFileService.create(mentorFileDTO);
+//        String fileUrl = mentorService.saveFile(mentorDTO.getFile(), uploadFolder);
+        Integer userId = sessionUser.getSeqId();
+        System.out.println("mentorId: " + userId);
 
-        mentorDTO.setMFId(mentorFileId);
-
-        mentorService.create(mentorDTO);
-        redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("mentor.create.success"));
+//        mentorDTO.setUsers(userId);
+//        mentorService.create(mentorDTO);
+//        System.out.println("mentorId: " + userId);
+//
+//        Integer mentorId = mentorDTO.getSeqId();
+//        System.out.println("mentorId: " + mentorId);
+//
+//        MentorFileDTO mentorFileDTO = new MentorFileDTO(fileUrl, mentorId);
+//        Integer mentorFileId = mentorFileService.create(mentorFileDTO);
+//        mentorDTO.setMFId(mentorFileId);
+//
+//        mentorService.update(mentorId, mentorDTO);
+//        redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("mentor.create.success"));
         return "redirect:/admin/mentors";
     }
 
