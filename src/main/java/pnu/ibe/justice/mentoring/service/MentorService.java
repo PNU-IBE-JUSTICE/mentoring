@@ -26,7 +26,6 @@ public class MentorService {
     private final MentorRepository mentorRepository;
     private final UserRepository userRepository;
     private final MentorFileRepository mentorFileRepository;
-//    private String uploadFolder = "/Users/munkyeong/Desktop/mentoring/upload/";
 
 
     public MentorService(final MentorRepository mentorRepository,
@@ -47,7 +46,6 @@ public class MentorService {
         String fileUrl="";
         String dateFolder = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
         Path folderPath = Paths.get(uploadFolder + dateFolder);
-//        File saveFile = new File(uploadFolder, multipartFile.getOriginalFilename());
 
         try {
             Files.createDirectories(folderPath);
@@ -56,7 +54,6 @@ public class MentorService {
 
             fileUrl = "/Users/munkyeong/Desktop/mentoring/upload/" + dateFolder + "/" + multipartFile.getOriginalFilename();
             System.out.println("File saved at: " + fileUrl);
-//            multipartFile.transferTo(saveFile);
         }catch(Exception e) {
             System.out.println(e.getMessage());
         }

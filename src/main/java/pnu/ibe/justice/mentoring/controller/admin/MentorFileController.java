@@ -1,10 +1,6 @@
 package pnu.ibe.justice.mentoring.controller.admin;
 
 import jakarta.validation.Valid;
-import org.apache.tomcat.util.buf.UriUtil;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Sort;
@@ -25,15 +21,8 @@ import pnu.ibe.justice.mentoring.util.CustomCollectors;
 import pnu.ibe.justice.mentoring.util.WebUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 

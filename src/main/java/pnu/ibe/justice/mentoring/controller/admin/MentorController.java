@@ -68,7 +68,6 @@ public class MentorController {
     @PostMapping("/add")
     public String add(@ModelAttribute("mentor") @Valid final MentorDTO mentorDTO,
                       final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
-//        String file = mentorDTO.toString();
         if (bindingResult.hasErrors()) {
             return "/admin/mentor/add";
         }
@@ -84,6 +83,7 @@ public class MentorController {
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("mentor.create.success"));
         return "redirect:/admin/mentors";
     }
+
 
     @GetMapping("/edit/{seqId}")
     public String edit(@PathVariable(name = "seqId") final Long seqId, final Model model) {

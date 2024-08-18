@@ -36,11 +36,9 @@ public class MentorFileService {
 
     public MentorFile findFileById(final Long id) {
         Optional<MentorFile> OPmentorFile = mentorFileRepository.findById(id);
-//        String FileURL = "";
         MentorFile mentorFile = null;
         if (OPmentorFile.isPresent()) {
             mentorFile = OPmentorFile.get();
-//            FileURL = mentorFile.getFileSrc();
         } else {
             System.out.println("error");
         }
@@ -66,16 +64,12 @@ public class MentorFileService {
         mentorFileRepository.save(mentorFile);
     }
 
-//    public Men downloadFile(long mFid){
-//
-//    }
 
     public void delete(final Long seqId) {
         mentorFileRepository.deleteById(seqId);
     }
 
     private MentorFileDTO mapToDTO(final MentorFile mentorFile, final MentorFileDTO mentorFileDTO) {
-//        mentorFileDTO.setSeqId(mentorFile.getSeqId());
         mentorFileDTO.setFileSrc(mentorFile.getFileSrc());
         mentorFileDTO.setMentor(mentorFile.getMentor() == null ? null : mentorFile.getMentor().getSeqId());
 
