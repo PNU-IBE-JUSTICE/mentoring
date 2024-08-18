@@ -42,10 +42,11 @@ public class QuestionFileService {
         this.questionRepository = questionRepository;
     }
 
-    public void saveFile(QuestionFileDTO questionFileDTO, MultipartFile file) throws IOException {
+    public void saveFile(QuestionFileDTO questionFileDTO, MultipartFile file, String type) throws IOException {
         // 날짜 기반 폴더 생성 (예: 20240815)
         String datePath = LocalDate.now().toString().replace("-", "");
-        Path targetLocation = Paths.get(uploadDir, datePath);
+        String typeDir = type.equalsIgnoreCase("question") ? "question" : "answer";
+        Path targetLocation = Paths.get(uploadDir, typeDir, datePath);
 
         // 폴더가 존재하지 않으면 생성
         if (!Files.exists(targetLocation)) {
@@ -72,7 +73,7 @@ public class QuestionFileService {
         QuestionFile questionFile = new QuestionFile();
         questionFile.setFileSrc(questionFileDTO.getFileSrc());
         questionFile.setType(questionFileDTO.getType());
-        questionFile.setData(questionFileDTO.getData());  // 파일의 바이너리 데이터를 저장
+        questionFile.setData(questionFileDTO.getData());
 
         questionFileRepository.save(questionFile);
     }

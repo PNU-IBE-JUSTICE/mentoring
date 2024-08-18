@@ -8,15 +8,20 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pnu.ibe.justice.mentoring.domain.Answer;
 import pnu.ibe.justice.mentoring.domain.Question;
 import pnu.ibe.justice.mentoring.domain.QuestionFile;
 import pnu.ibe.justice.mentoring.domain.User;
+import pnu.ibe.justice.mentoring.model.AnswerDTO;
 import pnu.ibe.justice.mentoring.model.QuestionDTO;
 import pnu.ibe.justice.mentoring.model.QuestionFileDTO;
+import pnu.ibe.justice.mentoring.model.UserDTO;
 import pnu.ibe.justice.mentoring.repos.QuestionFileRepository;
 import pnu.ibe.justice.mentoring.repos.UserRepository;
+import pnu.ibe.justice.mentoring.service.AnswerService;
 import pnu.ibe.justice.mentoring.service.QuestionFileService;
 import pnu.ibe.justice.mentoring.service.QuestionService;
+import pnu.ibe.justice.mentoring.service.UserService;
 import pnu.ibe.justice.mentoring.util.CustomCollectors;
 import pnu.ibe.justice.mentoring.util.ReferencedWarning;
 import pnu.ibe.justice.mentoring.util.WebUtils;
@@ -27,6 +32,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 
 
 @Controller
@@ -40,15 +46,22 @@ public class QuestionController {
     private final UserRepository userRepository;
 
     @Autowired
+    private final UserService userService;
+
+    @Autowired
     private QuestionFileRepository questionFileRepository;
 
     @Autowired
     private QuestionFileService questionFileService;
 
+    @Autowired
+    private AnswerService answerService;
+
     public QuestionController(final QuestionService questionService,
-            final UserRepository userRepository) {
+            final UserRepository userRepository, final  UserService userService) {
         this.questionService = questionService;
         this.userRepository = userRepository;
+        this.userService =  userService;
     }
 
     @ModelAttribute
@@ -83,7 +96,7 @@ public class QuestionController {
 
             if (!file.isEmpty()) {
                 QuestionFileDTO questionFileDTO = new QuestionFileDTO();
-                questionFileService.saveFile(questionFileDTO, file);
+                questionFileService.saveFile(questionFileDTO, file, "question");
 
                 questionFileDTO.setQuestion(createdQuestion.getSeqId());
                 questionFileService.save(questionFileDTO);
@@ -125,9 +138,22 @@ public class QuestionController {
                     WebUtils.getMessage(referencedWarning.getKey(), referencedWarning.getParams().toArray()));
         } else {
             questionService.delete(seqId);
+            System.out.println("delete doene");
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("question.delete.success"));
         }
+
         return "redirect:/questions";
+    }
+
+    @GetMapping(value = "/detail/{seqId}")
+    public String detail(Model model, @PathVariable("seqId") Integer seqId) {
+        // 기존에 사용하던 DTO 대신 엔티티를 직접 가져옴
+        QuestionDTO question = questionService.get(seqId);
+        List<Answer> answers = answerService.getAnswersForQuestion(seqId);
+
+        model.addAttribute("question", question);
+        model.addAttribute("answers", answers);
+        return "question/detail";
     }
 
 }

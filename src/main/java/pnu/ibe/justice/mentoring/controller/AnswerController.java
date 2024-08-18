@@ -5,21 +5,24 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pnu.ibe.justice.mentoring.domain.Answer;
 import pnu.ibe.justice.mentoring.domain.Question;
 import pnu.ibe.justice.mentoring.domain.User;
 import pnu.ibe.justice.mentoring.model.AnswerDTO;
+import pnu.ibe.justice.mentoring.model.AnswerFileDTO;
 import pnu.ibe.justice.mentoring.repos.QuestionRepository;
 import pnu.ibe.justice.mentoring.repos.UserRepository;
+import pnu.ibe.justice.mentoring.service.AnswerFileService;
 import pnu.ibe.justice.mentoring.service.AnswerService;
+import pnu.ibe.justice.mentoring.service.UserService;
 import pnu.ibe.justice.mentoring.util.CustomCollectors;
-import pnu.ibe.justice.mentoring.util.ReferencedWarning;
 import pnu.ibe.justice.mentoring.util.WebUtils;
+
+import java.io.IOException;
+import java.security.Principal;
 
 
 @Controller
@@ -27,14 +30,18 @@ import pnu.ibe.justice.mentoring.util.WebUtils;
 public class AnswerController {
 
     private final AnswerService answerService;
+    private final AnswerFileService answerFileService;
     private final QuestionRepository questionRepository;
     private final UserRepository userRepository;
+    private final UserService userService;
 
     public AnswerController(final AnswerService answerService,
-            final QuestionRepository questionRepository, final UserRepository userRepository) {
+                            AnswerFileService answerFileService, final QuestionRepository questionRepository, final UserRepository userRepository, UserService userService) {
         this.answerService = answerService;
+        this.answerFileService = answerFileService;
         this.questionRepository = questionRepository;
         this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     @ModelAttribute
@@ -59,15 +66,33 @@ public class AnswerController {
     }
 
     @PostMapping("/add")
-    public String add(@ModelAttribute("answer") @Valid final AnswerDTO answerDTO,
-            final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()) {
-            return "answer/add";
+    public String addAnswer(@RequestParam("question") Integer question,
+                            @RequestParam("content") String content,
+                            @RequestParam("file") MultipartFile file,
+                            final RedirectAttributes redirectAttributes) {
+        AnswerDTO answerDTO = new AnswerDTO();
+        answerDTO.setQuestion(Math.toIntExact(question));
+        answerDTO.setContent(content);
+
+        Answer createdAnswer = answerService.create(answerDTO);
+
+        try {
+            if (!file.isEmpty()) {
+                AnswerFileDTO answerFileDTO = new AnswerFileDTO();
+                // "answer"라는 type 인자를 추가하여 saveFile 메서드를 호출합니다.
+                answerFileService.saveFile(answerFileDTO, file, "answer");
+
+                answerFileDTO.setAnswer(createdAnswer.getSeqId());
+                answerFileService.save(answerFileDTO);
+            }
+        } catch (IOException e) {
+            redirectAttributes.addFlashAttribute(WebUtils.MSG_ERROR, "File upload failed: " + e.getMessage());
+            return "redirect:/questions/detail/" + question;
         }
-        answerService.create(answerDTO);
-        redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("answer.create.success"));
-        return "redirect:/answers";
+
+        return "redirect:/questions/detail/" + question;
     }
+
 
     @GetMapping("/edit/{seqId}")
     public String edit(@PathVariable(name = "seqId") final Integer seqId, final Model model) {
@@ -76,7 +101,7 @@ public class AnswerController {
     }
 
     @PostMapping("/edit/{seqId}")
-    public String edit(@PathVariable(name = "seqId") final Integer seqId,
+    public String edit(@RequestParam("question") Integer question, @PathVariable(name = "seqId") final Integer seqId,
             @ModelAttribute("answer") @Valid final AnswerDTO answerDTO,
             final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
@@ -84,21 +109,16 @@ public class AnswerController {
         }
         answerService.update(seqId, answerDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("answer.update.success"));
-        return "redirect:/answers";
+        return "redirect:/questions/detail/" + question;
     }
 
     @PostMapping("/delete/{seqId}")
     public String delete(@PathVariable(name = "seqId") final Integer seqId,
-            final RedirectAttributes redirectAttributes) {
-        final ReferencedWarning referencedWarning = answerService.getReferencedWarning(seqId);
-        if (referencedWarning != null) {
-            redirectAttributes.addFlashAttribute(WebUtils.MSG_ERROR,
-                    WebUtils.getMessage(referencedWarning.getKey(), referencedWarning.getParams().toArray()));
-        } else {
-            answerService.delete(seqId);
-            redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("answer.delete.success"));
-        }
-        return "redirect:/answers";
+                       @ModelAttribute("answer") @Valid final AnswerDTO answerDTO, final RedirectAttributes redirectAttributes) {
+        System.out.println("delete before");
+        answerService.delete(seqId);
+        System.out.println("delete after");
+        redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("answer.delete.success"));
+        return "redirect:/questions";
     }
-
 }

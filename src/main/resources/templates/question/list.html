@@ -26,16 +26,18 @@
                     <tbody>
                         <tr th:each="question : ${questions}">
                             <td>[[${question.seqId}]]</td>
-                            <td>[[${question.title}]]</td>
-                            <td>[[${question.users}]]</td>
                             <td>
-                                <div class="float-end text-nowrap">
-                                    <a th:href="@{/questions/edit/{seqId}(seqId=${question.seqId})}" class="btn btn-sm btn-secondary">[[#{question.list.edit}]]</a>
-                                    <form th:action="@{/questions/delete/{seqId}(seqId=${question.seqId})}"
-                                            th:hx-confirm="#{delete.confirm}" method="post" class="d-inline">
-                                        <button type="submit" class="btn btn-sm btn-secondary">[[#{question.list.delete}]]</button>
-                                    </form>
-                                </div>
+                                <a th:href="@{|/questions/detail/${question.seqId}|}" th:text="${question.title}"></a>
+                            </td>
+                            <td>[[${question.name}]]</td>
+                            <td>
+<!--                                <div class="float-end text-nowrap">-->
+<!--                                    <a th:href="@{/questions/edit/{seqId}(seqId=${question.seqId})}" class="btn btn-sm btn-secondary">[[#{question.list.edit}]]</a>-->
+<!--                                    <form th:action="@{/questions/delete/{seqId}(seqId=${question.seqId})}"-->
+<!--                                            th:hx-confirm="#{delete.confirm}" method="post" class="d-inline">-->
+<!--                                        <button type="submit" class="btn btn-sm btn-secondary">[[#{question.list.delete}]]</button>-->
+<!--                                    </form>-->
+<!--                                </div>-->
                             </td>
                         </tr>
                     </tbody>

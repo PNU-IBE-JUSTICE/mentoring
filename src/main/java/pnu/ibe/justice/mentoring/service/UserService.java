@@ -1,8 +1,11 @@
 package pnu.ibe.justice.mentoring.service;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import pnu.ibe.justice.mentoring.DataNotFoundException;
 import pnu.ibe.justice.mentoring.domain.Answer;
 import pnu.ibe.justice.mentoring.domain.Mentor;
 import pnu.ibe.justice.mentoring.domain.Notice;
@@ -53,6 +56,15 @@ public class UserService {
         return userRepository.findById(seqId)
                 .map(user -> mapToDTO(user, new UserDTO()))
                 .orElseThrow(NotFoundException::new);
+    }
+
+    public User getUser(String name) {
+        Optional<User> User = this.userRepository.findByname(name);
+        if (User.isPresent()) {
+            return User.get();
+        } else {
+            throw new DataNotFoundException("User not found");
+        }
     }
 
     public Integer create(final UserDTO userDTO) {

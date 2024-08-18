@@ -1,8 +1,12 @@
 package pnu.ibe.justice.mentoring.service;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import pnu.ibe.justice.mentoring.DataNotFoundException;
 import pnu.ibe.justice.mentoring.domain.Answer;
 import pnu.ibe.justice.mentoring.domain.Question;
 import pnu.ibe.justice.mentoring.domain.QuestionFile;
@@ -41,20 +45,38 @@ public class QuestionService {
                 .toList();
     }
 
+    public List<Question> findAllQuestion() {
+        final List<Question> questions = questionRepository.findAll(Sort.by("seqId"));
+        return questions;
+    }
+
     public QuestionDTO get(final Integer seqId) {
         return questionRepository.findById(seqId)
                 .map(question -> mapToDTO(question, new QuestionDTO()))
                 .orElseThrow(NotFoundException::new);
     }
 
+    public Question getQuestion(Integer seqId) {
+        Optional<Question> question = this.questionRepository.findById(seqId);
+        if (question.isPresent()) {
+            return question.get();
+        } else {
+            throw new DataNotFoundException("question not found");
+        }
+    }
     public Question create(QuestionDTO questionDTO) {
         Question question = new Question();
-        // questionDTO의 내용을 question 엔티티로 변환하는 로직 (예: 제목, 내용 설정)
+
         question.setTitle(questionDTO.getTitle());
         question.setContent(questionDTO.getContent());
-        // 기타 필요한 설정들...
 
-        questionRepository.save(question);  // 엔티티 저장
+        if (questionDTO.getUsers() != null) {
+            User user = userRepository.findById(questionDTO.getUsers())
+                    .orElseThrow(() -> new NotFoundException("User not found"));
+            question.setUsers(user); // User 객체를 직접 설정
+        }
+
+        questionRepository.save(question);
         return question;  // 저장된 Question 객체 반환
     }
 
@@ -73,7 +95,10 @@ public class QuestionService {
         questionDTO.setSeqId(question.getSeqId());
         questionDTO.setTitle(question.getTitle());
         questionDTO.setContent(question.getContent());
+        questionDTO.setDateCreated(question.getDateCreated());
+        questionDTO.setAnswers(question.getAnswers());
         questionDTO.setUsers(question.getUsers() == null ? null : question.getUsers().getSeqId());
+        questionDTO.setName(question.getUsers() == null ? null : question.getUsers().getName());
         return questionDTO;
     }
 

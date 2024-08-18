@@ -1,8 +1,15 @@
 package pnu.ibe.justice.mentoring.service;
 
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import jakarta.persistence.criteria.CriteriaBuilder;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import pnu.ibe.justice.mentoring.DataNotFoundException;
 import pnu.ibe.justice.mentoring.domain.Answer;
 import pnu.ibe.justice.mentoring.domain.AnswerFile;
 import pnu.ibe.justice.mentoring.domain.Question;
@@ -40,16 +47,40 @@ public class AnswerService {
                 .toList();
     }
 
+    public void save(AnswerDTO answerDTO) {
+        Answer answer = new Answer();
+        answer.setContent(answerDTO.getContent());
+        Question question = questionRepository.findById(answerDTO.getQuestion())
+                .orElseThrow(() -> new DataNotFoundException("Question not found"));
+        answer.setQuestion(question);
+        answer.setDateCreated(OffsetDateTime.now());
+        answerRepository.save(answer);
+    }
+
+    public List<Answer> getAnswersForQuestion(Integer questionId) {
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(() -> new RuntimeException("Question not found"));
+        return answerRepository.findByQuestion(question);
+    }
+
     public AnswerDTO get(final Integer seqId) {
         return answerRepository.findById(seqId)
                 .map(answer -> mapToDTO(answer, new AnswerDTO()))
                 .orElseThrow(NotFoundException::new);
     }
 
-    public Integer create(final AnswerDTO answerDTO) {
+    public Answer create(final AnswerDTO answerDTO) {
         final Answer answer = new Answer();
-        mapToEntity(answerDTO, answer);
-        return answerRepository.save(answer).getSeqId();
+        answer.setContent(answerDTO.getContent());
+
+        if (answerDTO.getQuestion() != null) {
+            Question question = questionRepository.findById(answerDTO.getQuestion())
+                    .orElseThrow(() -> new NotFoundException("Question not found"));
+            answer.setQuestion(question); // User 객체를 직접 설정
+        }
+
+        answerRepository.save(answer);
+        return answer;
     }
 
     public void update(final Integer seqId, final AnswerDTO answerDTO) {
@@ -94,5 +125,6 @@ public class AnswerService {
         }
         return null;
     }
+
 
 }

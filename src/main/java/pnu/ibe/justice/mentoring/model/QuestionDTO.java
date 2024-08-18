@@ -2,8 +2,15 @@ package pnu.ibe.justice.mentoring.model;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+import pnu.ibe.justice.mentoring.domain.Answer;
 
+import java.time.OffsetDateTime;
+import java.util.Set;
 
+@Getter
+@Setter
 public class QuestionDTO {
 
     private Integer seqId;
@@ -15,6 +22,9 @@ public class QuestionDTO {
     private String content;
 
     private Integer users;
+    private String name;
+    private OffsetDateTime dateCreated;
+    private Set<Answer> answers;
 
     public Integer getSeqId() {
         return seqId;

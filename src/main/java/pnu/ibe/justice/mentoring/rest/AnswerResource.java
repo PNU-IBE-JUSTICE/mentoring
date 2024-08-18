@@ -1,6 +1,8 @@
 package pnu.ibe.justice.mentoring.rest;
 
 import jakarta.validation.Valid;
+
+import java.security.Principal;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,7 +15,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pnu.ibe.justice.mentoring.domain.Question;
 import pnu.ibe.justice.mentoring.model.AnswerDTO;
+import pnu.ibe.justice.mentoring.model.QuestionDTO;
 import pnu.ibe.justice.mentoring.service.AnswerService;
 import pnu.ibe.justice.mentoring.util.ReferencedException;
 import pnu.ibe.justice.mentoring.util.ReferencedWarning;
@@ -40,8 +44,14 @@ public class AnswerResource {
     }
 
     @PostMapping
-    public ResponseEntity<Integer> createAnswer(@RequestBody @Valid final AnswerDTO answerDTO) {
-        final Integer createdSeqId = answerService.create(answerDTO);
+    public ResponseEntity<Integer> createAnswer(@RequestBody AnswerDTO answerDTO, Principal principal) {
+        // create 메서드 호출하여 Question 객체 반환
+        Question createdAnswer = answerService.create(answerDTO).getQuestion();
+
+        // 생성된 Question 객체에서 ID 추출
+        Integer createdSeqId = createdAnswer.getSeqId();
+
+        // 추출된 ID를 사용하여 ResponseEntity 생성
         return new ResponseEntity<>(createdSeqId, HttpStatus.CREATED);
     }
 

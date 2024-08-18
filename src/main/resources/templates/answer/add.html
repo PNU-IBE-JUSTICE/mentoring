@@ -13,10 +13,14 @@
                 </div>
             </div>
             <div th:replace="~{fragments/forms::globalErrors('answer')}" />
-            <form th:action="${requestUri}" method="post">
+            <form th:action="${requestUri}" method="post" enctype="multipart/form-data">
                 <div th:replace="~{fragments/forms::inputRow(object='answer', field='content', required=true, type='textarea')}" />
                 <div th:replace="~{fragments/forms::inputRow(object='answer', field='question', type='select')}" />
                 <div th:replace="~{fragments/forms::inputRow(object='answer', field='users', type='select')}" />
+                <div class="form-group">
+                    <label for="file">Upload File:</label>
+                    <input type="file" name="file" id="file" class="form-control">
+                </div>
                 <input type="submit" th:value="#{answer.add.headline}" class="btn btn-primary mt-4" />
             </form>
         </div>
