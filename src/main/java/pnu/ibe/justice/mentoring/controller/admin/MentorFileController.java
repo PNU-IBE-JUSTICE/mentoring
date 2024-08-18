@@ -1,25 +1,40 @@
 package pnu.ibe.justice.mentoring.controller.admin;
 
 import jakarta.validation.Valid;
+import org.apache.tomcat.util.buf.UriUtil;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.UriUtils;
 import pnu.ibe.justice.mentoring.domain.Mentor;
+import pnu.ibe.justice.mentoring.domain.MentorFile;
 import pnu.ibe.justice.mentoring.model.MentorFileDTO;
 import pnu.ibe.justice.mentoring.repos.MentorRepository;
 import pnu.ibe.justice.mentoring.service.MentorFileService;
 import pnu.ibe.justice.mentoring.util.CustomCollectors;
 import pnu.ibe.justice.mentoring.util.WebUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 @Controller
@@ -28,6 +43,8 @@ public class MentorFileController {
 
     private final MentorFileService mentorFileService;
     private final MentorRepository mentorRepository;
+    private String uploadFolder = "/Users/munkyeong/Desktop/mentoring/upload/";
+
 
     public MentorFileController(final MentorFileService mentorFileService,
             final MentorRepository mentorRepository) {
@@ -42,12 +59,6 @@ public class MentorFileController {
                 .collect(CustomCollectors.toSortedMap(Mentor::getSeqId, Mentor::getTitle)));
     }
 
-    @GetMapping("/{mFId}/download")
-    public String get(@PathVariable Long mFId, Model model) {
-//        MentorFileDTO mentorFile = mentorFileService.downloadFile(mFId);
-//        model.addAttribute("mentorFile", mentorFile);
-        return "mentor/list";
-    }
 
     @GetMapping
     public String list(final Model model) {
@@ -55,10 +66,24 @@ public class MentorFileController {
         return "/admin/mentorFile/list";
     }
 
-//    @GetMapping
-//    public String FileDetail(){
-//        return "mentorFile/detail";
-//    }
+
+    @GetMapping("/{mFId}/download")
+    public ResponseEntity<Resource> downloadFile(@PathVariable Long mFId, @RequestHeader(value = "Hx-Request", required = false) String hxRequestHeader) throws MalformedURLException {
+
+        MentorFile mentorFile = mentorFileService.findFileById(mFId);
+        String mentorFileName = mentorFile.getFileSrc();
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        String formattedDate = mentorFile.getDateCreated().format(outputFormatter);
+        File file = new File(uploadFolder + formattedDate +"/" + mentorFileName);
+        UrlResource urlResource = new UrlResource(file.toURI());
+        String encodedUploadFileName = UriUtils.encode(mentorFileName, StandardCharsets.UTF_8);
+        String contentDisposition = "attachment;  filename=\""  + encodedUploadFileName + "\"";
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
+                .body(urlResource);
+    }
 
     @GetMapping("/add")
     public String add(@ModelAttribute("mentorFile") final MentorFileDTO mentorFileDTO) {

@@ -54,13 +54,13 @@ public class MentorService {
             Path filePath = folderPath.resolve(multipartFile.getOriginalFilename());
             multipartFile.transferTo(filePath.toFile());
 
-            fileUrl = "/files/" + dateFolder + "/" + multipartFile.getOriginalFilename();
+            fileUrl = "/Users/munkyeong/Desktop/mentoring/upload/" + dateFolder + "/" + multipartFile.getOriginalFilename();
             System.out.println("File saved at: " + fileUrl);
 //            multipartFile.transferTo(saveFile);
         }catch(Exception e) {
             System.out.println(e.getMessage());
         }
-        return fileUrl;
+        return multipartFile.getOriginalFilename();
     }
 
     public MentorDTO get(final Long seqId) {

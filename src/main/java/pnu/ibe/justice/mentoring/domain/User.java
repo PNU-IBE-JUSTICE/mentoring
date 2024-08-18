@@ -37,6 +37,7 @@ public class User {
     private Integer sdNum;
 
     @Column
+
     private String name;
 
     @Column

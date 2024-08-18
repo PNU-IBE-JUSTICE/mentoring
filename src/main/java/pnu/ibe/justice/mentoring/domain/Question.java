@@ -40,7 +40,7 @@ public class Question {
     @OneToMany(mappedBy = "question")
     private Set<Answer> answers;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "users_id")
     private User users;
 

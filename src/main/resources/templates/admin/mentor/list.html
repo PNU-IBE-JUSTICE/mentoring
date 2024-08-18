@@ -39,7 +39,8 @@
                             <td>[[${mentor.team}]]</td>
                             <td>[[${mentor.mFId}]]</td>
                             <td>[[${mentor.status}]]</td>
-                            <td><a th:href="@{'/mentorFiles/' + ${mentor.mFId}}">[[${mentor.mFId}]]</a></td>
+                            <td><a th:href="|/mentorFiles/${mentor.mFId}/download|" hx-no-boost="true" download target="_blank"  th:text="${mentor.mFId}"/></td>
+
                             <td>
                                 <div class="float-end text-nowrap">
                                     <a th:href="@{/admin/mentors/edit/{seqId}(seqId=${mentor.seqId})}" class="btn btn-sm btn-secondary">[[#{mentor.list.edit}]]</a>

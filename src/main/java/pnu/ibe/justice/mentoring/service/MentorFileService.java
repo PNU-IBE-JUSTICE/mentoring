@@ -1,10 +1,14 @@
 package pnu.ibe.justice.mentoring.service;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import pnu.ibe.justice.mentoring.domain.Mentor;
 import pnu.ibe.justice.mentoring.domain.MentorFile;
+import pnu.ibe.justice.mentoring.model.MentorDTO;
 import pnu.ibe.justice.mentoring.model.MentorFileDTO;
 import pnu.ibe.justice.mentoring.repos.MentorFileRepository;
 import pnu.ibe.justice.mentoring.repos.MentorRepository;
@@ -28,6 +32,19 @@ public class MentorFileService {
         return mentorFiles.stream()
                 .map(mentorFile -> mapToDTO(mentorFile, new MentorFileDTO()))
                 .toList();
+    }
+
+    public MentorFile findFileById(final Long id) {
+        Optional<MentorFile> OPmentorFile = mentorFileRepository.findById(id);
+//        String FileURL = "";
+        MentorFile mentorFile = null;
+        if (OPmentorFile.isPresent()) {
+            mentorFile = OPmentorFile.get();
+//            FileURL = mentorFile.getFileSrc();
+        } else {
+            System.out.println("error");
+        }
+        return mentorFile;
     }
 
     public MentorFileDTO get(final Long seqId) {

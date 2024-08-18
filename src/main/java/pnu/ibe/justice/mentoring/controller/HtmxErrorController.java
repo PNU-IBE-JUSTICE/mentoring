@@ -17,7 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class HtmxErrorController {
-
     private final BasicErrorController basicErrorController;
 
     public HtmxErrorController(final BasicErrorController basicErrorController) {
