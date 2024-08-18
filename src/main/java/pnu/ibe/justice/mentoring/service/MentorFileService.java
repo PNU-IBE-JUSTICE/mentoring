@@ -34,7 +34,7 @@ public class MentorFileService {
                 .toList();
     }
 
-    public MentorFile findFileById(final Long id) {
+    public MentorFile findFileById(final Integer id) {
         Optional<MentorFile> OPmentorFile = mentorFileRepository.findById(id);
         MentorFile mentorFile = null;
         if (OPmentorFile.isPresent()) {
@@ -45,19 +45,19 @@ public class MentorFileService {
         return mentorFile;
     }
 
-    public MentorFileDTO get(final Long seqId) {
+    public MentorFileDTO get(final Integer seqId) {
         return mentorFileRepository.findById(seqId)
                 .map(mentorFile -> mapToDTO(mentorFile, new MentorFileDTO()))
                 .orElseThrow(NotFoundException::new);
     }
 
-    public Long create(final MentorFileDTO mentorFileDTO) {
+    public Integer create(final MentorFileDTO mentorFileDTO) {
         final MentorFile mentorFile = new MentorFile();
         mapToEntity(mentorFileDTO, mentorFile);
         return mentorFileRepository.save(mentorFile).getSeqId();
     }
 
-    public void update(final Long seqId, final MentorFileDTO mentorFileDTO) {
+    public void update(final Integer seqId, final MentorFileDTO mentorFileDTO) {
         final MentorFile mentorFile = mentorFileRepository.findById(seqId)
                 .orElseThrow(NotFoundException::new);
         mapToEntity(mentorFileDTO, mentorFile);
@@ -65,7 +65,7 @@ public class MentorFileService {
     }
 
 
-    public void delete(final Long seqId) {
+    public void delete(final Integer seqId) {
         mentorFileRepository.deleteById(seqId);
     }
 

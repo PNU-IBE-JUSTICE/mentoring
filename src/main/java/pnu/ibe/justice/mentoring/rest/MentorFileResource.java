@@ -34,26 +34,26 @@ public class MentorFileResource {
 
     @GetMapping("/{seqId}")
     public ResponseEntity<MentorFileDTO> getMentorFile(
-            @PathVariable(name = "seqId") final Long seqId) {
+            @PathVariable(name = "seqId") final Integer seqId) {
         return ResponseEntity.ok(mentorFileService.get(seqId));
     }
 
     @PostMapping
-    public ResponseEntity<Long> createMentorFile(
+    public ResponseEntity<Integer> createMentorFile(
             @RequestBody @Valid final MentorFileDTO mentorFileDTO) {
-        final Long createdSeqId = mentorFileService.create(mentorFileDTO);
+        final Integer createdSeqId = mentorFileService.create(mentorFileDTO);
         return new ResponseEntity<>(createdSeqId, HttpStatus.CREATED);
     }
 
     @PutMapping("/{seqId}")
-    public ResponseEntity<Long> updateMentorFile(@PathVariable(name = "seqId") final Long seqId,
+    public ResponseEntity<Integer> updateMentorFile(@PathVariable(name = "seqId") final Integer seqId,
             @RequestBody @Valid final MentorFileDTO mentorFileDTO) {
         mentorFileService.update(seqId, mentorFileDTO);
         return ResponseEntity.ok(seqId);
     }
 
     @DeleteMapping("/{seqId}")
-    public ResponseEntity<Void> deleteMentorFile(@PathVariable(name = "seqId") final Long seqId) {
+    public ResponseEntity<Void> deleteMentorFile(@PathVariable(name = "seqId") final Integer seqId) {
         mentorFileService.delete(seqId);
         return ResponseEntity.noContent().build();
     }

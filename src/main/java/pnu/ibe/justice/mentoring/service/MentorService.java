@@ -60,26 +60,26 @@ public class MentorService {
         return multipartFile.getOriginalFilename();
     }
 
-    public MentorDTO get(final Long seqId) {
+    public MentorDTO get(final Integer seqId) {
         return mentorRepository.findById(seqId)
                 .map(mentor -> mapToDTO(mentor, new MentorDTO()))
                 .orElseThrow(NotFoundException::new);
     }
 
-    public Long create(final MentorDTO mentorDTO) {
+    public Integer create(final MentorDTO mentorDTO) {
         final Mentor mentor = new Mentor();
         mapToEntity(mentorDTO, mentor);
         return mentorRepository.save(mentor).getSeqId();
     }
 
-    public void update(final Long seqId, final MentorDTO mentorDTO) {
+    public void update(final Integer seqId, final MentorDTO mentorDTO) {
         final Mentor mentor = mentorRepository.findById(seqId)
                 .orElseThrow(NotFoundException::new);
         mapToEntity(mentorDTO, mentor);
         mentorRepository.save(mentor);
     }
 
-    public void delete(final Long seqId) {
+    public void delete(final Integer seqId) {
         mentorRepository.deleteById(seqId);
     }
 
@@ -112,7 +112,7 @@ public class MentorService {
         return mentor;
     }
 
-    public ReferencedWarning getReferencedWarning(final Long seqId) {
+    public ReferencedWarning getReferencedWarning(final Integer seqId) {
         final ReferencedWarning referencedWarning = new ReferencedWarning();
         final Mentor mentor = mentorRepository.findById(seqId)
                 .orElseThrow(NotFoundException::new);

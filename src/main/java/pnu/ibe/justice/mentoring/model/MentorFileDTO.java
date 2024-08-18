@@ -18,7 +18,7 @@ public class MentorFileDTO {
     @Size(max = 255)
     private String fileSrc;
 
-    private Long mentor;
+    private Integer mentor;
 
 
 //    private MultipartFile file;

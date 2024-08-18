@@ -7,7 +7,7 @@ import pnu.ibe.justice.mentoring.domain.MentorFile;
 import pnu.ibe.justice.mentoring.model.MentorFileDTO;
 
 
-public interface MentorFileRepository extends JpaRepository<MentorFile, Long> {
+public interface MentorFileRepository extends JpaRepository<MentorFile, Integer> {
 
     MentorFile findFirstByMentor(Mentor mentor);
 

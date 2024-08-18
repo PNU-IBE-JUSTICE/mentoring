@@ -57,7 +57,7 @@ public class MentorFileController {
 
 
     @GetMapping("/{mFId}/download")
-    public ResponseEntity<Resource> downloadFile(@PathVariable Long mFId, @RequestHeader(value = "Hx-Request", required = false) String hxRequestHeader) throws MalformedURLException {
+    public ResponseEntity<Resource> downloadFile(@PathVariable Integer mFId, @RequestHeader(value = "Hx-Request", required = false) String hxRequestHeader) throws MalformedURLException {
 
         MentorFile mentorFile = mentorFileService.findFileById(mFId);
         String mentorFileName = mentorFile.getFileSrc();
@@ -92,13 +92,13 @@ public class MentorFileController {
     }
 
     @GetMapping("/edit/{seqId}")
-    public String edit(@PathVariable(name = "seqId") final Long seqId, final Model model) {
+    public String edit(@PathVariable(name = "seqId") final Integer seqId, final Model model) {
         model.addAttribute("mentorFile", mentorFileService.get(seqId));
         return "/admin/mentorFile/edit";
     }
 
     @PostMapping("/edit/{seqId}")
-    public String edit(@PathVariable(name = "seqId") final Long seqId,
+    public String edit(@PathVariable(name = "seqId") final Integer seqId,
             @ModelAttribute("mentorFile") @Valid final MentorFileDTO mentorFileDTO,
             final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
@@ -110,7 +110,7 @@ public class MentorFileController {
     }
 
     @PostMapping("/delete/{seqId}")
-    public String delete(@PathVariable(name = "seqId") final Long seqId,
+    public String delete(@PathVariable(name = "seqId") final Integer seqId,
             final RedirectAttributes redirectAttributes) {
         mentorFileService.delete(seqId);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("mentorFile.delete.success"));

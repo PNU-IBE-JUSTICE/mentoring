@@ -73,10 +73,10 @@ public class MentorController {
         }
 
         String fileUrl = mentorService.saveFile(mentorDTO.getFile(), uploadFolder);
-        Long mentorId = mentorDTO.getSeqId();
+        Integer mentorId = mentorDTO.getUsers();
         MentorFileDTO mentorFileDTO = new MentorFileDTO(fileUrl, mentorId);
-        Long mentorFileId = mentorFileService.create(mentorFileDTO);
-        System.out.println("mentorFileId: " + mentorFileId);
+        Integer mentorFileId = mentorFileService.create(mentorFileDTO);
+
         mentorDTO.setMFId(mentorFileId);
 
         mentorService.create(mentorDTO);
@@ -86,13 +86,13 @@ public class MentorController {
 
 
     @GetMapping("/edit/{seqId}")
-    public String edit(@PathVariable(name = "seqId") final Long seqId, final Model model) {
+    public String edit(@PathVariable(name = "seqId") final Integer seqId, final Model model) {
         model.addAttribute("mentor", mentorService.get(seqId));
         return "/admin/mentor/edit";
     }
 
     @PostMapping("/edit/{seqId}")
-    public String edit(@PathVariable(name = "seqId") final Long seqId,
+    public String edit(@PathVariable(name = "seqId") final Integer seqId,
             @ModelAttribute("mentor") @Valid final MentorDTO mentorDTO,
             final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
@@ -104,7 +104,7 @@ public class MentorController {
     }
 
     @PostMapping("/delete/{seqId}")
-    public String delete(@PathVariable(name = "seqId") final Long seqId,
+    public String delete(@PathVariable(name = "seqId") final Integer seqId,
             final RedirectAttributes redirectAttributes) {
         final ReferencedWarning referencedWarning = mentorService.getReferencedWarning(seqId);
         if (referencedWarning != null) {
