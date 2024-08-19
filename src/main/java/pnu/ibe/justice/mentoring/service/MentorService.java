@@ -1,8 +1,14 @@
 package pnu.ibe.justice.mentoring.service;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import pnu.ibe.justice.mentoring.domain.Mentor;
 import pnu.ibe.justice.mentoring.domain.MentorFile;
 import pnu.ibe.justice.mentoring.domain.User;
@@ -21,8 +27,9 @@ public class MentorService {
     private final UserRepository userRepository;
     private final MentorFileRepository mentorFileRepository;
 
+
     public MentorService(final MentorRepository mentorRepository,
-            final UserRepository userRepository, final MentorFileRepository mentorFileRepository) {
+                         final UserRepository userRepository, final MentorFileRepository mentorFileRepository) {
         this.mentorRepository = mentorRepository;
         this.userRepository = userRepository;
         this.mentorFileRepository = mentorFileRepository;
@@ -35,26 +42,44 @@ public class MentorService {
                 .toList();
     }
 
-    public MentorDTO get(final Long seqId) {
+    public String saveFile(MultipartFile multipartFile, String uploadFolder){
+        String fileUrl="";
+        String dateFolder = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+        Path folderPath = Paths.get(uploadFolder + dateFolder);
+
+        try {
+            Files.createDirectories(folderPath);
+            Path filePath = folderPath.resolve(multipartFile.getOriginalFilename());
+            multipartFile.transferTo(filePath.toFile());
+
+            fileUrl = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring_git/upload/" + dateFolder + "/" + multipartFile.getOriginalFilename();
+            System.out.println("File saved at: " + fileUrl);
+        }catch(Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return multipartFile.getOriginalFilename();
+    }
+
+    public MentorDTO get(final Integer seqId) {
         return mentorRepository.findById(seqId)
                 .map(mentor -> mapToDTO(mentor, new MentorDTO()))
                 .orElseThrow(NotFoundException::new);
     }
 
-    public Long create(final MentorDTO mentorDTO) {
+    public Integer create(final MentorDTO mentorDTO) {
         final Mentor mentor = new Mentor();
         mapToEntity(mentorDTO, mentor);
         return mentorRepository.save(mentor).getSeqId();
     }
 
-    public void update(final Long seqId, final MentorDTO mentorDTO) {
+    public void update(final Integer seqId, final MentorDTO mentorDTO) {
         final Mentor mentor = mentorRepository.findById(seqId)
                 .orElseThrow(NotFoundException::new);
         mapToEntity(mentorDTO, mentor);
         mentorRepository.save(mentor);
     }
 
-    public void delete(final Long seqId) {
+    public void delete(final Integer seqId) {
         mentorRepository.deleteById(seqId);
     }
 
@@ -68,7 +93,7 @@ public class MentorService {
         mentorDTO.setTeam(mentor.getTeam());
         mentorDTO.setMFId(mentor.getMFId());
         mentorDTO.setStatus(mentor.getStatus());
-        mentorDTO.setUsers(mentor.getUsers() == null ? null : mentor.getUsers().getSeqId());
+        mentorDTO.setUsers(mentor.getUsers() == null ? null : mentor.getUsers());
         return mentorDTO;
     }
 
@@ -81,13 +106,13 @@ public class MentorService {
         mentor.setTeam(mentorDTO.getTeam());
         mentor.setMFId(mentorDTO.getMFId());
         mentor.setStatus(mentorDTO.getStatus());
-        final User users = mentorDTO.getUsers() == null ? null : userRepository.findById(mentorDTO.getUsers())
+        final User users = mentorDTO.getUsers() == null ? null : userRepository.findById(mentorDTO.getUsers().getSeqId())
                 .orElseThrow(() -> new NotFoundException("users not found"));
         mentor.setUsers(users);
         return mentor;
     }
 
-    public ReferencedWarning getReferencedWarning(final Long seqId) {
+    public ReferencedWarning getReferencedWarning(final Integer seqId) {
         final ReferencedWarning referencedWarning = new ReferencedWarning();
         final Mentor mentor = mentorRepository.findById(seqId)
                 .orElseThrow(NotFoundException::new);

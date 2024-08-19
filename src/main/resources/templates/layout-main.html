@@ -51,7 +51,7 @@
       >
         <div class="navbar-nav font-weight-bold mx-auto py-0">
           <a th:href="@{/notice}" class="nav-item nav-link">공지사항</a>
-          <a th:href="@{/mentor}" class="nav-item nav-link">강의목록</a>
+          <a th:href="@{/lectureList}" class="nav-item nav-link">강의목록</a>
           <a th:href="@{/question}" class="nav-item nav-link">질문게시판</a>
           <div class="nav-item dropdown">
             <a
@@ -60,7 +60,7 @@
                     data-toggle="dropdown">마이페이지</a>
             <div class="dropdown-menu rounded-0 m-0">
               <a th:href="@{/MemberIfForm/edit}" class="dropdown-item">회원정보</a>
-              <a th:href="@{/mentor}" class="dropdown-item">신청내역</a>
+              <a th:href="@{/mentorApplication}" class="dropdown-item">신청내역</a>
             </div>
           </div>
 
@@ -70,7 +70,7 @@
           <a th:href="@{/logout}" class="btn btn-primary px-4">Logout</a>
         </div>
         <div th:if="${user == null}">
-          <a th:href="@{/login}" class="btn btn-primary px-4">Login</a>
+          <a href="/oauth2/authorization/google" class="btn btn-primary px-4">Login</a>
         </div>
 
       </div>
@@ -107,7 +107,7 @@
       class="container-fluid bg-secondary text-white mt-5 py-5 px-sm-3 px-md-5"
     >
       <div class="row pt-5">
-        <div class="col-lg-3 col-md-6 mb-5">
+        <div class="col-lg-4 col-md-6 mb-5">
           <a
             href=""
             class="navbar-brand font-weight-bold text-primary m-0 mb-4 p-0"
@@ -140,7 +140,7 @@
             ></a>
           </div>
         </div>
-        <div class="col-lg-3 col-md-6 mb-5">
+        <div class="col-lg-4 col-md-6 mb-5">
           <h3 class="text-primary mb-4">Get In Touch</h3>
           <div class="d-flex">
             <h4 class="fa fa-map-marker-alt text-primary"></h4>
@@ -165,7 +165,7 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-3 col-md-6 mb-5">
+        <div class="col-lg-4 col-md-6 mb-5">
           <h3 class="text-primary mb-4">Quick Links</h3>
           <div class="d-flex flex-column justify-content-start">
             <a class="text-white mb-2" href="#"
