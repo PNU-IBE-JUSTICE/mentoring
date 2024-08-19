@@ -4,6 +4,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import org.springframework.data.domain.Sort;
@@ -26,6 +27,7 @@ public class MentorService {
     private final MentorRepository mentorRepository;
     private final UserRepository userRepository;
     private final MentorFileRepository mentorFileRepository;
+    String dateFolder = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
 
 
     public MentorService(final MentorRepository mentorRepository,
@@ -44,7 +46,6 @@ public class MentorService {
 
     public String saveFile(MultipartFile multipartFile, String uploadFolder){
         String fileUrl="";
-        String dateFolder = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
         Path folderPath = Paths.get(uploadFolder + dateFolder);
 
         try {
@@ -68,6 +69,9 @@ public class MentorService {
 
     public Integer create(final MentorDTO mentorDTO) {
         final Mentor mentor = new Mentor();
+        OffsetDateTime currentDateTime = OffsetDateTime.now();
+        mentor.setDateCreated(currentDateTime);
+        mentor.setLastUpdated(currentDateTime);
         mapToEntity(mentorDTO, mentor);
         return mentorRepository.save(mentor).getSeqId();
     }

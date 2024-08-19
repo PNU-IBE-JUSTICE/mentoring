@@ -39,7 +39,7 @@
                 <td>[[${mentor.team}]]</td>
                 <td>[[${mentor.mFId}]]</td>
                 <td>[[${mentor.status}]]</td>
-                <td><a th:href="|/admin/mentorFiles/${mentor.mFId}/download|" hx-no-boost="true" download  target="_blank" th:text="${mentor.mFId}"/></td>
+                <td><a th:href="|/admin/mentorFiles/${mentor.mFId}/download|" hx-no-boost="true" download  target="_blank" th:text="${mentor.getMFId()}"/></td>
 
                 <td>
                     <div class="float-end text-nowrap">
