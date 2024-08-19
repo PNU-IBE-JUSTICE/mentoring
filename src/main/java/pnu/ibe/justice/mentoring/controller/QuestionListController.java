@@ -17,9 +17,9 @@ import pnu.ibe.justice.mentoring.util.CustomCollectors;
 
 
 @Controller
-@RequestMapping("/notice")
+@RequestMapping("/question")
 @RequiredArgsConstructor
-public class MenNoticeController {
+public class QuestionListController {
 
     @ModelAttribute("user")
     public SessionUser getSettings(@LoginUser SessionUser user) {
@@ -39,9 +39,7 @@ public class MenNoticeController {
 
     @GetMapping
     public String list(final Model model) {
-        model.addAttribute("notices", noticeService.findAll());
-        System.out.println(userRepository.findAll());
-        return "/pages/notice";
+       return "/pages/question";
     }
 
 

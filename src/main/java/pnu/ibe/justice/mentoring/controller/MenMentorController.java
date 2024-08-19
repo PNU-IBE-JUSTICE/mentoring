@@ -1,6 +1,8 @@
 package pnu.ibe.justice.mentoring.controller;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,8 +20,11 @@ import pnu.ibe.justice.mentoring.service.MentorService;
 import pnu.ibe.justice.mentoring.service.NoticeService;
 import pnu.ibe.justice.mentoring.util.WebUtils;
 
-@RequestMapping("/MentorApplication")
+@Controller
+@RequiredArgsConstructor
+@RequestMapping("/mentorApplication")
 public class MenMentorController {
+
     @ModelAttribute("user")
     public SessionUser getSettings(@LoginUser SessionUser user) {
         System.out.println("success mapping mentor");
@@ -27,10 +32,6 @@ public class MenMentorController {
     }
 
     private final MentorService mentorService;
-
-    public MenMentorController(final MentorService mentorService) {
-        this.mentorService = mentorService;
-    }
 
     @ModelAttribute
     public void prepareContext(final Model model) {
@@ -40,9 +41,6 @@ public class MenMentorController {
     @GetMapping
     public String edit(@LoginUser SessionUser sessionUser,final Model model) {
         model.addAttribute("modifyMentor",mentorService.get(sessionUser.getSeqId()));
-        System.out.println("edit1 success");
-        System.out.println("success get service Mentorcontroller");
-        System.out.println(mentorService.get(sessionUser.getSeqId()));
         return "/pages/MentorApplication";
     }
 
