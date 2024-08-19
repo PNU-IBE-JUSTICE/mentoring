@@ -62,6 +62,7 @@ public class MentorController {
 
     @GetMapping("/add")
     public String add(final Model model, @LoginUser SessionUser sessionUser) {
+        System.out.println("11 : " +  sessionUser.getSeqId());
         model.addAttribute("mentor", mentorService.get(sessionUser.getSeqId()));
         System.out.println("mentorcontroller getmapping 1 success");
         return "/admin/mentor/add";
