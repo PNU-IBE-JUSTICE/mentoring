@@ -61,15 +61,15 @@ public class Mentor {
     @JoinColumn(name = "users_id", nullable = false)
     private User users;
 
-//    @OneToMany(mappedBy = "mentor")
-//    private Set<MentorFile> mentorFiles;
+    @OneToMany(mappedBy = "mentor")
+    private Set<MentorFile> mentorFiles;
 
-//    @CreatedDate
-//    @Column(nullable = false, updatable = false)
-//    private OffsetDateTime dateCreated;
-//
-//    @LastModifiedDate
-//    @Column(nullable = false)
-//    private OffsetDateTime lastUpdated;
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private OffsetDateTime dateCreated;
+
+    @LastModifiedDate
+    @Column(nullable = false)
+    private OffsetDateTime lastUpdated;
 
 }

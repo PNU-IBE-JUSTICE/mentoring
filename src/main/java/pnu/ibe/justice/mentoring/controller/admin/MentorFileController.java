@@ -32,7 +32,7 @@ public class MentorFileController {
 
     private final MentorFileService mentorFileService;
     private final MentorRepository mentorRepository;
-    private String uploadFolder = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring_git/upload/";
+    private String uploadFolder = "/Users/munkyeong/Desktop/mentoring/upload/";
 
 
     public MentorFileController(final MentorFileService mentorFileService,

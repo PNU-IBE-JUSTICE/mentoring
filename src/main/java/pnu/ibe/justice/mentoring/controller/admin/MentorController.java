@@ -22,6 +22,9 @@ import pnu.ibe.justice.mentoring.util.CustomCollectors;
 import pnu.ibe.justice.mentoring.util.ReferencedWarning;
 import pnu.ibe.justice.mentoring.util.WebUtils;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 
 @Controller
 @RequestMapping("/admin/mentors")
@@ -37,7 +40,7 @@ public class MentorController {
     private final MentorService mentorService;
     private final UserRepository userRepository;
     private final MentorFileService mentorFileService;
-    private String uploadFolder = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring_git/upload/";
+    private String uploadFolder = "/Users/munkyeong/Desktop/mentoring/upload/";
 
 
     public MentorController(final MentorService mentorService,
@@ -61,10 +64,7 @@ public class MentorController {
     }
 
     @GetMapping("/add")
-    public String add(final Model model, @LoginUser SessionUser sessionUser) {
-        System.out.println("11 : " +  sessionUser.getSeqId());
-        model.addAttribute("mentor", mentorService.get(sessionUser.getSeqId()));
-        System.out.println("mentorcontroller getmapping 1 success");
+    public String add(@ModelAttribute("mentor") final MentorDTO mentorDTO, final Model model, @LoginUser SessionUser sessionUser) {
         return "/admin/mentor/add";
     }
 
@@ -76,15 +76,14 @@ public class MentorController {
         }
 
         String fileUrl = mentorService.saveFile(mentorDTO.getFile(), uploadFolder);
-        System.out.println(mentorDTO.getSeqId());
+        Integer seqId = mentorService.create(mentorDTO);
+
         Integer mentorId = mentorDTO.getSeqId();
-        Integer seqId = mentorDTO.getSeqId();
         MentorFileDTO mentorFileDTO = new MentorFileDTO(seqId,fileUrl,mentorId);
         Integer mentorFileId = mentorFileService.create(mentorFileDTO);
-
         mentorDTO.setMFId(mentorFileId);
+        mentorService.update(seqId, mentorDTO);
 
-        mentorService.create(mentorDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("mentor.create.success"));
         return "redirect:/admin/mentors";
     }
