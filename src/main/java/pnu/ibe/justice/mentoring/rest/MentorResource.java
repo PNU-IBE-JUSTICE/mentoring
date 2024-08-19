@@ -35,25 +35,25 @@ public class MentorResource {
     }
 
     @GetMapping("/{seqId}")
-    public ResponseEntity<MentorDTO> getMentor(@PathVariable(name = "seqId") final Long seqId) {
+    public ResponseEntity<MentorDTO> getMentor(@PathVariable(name = "seqId") final Integer seqId) {
         return ResponseEntity.ok(mentorService.get(seqId));
     }
 
     @PostMapping
-    public ResponseEntity<Long> createMentor(@RequestBody @Valid final MentorDTO mentorDTO) {
-        final Long createdSeqId = mentorService.create(mentorDTO);
+    public ResponseEntity<Integer> createMentor(@RequestBody @Valid final MentorDTO mentorDTO) {
+        final Integer createdSeqId = mentorService.create(mentorDTO);
         return new ResponseEntity<>(createdSeqId, HttpStatus.CREATED);
     }
 
     @PutMapping("/{seqId}")
-    public ResponseEntity<Long> updateMentor(@PathVariable(name = "seqId") final Long seqId,
-            @RequestBody @Valid final MentorDTO mentorDTO) {
+    public ResponseEntity<Integer> updateMentor(@PathVariable(name = "seqId") final Integer seqId,
+                                                @RequestBody @Valid final MentorDTO mentorDTO) {
         mentorService.update(seqId, mentorDTO);
         return ResponseEntity.ok(seqId);
     }
 
     @DeleteMapping("/{seqId}")
-    public ResponseEntity<Void> deleteMentor(@PathVariable(name = "seqId") final Long seqId) {
+    public ResponseEntity<Void> deleteMentor(@PathVariable(name = "seqId") final Integer seqId) {
         final ReferencedWarning referencedWarning = mentorService.getReferencedWarning(seqId);
         if (referencedWarning != null) {
             throw new ReferencedException(referencedWarning);

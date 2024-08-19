@@ -5,7 +5,7 @@ import pnu.ibe.justice.mentoring.domain.Mentor;
 import pnu.ibe.justice.mentoring.domain.User;
 
 
-public interface MentorRepository extends JpaRepository<Mentor, Long> {
+public interface MentorRepository extends JpaRepository<Mentor, Integer> {
 
     Mentor findFirstByUsers(User user);
 

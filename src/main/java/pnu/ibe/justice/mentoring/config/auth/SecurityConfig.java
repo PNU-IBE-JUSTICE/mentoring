@@ -25,7 +25,11 @@ public class SecurityConfig {
         http
                 .csrf(
                         (csrfConfig) -> csrfConfig.disable()
+
+
                 )
+
+
                 .headers(
                         (headerConfig) -> headerConfig.frameOptions(
                                 frameOptionsConfig -> frameOptionsConfig.disable()
@@ -35,15 +39,27 @@ public class SecurityConfig {
                         //.requestMatchers("/admin/**").hasRole(Role.ADMIN.name())
                         .requestMatchers("/admin/**").hasRole(Role.ADMIN.name())
                         .requestMatchers("/posts/new", "/comments/save").hasRole(Role.GUEST.name())
-                        .requestMatchers("/","/h2-console/**", "/login/*","/MemberIfForm/**",
+                        .requestMatchers("/","/h2-console/**", "/login/*","/MemberIfForm/**","/notice/**","/lectureList/**",
                                 "/logout/*","/favicon.ico","/lib/**", "/css/**","/js/**","/images/**","/scss/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .logout( // 로그아웃 성공 시 / 주소로 이동
                         (logoutConfig) -> logoutConfig.logoutSuccessUrl("/")
                 )
+
                 // OAuth2 로그인 기능에 대한 여러 설정
-                .oauth2Login(Customizer.withDefaults()); // 아래 코드와 동일한 결과
+                .oauth2Login(Customizer.withDefaults()) // 아래 코드와 동일한 결과
+
+                .oauth2Login(oauth -> oauth
+                .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint.userService(customOAuth2UserService))
+                .successHandler((request, response, authentication) -> {
+                            response.sendRedirect("/");
+                        })
+
+                );
+
+
+
         /*
                 .oauth2Login(
                         (oauth) ->
