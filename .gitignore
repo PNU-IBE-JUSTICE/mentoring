@@ -39,4 +39,4 @@ bin/
 /.nb-gradle/
 
 settings.gradle
-uploads
+/upload/**/
