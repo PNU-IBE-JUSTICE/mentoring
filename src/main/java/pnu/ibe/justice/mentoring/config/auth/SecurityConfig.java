@@ -37,9 +37,9 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests((authorizeRequest) -> authorizeRequest
                         //.requestMatchers("/admin/**").hasRole(Role.ADMIN.name())
-//                        .requestMatchers("/admin/**").hasRole(Role.ADMIN.name())
+                        .requestMatchers("/admin/**").hasRole(Role.ADMIN.name())
                         .requestMatchers("/posts/new", "/comments/save").hasRole(Role.GUEST.name())
-                        .requestMatchers("/","/h2-console/**", "/login/*","/MemberIfForm/**","/notice/**","/lectureList/**",
+                        .requestMatchers("/","/h2-console/**", "/login/*","/notice/**","/lectureList/**",
                                 "/logout/*","/favicon.ico","/lib/**", "/css/**","/js/**","/images/**","/scss/**").permitAll()
                         .anyRequest().authenticated()
                 )

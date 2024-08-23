@@ -32,7 +32,7 @@ public class MentorFileController {
 
     private final MentorFileService mentorFileService;
     private final MentorRepository mentorRepository;
-    private String uploadFolder = "/Users/munkyeong/Desktop/mentoring/upload/";
+    private String uploadFolder = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring/upload/";
 
 
     public MentorFileController(final MentorFileService mentorFileService,
@@ -52,7 +52,7 @@ public class MentorFileController {
     @GetMapping
     public String list(final Model model) {
         model.addAttribute("mentorFiles", mentorFileService.findAll());
-        return "/admin/mentorFile/list";
+        return "admin/mentorFile/list";
     }
 
 
@@ -76,14 +76,14 @@ public class MentorFileController {
 
     @GetMapping("/add")
     public String add(@ModelAttribute("mentorFile") final MentorFileDTO mentorFileDTO) {
-        return "/admin/mentorFile/add";
+        return "admin/mentorFile/add";
     }
 
     @PostMapping("/add")
     public String add(@ModelAttribute("mentorFile") @Valid final MentorFileDTO mentorFileDTO,
                       final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "/admin/mentorFile/add";
+            return "admin/mentorFile/add";
         }
 
         mentorFileService.create(mentorFileDTO);
@@ -94,7 +94,7 @@ public class MentorFileController {
     @GetMapping("/edit/{seqId}")
     public String edit(@PathVariable(name = "seqId") final Integer seqId, final Model model) {
         model.addAttribute("mentorFile", mentorFileService.get(seqId));
-        return "/admin/mentorFile/edit";
+        return "admin/mentorFile/edit";
     }
 
     @PostMapping("/edit/{seqId}")
@@ -102,7 +102,7 @@ public class MentorFileController {
                        @ModelAttribute("mentorFile") @Valid final MentorFileDTO mentorFileDTO,
                        final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "/admin/mentorFile/edit";
+            return "admin/mentorFile/edit";
         }
         mentorFileService.update(seqId, mentorFileDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("mentorFile.update.success"));

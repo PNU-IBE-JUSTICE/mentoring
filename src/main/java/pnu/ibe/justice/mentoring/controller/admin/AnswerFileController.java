@@ -42,19 +42,19 @@ public class AnswerFileController {
     @GetMapping
     public String list(final Model model) {
         model.addAttribute("answerFiles", answerFileService.findAll());
-        return "/admin/answerFile/list";
+        return "admin/answerFile/list";
     }
 
     @GetMapping("/add")
     public String add(@ModelAttribute("answerFile") final AnswerFileDTO answerFileDTO) {
-        return "/admin/answerFile/add";
+        return "admin/answerFile/add";
     }
 
     @PostMapping("/add")
     public String add(@ModelAttribute("answerFile") @Valid final AnswerFileDTO answerFileDTO,
             final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "/admin/answerFile/add";
+            return "admin/answerFile/add";
         }
         answerFileService.create(answerFileDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("answerFile.create.success"));
@@ -64,7 +64,7 @@ public class AnswerFileController {
     @GetMapping("/edit/{seqId}")
     public String edit(@PathVariable(name = "seqId") final Integer seqId, final Model model) {
         model.addAttribute("answerFile", answerFileService.get(seqId));
-        return "/admin/answerFile/edit";
+        return "admin/answerFile/edit";
     }
 
     @PostMapping("/edit/{seqId}")
@@ -72,7 +72,7 @@ public class AnswerFileController {
             @ModelAttribute("answerFile") @Valid final AnswerFileDTO answerFileDTO,
             final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "/admin/answerFile/edit";
+            return "admin/answerFile/edit";
         }
         answerFileService.update(seqId, answerFileDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("answerFile.update.success"));

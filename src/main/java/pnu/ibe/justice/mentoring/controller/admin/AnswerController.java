@@ -50,19 +50,19 @@ public class AnswerController {
     @GetMapping
     public String list(final Model model) {
         model.addAttribute("answers", answerService.findAll());
-        return "/admin/answer/list";
+        return "admin/answer/list";
     }
 
     @GetMapping("/add")
     public String add(@ModelAttribute("answer") final AnswerDTO answerDTO) {
-        return "/admin/answer/add";
+        return "admin/answer/add";
     }
 
     @PostMapping("/add")
     public String add(@ModelAttribute("answer") @Valid final AnswerDTO answerDTO,
             final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "/admin/answer/add";
+            return "admin/answer/add";
         }
         answerService.create(answerDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("answer.create.success"));
@@ -72,7 +72,7 @@ public class AnswerController {
     @GetMapping("/edit/{seqId}")
     public String edit(@PathVariable(name = "seqId") final Integer seqId, final Model model) {
         model.addAttribute("answer", answerService.get(seqId));
-        return "/admin/answer/edit";
+        return "admin/answer/edit";
     }
 
     @PostMapping("/edit/{seqId}")
@@ -80,7 +80,7 @@ public class AnswerController {
             @ModelAttribute("answer") @Valid final AnswerDTO answerDTO,
             final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "/admin/answer/edit";
+            return "admin/answer/edit";
         }
         answerService.update(seqId, answerDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("answer.update.success"));

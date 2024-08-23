@@ -21,7 +21,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String index() {
-        return "/admin/home/index";
+        return "admin/home/index";
     }
 
     // 메인 화면 - 게시판 목록
@@ -32,7 +32,7 @@ public class HomeController {
         if (user != null) {
             model.addAttribute("userName", user.getName());
         }
-        return "/admin/home";
+        return "admin/home";
     }
 
 

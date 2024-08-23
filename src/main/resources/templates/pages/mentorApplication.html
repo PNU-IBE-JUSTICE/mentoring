@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout-main}">
+<head>
+    <title>LectureList</title>
+</head>
+<body>
+
+<div layout:fragment="content" >
+    <!--멘토신청서상태--->
+    <div th:if = "${mentorsCount == 0 }" class="row pb-3" style="position: relative; min-height: 200px;">
+        <!--        sessionuser의 seqId값을 가져와서, 그 아이디로 있는 멘토가 있는지 확인. 멘토가 없다면 화면 띄우기 -->
+        <!-- mentor 목록이 없는 경우 -->
+        <div class="d-flex justify-content-center align-items-center"
+             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+            <div class="col-12">
+                <div class="alert alert-info text-center" role="alert">
+                    아직 멘토 신청서가  존재하지 않아요.
+                </div>
+                <a th:href="@{/mentorApplication/add}" class="btn btn-primary px-4">신청서 작성하러 가기</a>
+            </div>
+        </div>
+    </div>
+
+    <div th:if = "${mentorsCount >0 }" class="row pb-3" style="position: relative; min-height: 200px;">
+        <!--        sessionuser의 seqId값을 가져와서, 그 아이디로 있는 멘토가 있는지 확인. 멘토가 없다면 화면 띄우기 -->
+        <!-- mentor 목록이 없는 경우 -->
+        <div class="d-flex justify-content-center align-items-center"
+             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+            <div class="col-12">
+                <a th:href="@{/mentorApplication/edit/{id}(id=${mentorsSeqId})}" class="btn btn-primary px-4">신청서 수정하러 가기</a>
+            </div>
+        </div>
+    </div>
+
+    <!---맨티 신청서 상태-->
+
+
+</div>
+
+</body>
+</html>

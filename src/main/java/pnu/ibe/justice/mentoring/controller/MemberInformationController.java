@@ -57,7 +57,7 @@ public class MemberInformationController {
         model.addAttribute("modifyUser", userService.get(sessionUser.getSeqId()));
         System.out.println("edit1 success");
         System.out.println("success get service");
-        return "/pages/MemberIfForm";
+        return "pages/MemberIfForm";
     }
 
     @PostMapping("/edit")
@@ -65,12 +65,6 @@ public class MemberInformationController {
             @ModelAttribute("modifyUser") @Valid final UserDTO userDTO, @LoginUser SessionUser sessionUser,final BindingResult bindingResult,
                        final RedirectAttributes redirectAttributes) {
         System.out.println(userDTO.toString());
-        if (bindingResult.hasErrors()) {
-            bindingResult.rejectValue("grade", "passwordInCorrect",
-                    "2개의 패스워드가 일치하지 않습니다.");
-            System.out.println("unsuccess_submit");
-            return "/pages/MemberIfForm";
-        }
         userService.update(sessionUser.getSeqId(), userDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("user.update.success"));
         return "redirect:/";

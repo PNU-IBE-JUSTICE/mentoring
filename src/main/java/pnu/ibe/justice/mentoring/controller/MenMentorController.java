@@ -1,63 +1,132 @@
 package pnu.ibe.justice.mentoring.controller;
 
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pnu.ibe.justice.mentoring.config.auth.LoginUser;
 import pnu.ibe.justice.mentoring.config.auth.SessionUser;
+import pnu.ibe.justice.mentoring.domain.User;
 import pnu.ibe.justice.mentoring.model.MentorDTO;
+import pnu.ibe.justice.mentoring.model.MentorFileDTO;
 import pnu.ibe.justice.mentoring.model.Role;
-import pnu.ibe.justice.mentoring.model.UserDTO;
 import pnu.ibe.justice.mentoring.repos.UserRepository;
+import pnu.ibe.justice.mentoring.service.MentorFileService;
 import pnu.ibe.justice.mentoring.service.MentorService;
-import pnu.ibe.justice.mentoring.service.NoticeService;
+import pnu.ibe.justice.mentoring.service.UserService;
+import pnu.ibe.justice.mentoring.util.CustomCollectors;
+import pnu.ibe.justice.mentoring.util.NotFoundException;
 import pnu.ibe.justice.mentoring.util.WebUtils;
+import jakarta.validation.Valid;
 
 @Controller
-@RequiredArgsConstructor
 @RequestMapping("/mentorApplication")
 public class MenMentorController {
 
     @ModelAttribute("user")
     public SessionUser getSettings(@LoginUser SessionUser user) {
-        System.out.println("success mapping mentor");
         return user;
     }
 
     private final MentorService mentorService;
+    private final UserRepository userRepository;
+    private final MentorFileService mentorFileService;
+    private String uploadFolder = "/Users/gim-yeseul/Desktop/mentoring/mentoring/upload/";
+    private final UserService userService;
+
+    public MenMentorController(final MentorService mentorService,
+                               final UserRepository userRepository, MentorFileService mentorFileService, UserService userService) {
+        this.mentorService = mentorService;
+        this.userRepository = userRepository;
+        this.mentorFileService = mentorFileService;
+        this.userService = userService;
+    }
 
     @ModelAttribute
     public void prepareContext(final Model model) {
         model.addAttribute("roleValues", Role.values());
+        model.addAttribute("usersValues", userRepository.findAll(Sort.by("seqId"))
+                .stream()
+                .collect(CustomCollectors.toSortedMap(User::getSeqId, User::getEmail)));
     }
 
     @GetMapping
-    public String edit(@LoginUser SessionUser sessionUser,final Model model) {
-        model.addAttribute("modifyMentor",mentorService.get(sessionUser.getSeqId()));
-        return "/pages/MentorApplication";
+    public String list(final Model model, @LoginUser SessionUser user) {
+        // 예시: 예외 발생 처리
+        int cnt = mentorService.getMentorsCountByUser(user.getSeqId());
+        model.addAttribute("mentorsCount", cnt);
+        Integer mentorSeqId = mentorService.getMentorsByUser(user.getSeqId());
+        model.addAttribute("mentorsSeqId", mentorSeqId);
+        return "pages/mentorApplication";
     }
 
-    @PostMapping
-    public String edit(
-            @ModelAttribute("modifyMentor") @Valid final MentorDTO mentorDTO, @LoginUser SessionUser sessionUser, final BindingResult bindingResult,
-            final RedirectAttributes redirectAttributes) {
-        System.out.println(mentorDTO.toString());
-        if (bindingResult.hasErrors()) {
-            bindingResult.rejectValue("grade", "passwordInCorrect",
-                    "2개의 패스워드가 일치하지 않습니다.");
-            System.out.println("unsuccess_submit");
-            return "/pages/MentorApplication";
+    @GetMapping("/add")
+    public String add(@ModelAttribute("mentor") final MentorDTO mentorDTO, final Model model, @LoginUser SessionUser user) {
+        System.out.println("dnsjfkdsnfdjkcnjxvk");
+        if ( mentorService.getMentorsCountByUser(user.getSeqId() ) > 0) {
+            model.addAttribute("status","오류");
+            model.addAttribute("error","신청서가 이미 존재합니다.");
+
+            return "error";
         }
-        mentorService.update(sessionUser.getSeqId(), mentorDTO);
-        redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("user.update.success"));
-        return "redirect:/";
+        return "pages/mentor-add";
     }
 
+    @PostMapping("/add")
+    public String add(@ModelAttribute("mentor") @Valid final MentorDTO mentorDTO, @LoginUser SessionUser sessionUser,
+                      final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            return "pages/mentor-add"; // 폼 유효성 검사 실패 시 멘토 추가 페이지로 리다이렉트
+        }
+        System.out.println(mentorDTO);
+        String fileUrl = mentorService.saveFile(mentorDTO.getFile(), uploadFolder);
+        final User users = userRepository.findById(sessionUser.getSeqId())
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        mentorDTO.setUsers(users);
+        System.out.println("0");
+        System.out.println(mentorDTO);
+        Integer seqId = mentorService.create(mentorDTO);
+        System.out.println("1");
+        System.out.println("2");
+        MentorFileDTO mentorFileDTO = new MentorFileDTO();
+        mentorFileDTO.setFileSrc(fileUrl);
+        mentorFileDTO.setMentor(seqId);
+        Integer mentorFileId = mentorFileService.create(mentorFileDTO);
+        mentorDTO.setMFId(mentorFileId);
+        mentorService.update(seqId, mentorDTO);
+        System.out.println("success upupup");
+        redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("mentor.create.success"));
+        return "redirect:/"; // 성공 후 멘토 페이지로 리다이렉트
+    }
+
+
+    //mentor seqId => mentor 의 userId 와 Session user 비교
+    @GetMapping("/edit/{seqId}")
+    public String edit(@PathVariable(name = "seqId") final Integer seqId, @LoginUser SessionUser sessionUser, final Model model) {
+        MentorDTO mentorDTO = mentorService.get(seqId);
+        if (sessionUser.getSeqId() != mentorDTO.getUsers().getSeqId()) {
+            model.addAttribute("status","오류");
+            model.addAttribute("error","잘못된 접근입니다.");
+            return "error";
+        }
+        model.addAttribute("modifyMentor",mentorDTO);
+        return "pages/mentor-edit";
+    }
+
+    @PostMapping("/edit")
+    public String edit(@ModelAttribute("modifyMentor") @Validated(MentorDTO.EditValidationGroup.class) final MentorDTO mentorDTO, @LoginUser SessionUser sessionUser,
+                       final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
+        System.out.println(mentorDTO);
+        System.out.println("edit 접속함");
+        if (bindingResult.hasErrors()) {
+            return "pages/mentor-edit"; // 폼 유효성 검사 실패 시 멘토 수정 페이지로 리다이렉트
+        }
+        mentorService.update(mentorDTO.getSeqId(), mentorDTO);
+        System.out.println("update perff");
+        redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("user.update.success"));
+        return "redirect:/mentorApplication"; // 성공 후 홈 페이지로 리다이렉트
+    }
 }

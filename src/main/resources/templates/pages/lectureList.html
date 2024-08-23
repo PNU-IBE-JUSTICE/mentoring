@@ -3,49 +3,92 @@
       layout:decorate="~{layout-main}">
 <head>
     <title>LectureList</title>
+    <!-- Add Bootstrap CSS -->
 </head>
+
+<script>
+    function onChangeSort(obj) {
+        console.log("Sort form is being submitted.");  // 콘솔에 메시지 출력
+        var sortForm = $(obj).val();
+        console.log(sortForm);  // 콘솔에 메시지 출력
+        alert("dfdfdf");
+        sortForm.submit();
+    }
+</script>
 <body>
 
-<div layout:fragment="content" >
+<div layout:fragment="content">
     <!--lecturelist 본문-->
-    <div class="row pb-3" style="position: relative; min-height: 200px;">
-        <!-- mentor 목록이 없는 경우 -->
+
+<!--    <form th:action="@{/lectureList}" id="sortForm" method="get">-->
+<!--        <select class="bg-gray-300 px-1 py-1 rounded" name="caSort" onchange="onChangeSort(this)" th:value="${param.caSort}">-->
+<!--            <option value="0" th:selected=" ${param.caSort == '0'} ">전체보기</option>-->
+<!--            <option value="1"  th:selected=" ${param.caSort == '1'} ">프로젝트</option>-->
+<!--            <option value="2"  th:selected=" ${param.caSort == '2'} ">학부수업</option>-->
+<!--        </select>-->
+
+<!--    </form>-->
+<!--    <div class="row">-->
+<!--        <div class="col-12 text-center mb-2">-->
+<!--            <ul class="list-inline mb-4" id="portfolio-filters">-->
+<!--                <li class="btn btn-outline-primary m-1 active" data-filter="*">-->
+<!--                    All-->
+<!--                </li>-->
+<!--                <li class="btn btn-outline-primary m-1" data-filter=".프로젝트">-->
+<!--                    프로젝트-->
+<!--                </li>-->
+<!--                <li class="btn btn-outline-primary m-1" data-filter=".학부수업">-->
+<!--                    학과수업-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </div>-->
+<!--    </div>-->
+
+    <div class="row pb-3" >
         <div class="d-flex justify-content-center align-items-center"
              style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
             <div class="col-12">
                 <div class="alert alert-info text-center" role="alert">
-                    아직 강의가 개설되지 않았어요.
+                    아직 열리지 않았어요.
                 </div>
             </div>
         </div>
     </div>
 
-
-
+    <div class="row">
         <!-- mentor의 status가 1일 때만 표시 -->
-        <div class="col-lg-4 mb-4" th:each="mentor : ${mentors}" th:if="${mentor.status == 0}">
+        <div class="col-lg-4 mb-4" th:each="mentor : ${category}" th:if="${mentor.status == 1}">
             <div class="card border-0 shadow-sm mb-2">
                 <img class="card-img-top mb-2" src="/img/blog-1.jpg" alt="" />
                 <div class="card-body bg-light text-center p-4">
+                    <h6 class="mb-3">group name:[[${mentor.team}]]</h6>
                     <h4 class="">[[${mentor.title}]]</h4>
                     <div class="d-flex justify-content-center mb-3">
                         <small class="mr-3">
-                            <i class="fa fa-user text-primary"></i> [[${mentor.users.name}]]
+                            <i class="fa fa-user text-primary"></i> [[${mentor.team}]]
                         </small>
                         <small class="mr-3">
-                            <i class="fa fa-comments text-primary"></i> 최대 멘티수: [[${mentor.maxMent}]]
+                            <i class="fa fa-users text-primary"></i> 멘티수:[[${mentor.minMent}]]~[[${mentor.maxMent}]]
+                        </small>
+                        <small class="mr-3">
+                            <i class="fa fa-tag text-primary"></i> [[${mentor.category}]]
                         </small>
                     </div>
                     <p>
-                        [[${mentor.content}]]
+                        [[${#strings.abbreviate(mentor.content, 50)}]]
                     </p>
-                    <a href="" class="btn btn-primary px-4 mx-auto my-2">Read More</a>
+                    <a th:href="@{|/lectureList/detail/${mentor.seqId}|}" class="btn btn-primary px-4 mx-auto my-2">
+                        Read More
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 
 </div>
+
+<!-- Add Bootstrap JS and dependencies -->
+
 
 </body>
 </html>

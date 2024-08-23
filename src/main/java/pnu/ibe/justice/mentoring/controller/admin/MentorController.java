@@ -40,7 +40,7 @@ public class MentorController {
     private final MentorService mentorService;
     private final UserRepository userRepository;
     private final MentorFileService mentorFileService;
-    private String uploadFolder = "/Users/munkyeong/Desktop/mentoring/upload/";
+    private String uploadFolder = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring/upload/";
 
 
     public MentorController(final MentorService mentorService,
@@ -60,30 +60,31 @@ public class MentorController {
     @GetMapping
     public String list(final Model model) {
         model.addAttribute("mentors", mentorService.findAll());
-        return "/admin/mentor/list";
+        return "admin/mentor/list";
     }
 
     @GetMapping("/add")
     public String add(@ModelAttribute("mentor") final MentorDTO mentorDTO, final Model model, @LoginUser SessionUser sessionUser) {
-        return "/admin/mentor/add";
+        return "admin/mentor/add";
     }
 
     @PostMapping("/add")
     public String add(@ModelAttribute("mentor") @Valid final MentorDTO mentorDTO, @LoginUser SessionUser sessionUser,
                       final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "/admin/mentor/add";
+            return "admin/mentor/add";
         }
 
         String fileUrl = mentorService.saveFile(mentorDTO.getFile(), uploadFolder);
         Integer seqId = mentorService.create(mentorDTO);
-
+        System.out.println(seqId);
         Integer mentorId = mentorDTO.getSeqId();
+        System.out.println(mentorId);
         MentorFileDTO mentorFileDTO = new MentorFileDTO(seqId,fileUrl,mentorId);
         Integer mentorFileId = mentorFileService.create(mentorFileDTO);
         mentorDTO.setMFId(mentorFileId);
         mentorService.update(seqId, mentorDTO);
-
+        System.out.println(mentorDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("mentor.create.success"));
         return "redirect:/admin/mentors";
     }
@@ -92,7 +93,7 @@ public class MentorController {
     @GetMapping("/edit/{seqId}")
     public String edit(@PathVariable(name = "seqId") final Integer seqId, final Model model) {
         model.addAttribute("mentor", mentorService.get(seqId));
-        return "/admin/mentor/edit";
+        return "admin/mentor/edit";
     }
 
     @PostMapping("/edit/{seqId}")
@@ -100,7 +101,7 @@ public class MentorController {
                        @ModelAttribute("mentor") @Valid final MentorDTO mentorDTO,
                        final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "/admin/mentor/edit";
+            return "admin/mentor/edit";
         }
         mentorService.update(seqId, mentorDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("mentor.update.success"));

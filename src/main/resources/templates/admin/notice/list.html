@@ -22,6 +22,7 @@
                             <th scope="col">[[#{notice.isPopup.label}]]</th>
                             <th scope="col">[[#{notice.isMust.label}]]</th>
                             <th scope="col">[[#{notice.users.label}]]</th>
+                            <th scope="col">file</th>
                             <th><!-- --></th>
                         </tr>
                     </thead>
@@ -32,6 +33,7 @@
                             <td>[[${notice.isPopup}]]</td>
                             <td>[[${notice.isMust}]]</td>
                             <td>[[${notice.users}]]</td>
+                            <td><a th:href="|/admin/noticeFiles/${notice.mFId}/download|" hx-no-boost="true" download  target="_blank" th:text="${notice.getMFId()}"/></td>
                             <td>
                                 <div class="float-end text-nowrap">
                                     <a th:href="@{/admin/notices/edit/{seqId}(seqId=${notice.seqId})}" class="btn btn-sm btn-secondary">[[#{notice.list.edit}]]</a>

@@ -24,7 +24,18 @@
     <link href="/lib/lightbox/css/lightbox.min.css" rel="stylesheet" />
     <!-- Customized Bootstrap Stylesheet -->
     <link href="/css/style.css" rel="stylesheet" />
+    <style>
+      .justice-icon-icon {
+        width: 90px; /* 필요에 따라 조정 */
+        height: 60px; /* 필요에 따라 조정 */
+      }
+      .ibe-icon-icon {
+        width: 100px; /* 필요에 따라 조정 */
+        height: 100px; /* 필요에 따라 조정 */
+      }
+    </style>
   </head>
+
   <body>
     <!-- Navbar Start -->
     <nav
@@ -33,9 +44,10 @@
       <a
               th:href="@{/}"
               class="navbar-brand font-weight-bold text-secondary"
-              style="font-size: 50px"
+              style="font-size: 50px; display: flex; align-items: center;"
       >
-        <span class="text-primary">Mentoring_수정중</span>
+        <img src="/images/ibelogo.png" alt="Teddy Bear" class="ibe-icon-icon" style="margin-right: 2px;">
+        <span class="text-primary">Mentoring</span>
       </a>
       <button
               type="button"
@@ -53,6 +65,7 @@
           <a th:href="@{/notice}" class="nav-item nav-link">공지사항</a>
           <a th:href="@{/lectureList}" class="nav-item nav-link">강의목록</a>
           <a th:href="@{/question}" class="nav-item nav-link">질문게시판</a>
+          <a th:href="@{/submit}" class="nav-item nav-link">보고서제출</a>
           <div class="nav-item dropdown">
             <a
                     th:href="@{/}"
@@ -113,11 +126,11 @@
             class="navbar-brand font-weight-bold text-primary m-0 mb-4 p-0"
             style="font-size: 40px; line-height: 40px"
           >
-            <i class="flaticon-043-teddy-bear"></i>
+            <img src="/images/justicemarkwhite.png" alt="Teddy Bear" class="justice-icon-icon">
             <span class="text-white">IBE_JUSTICE</span>
           </a>
           <p>
-            현 사업은 정보의생명공학대학 학생회 정의 1기에서 하반기 사업으로 진행되는 사업안입니다.
+            현 사업은 정보의생명공학대학 학생회 정의 1기에서 하반기 사업으로 진행하는 사업안입니다.
           </p>
           <div class="d-flex justify-content-start mt-4">
             <a

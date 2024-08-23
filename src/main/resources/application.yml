@@ -1,40 +1,7 @@
 spring:
-
-#
-#  datasource:
-#    url: ${JDBC_DATABASE_URL:jdbc:mysql://localhost:3306/Mentoring?serverTimezone=UTC}
-#    username: ${JDBC_DATABASE_USERNAME:root}
-#    password: ${JDBC_DATABASE_PASSWORD:<<YOUR_PASSWORD>>}
-#    hikari:
-#      connection-timeout: 30000
-#      maximum-pool-size: 10
-#
-
-
-#google login oauth profiles 설정_ #1
   profiles:
     include: oauth
-
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-  datasource:
-    url: jdbc:h2:./db_dev;MODE=MySQL
-    driverClassName: org.h2.Driver
-    username: sa
-    password:
-  jpa:
-    hibernate:
-      ddl-auto: update
-    open-in-view: false
-    properties:
-      hibernate:
-        jdbc:
-          lob:
-            non_contextual_creation: true
-        id:
-          new_generator_mappings: true
+    active: local
   mvc:
     format:
       date: yyyy-MM-dd
@@ -43,7 +10,7 @@ spring:
 error:
   handling:
     http-status-in-json-response: true
-    exception-logging: NO_LOGGING
+    exception-logging: message_only #NO_LOGGING
     full-stacktrace-http-statuses: 5xx
     log-levels:
       5xx: ERROR
@@ -54,6 +21,9 @@ error:
 thymeleaf:
   cache: false
   check-template-location: true
-  prefix: classpath:/templates/
+  prefix: classpath:/templates
   suffix: .html
   enabled: true
+
+
+

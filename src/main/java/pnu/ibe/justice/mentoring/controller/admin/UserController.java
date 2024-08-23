@@ -35,19 +35,19 @@ public class UserController {
     @GetMapping
     public String list(final Model model) {
         model.addAttribute("users", userService.findAll());
-        return "/admin/user/list";
+        return "admin/user/list";
     }
 
     @GetMapping("/add")
     public String add(@ModelAttribute("user") final UserDTO userDTO) {
-        return "/admin/user/add";
+        return "admin/user/add";
     }
 
     @PostMapping("/add")
     public String add(@ModelAttribute("user") @Valid final UserDTO userDTO,
             final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "/admin/user/add";
+            return "admin/user/add";
         }
         userService.create(userDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("user.create.success"));
@@ -57,7 +57,7 @@ public class UserController {
     @GetMapping("/edit/{seqId}")
     public String edit(@PathVariable(name = "seqId") final Integer seqId, final Model model) {
         model.addAttribute("user", userService.get(seqId));
-        return "/admin/user/edit";
+        return "admin/user/edit";
     }
 
     @PostMapping("/edit/{seqId}")
@@ -65,7 +65,7 @@ public class UserController {
             @ModelAttribute("user") @Valid final UserDTO userDTO, final BindingResult bindingResult,
             final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "/admin/user/edit";
+            return "admin/user/edit";
         }
         userService.update(seqId, userDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("user.update.success"));

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:c="" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout-main}">
+<head>
+    <title>Index Page</title>
+    <style>
+        .notice-content {
+            max-width: 100%;
+            overflow-wrap: break-word; /* 긴 단어가 줄 바꿈되도록 */
+        }
+
+        .notice-content div {
+            white-space: pre-wrap; /* 줄바꿈과 공백을 유지하며, 콘텐츠가 화면에 맞게 줄바꿈됨 */
+        }
+    </style>
+
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container py-5" th:object="${mentor}">
+
+        <div class="d-flex flex-column text-left mb-3">
+            <p class="section-title pr-5">
+                <span class="pr-2"> 강의 목록</span>
+            </p>
+            <h3 class="mb-3" th:text="${mentor.team}"></h3>
+            <h1 class="mb-3" th:text="${mentor.title}"></h1>
+            <div class="d-flex">
+
+                <p class="mr-3"><i class="fa fa-user text-primary"></i> <span th:text="${mentor.team}"></span></p>
+                <p class="mr-3"><i class="fa fa-user text-primary"></i> 멘토 :<span th:text="${mentor.users.getName()}"></span></p>
+                <p class="mr-3"><i class="fa fa-folder text-primary"></i><span th:text="${mentor.category}"></span> </p>
+                <p class="mr-3"><i class="fa fa-users text-primary"></i> 최소인원:<span th:text="${mentor.minMent}"></span>   최대인원:<span th:text="${mentor.maxMent}"> </span></p>
+            </div>
+        </div>
+        <div class="mb-5 notice-content">
+            <div th:utext="${mentor.content}"></div>
+        </div>
+        <div>
+            <a th:href="@{/lectureList}" class="btn btn-secondary">[[#{mentor.add.back}]]</a>
+        </div>
+    </div>
+    <!-- Detail End -->
+</div>
+</body>
+</html>

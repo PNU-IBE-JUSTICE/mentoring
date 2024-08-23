@@ -39,7 +39,7 @@ public class QuestionListController {
 
     @GetMapping
     public String list(final Model model) {
-       return "/pages/question";
+       return "pages/question";
     }
 
 

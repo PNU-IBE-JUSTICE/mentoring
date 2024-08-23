@@ -13,12 +13,13 @@
                 </div>
             </div>
             <div th:replace="~{fragments/forms::globalErrors('notice')}" />
-            <form th:action="${requestUri}" method="post">
+            <form th:action="${requestUri}" method="post"  enctype="multipart/form-data">
                 <div th:replace="~{fragments/forms::inputRow(object='notice', field='title', required=true)}" />
-                <div th:replace="~{fragments/forms::inputRow(object='notice', field='content', required=true, type='textarea')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='notice', field='content', required=true, type='textarea')}" th:wrap="hard"/>
                 <div th:replace="~{fragments/forms::inputRow(object='notice', field='isPopup', type='checkbox')}" />
                 <div th:replace="~{fragments/forms::inputRow(object='notice', field='isMust', type='checkbox')}" />
                 <div th:replace="~{fragments/forms::inputRow(object='notice', field='users', type='select')}" />
+                <div th:replace="~{fragments/forms::inputRow(object='notice', field='file', required=true, type='file')}" />
                 <input type="submit" th:value="#{notice.add.headline}" class="btn btn-primary mt-4" />
             </form>
         </div>

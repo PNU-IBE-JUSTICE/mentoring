@@ -28,8 +28,7 @@ public class MenHomeController {
 
     @GetMapping("")
     public String index(Model model) {
-
-        return "/index";
+        return "index";
     }
 
 

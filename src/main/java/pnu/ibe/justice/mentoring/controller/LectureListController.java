@@ -3,17 +3,20 @@ package pnu.ibe.justice.mentoring.controller;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import pnu.ibe.justice.mentoring.config.auth.LoginUser;
 import pnu.ibe.justice.mentoring.config.auth.SessionUser;
 import pnu.ibe.justice.mentoring.domain.User;
+import pnu.ibe.justice.mentoring.model.MentorDTO;
+import pnu.ibe.justice.mentoring.model.NoticeDTO;
 import pnu.ibe.justice.mentoring.repos.MentorRepository;
 import pnu.ibe.justice.mentoring.repos.UserRepository;
 import pnu.ibe.justice.mentoring.service.MentorService;
 import pnu.ibe.justice.mentoring.service.NoticeService;
 import pnu.ibe.justice.mentoring.util.CustomCollectors;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/lectureList")
@@ -42,10 +45,29 @@ public class LectureListController {
     }
 
     @GetMapping
-    public String list(final Model model) {
+    public String list(final Model model, @RequestParam(value = "caSort" , required = false, defaultValue = "0") String caSort) {
+        System.out.println(mentorService.findMentorsByCategory("프로젝트"));
         model.addAttribute("mentors", mentorService.findAll());
-        System.out.println(mentorService.findAll());
+        if (caSort.equals("0")) {
+            System.out.println(caSort);
+            model.addAttribute("category",mentorService.findAll());
+        } else if (caSort.equals("1")) {
+            String categoryPj="프로젝트";
+            model.addAttribute("category",mentorService.findMentorsByCategory(categoryPj));
+
+        }
+        else  {
+            model.addAttribute(("category"),mentorService.findMentorsByCategory("학부수업"));
+        }
         System.out.println("success getmapping lecture");
-        return "/pages/lectureList";
+        return "pages/lectureList";
+    }
+
+
+    @GetMapping(value ="/detail/{id}")
+    public String detail(Model model, @PathVariable("id") Integer id) {
+        MentorDTO mentor = this.mentorService.get(id);
+        model.addAttribute("mentor",mentor);
+        return "pages/lectureDetail";
     }
 }

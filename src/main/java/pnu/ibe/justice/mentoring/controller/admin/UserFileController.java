@@ -42,19 +42,19 @@ public class UserFileController {
     @GetMapping
     public String list(final Model model) {
         model.addAttribute("userFiles", userFileService.findAll());
-        return "/admin/userFile/list";
+        return "admin/userFile/list";
     }
 
     @GetMapping("/add")
     public String add(@ModelAttribute("userFile") final UserFileDTO userFileDTO) {
-        return "/admin/userFile/add";
+        return "admin/userFile/add";
     }
 
     @PostMapping("/add")
     public String add(@ModelAttribute("userFile") @Valid final UserFileDTO userFileDTO,
             final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "/admin/userFile/add";
+            return "admin/userFile/add";
         }
         userFileService.create(userFileDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("userFile.create.success"));
@@ -64,7 +64,7 @@ public class UserFileController {
     @GetMapping("/edit/{seqId}")
     public String edit(@PathVariable(name = "seqId") final Integer seqId, final Model model) {
         model.addAttribute("userFile", userFileService.get(seqId));
-        return "/admin/userFile/edit";
+        return "admin/userFile/edit";
     }
 
     @PostMapping("/edit/{seqId}")
@@ -72,7 +72,7 @@ public class UserFileController {
             @ModelAttribute("userFile") @Valid final UserFileDTO userFileDTO,
             final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "/admin/userFile/edit";
+            return "admin/userFile/edit";
         }
         userFileService.update(seqId, userFileDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("userFile.update.success"));

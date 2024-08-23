@@ -8,6 +8,8 @@
         <div layout:fragment="content">
             <h1 class="mb-4">[[${status}]] - [[${error}]]</h1>
             <p>[[#{error.message}]]</p>
+            <a th:href="@{/}" class="btn btn-primary px-4">홈으로 돌아가기</a>
         </div>
+
     </body>
 </html>

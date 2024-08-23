@@ -1,8 +1,11 @@
 package pnu.ibe.justice.mentoring.service;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import pnu.ibe.justice.mentoring.domain.MentorFile;
 import pnu.ibe.justice.mentoring.domain.Notice;
 import pnu.ibe.justice.mentoring.domain.NoticeFile;
 import pnu.ibe.justice.mentoring.model.NoticeFileDTO;
@@ -28,6 +31,18 @@ public class NoticeFileService {
         return noticeFiles.stream()
                 .map(noticeFile -> mapToDTO(noticeFile, new NoticeFileDTO()))
                 .toList();
+    }
+
+
+    public NoticeFile findFileById(final Integer id) {
+        Optional<NoticeFile> OPnoticeFile = noticeFileRepository.findById(id);
+        NoticeFile noticeFile = null;
+        if (OPnoticeFile.isPresent()) {
+            noticeFile = OPnoticeFile.get();
+        } else {
+            System.out.println("error");
+        }
+        return noticeFile;
     }
 
     public NoticeFileDTO get(final Integer seqId) {
@@ -56,7 +71,7 @@ public class NoticeFileService {
     private NoticeFileDTO mapToDTO(final NoticeFile noticeFile, final NoticeFileDTO noticeFileDTO) {
         noticeFileDTO.setSeqId(noticeFile.getSeqId());
         noticeFileDTO.setFileSrc(noticeFile.getFileSrc());
-        noticeFileDTO.setType(noticeFile.getType());
+//        noticeFileDTO.setType(noticeFile.getType());
         noticeFileDTO.setUserSeqId(noticeFile.getUserSeqId());
         noticeFileDTO.setNotice(noticeFile.getNotice() == null ? null : noticeFile.getNotice().getSeqId());
         return noticeFileDTO;
@@ -64,8 +79,8 @@ public class NoticeFileService {
 
     private NoticeFile mapToEntity(final NoticeFileDTO noticeFileDTO, final NoticeFile noticeFile) {
         noticeFile.setFileSrc(noticeFileDTO.getFileSrc());
-        noticeFile.setType(noticeFileDTO.getType());
-        noticeFile.setUserSeqId(noticeFileDTO.getUserSeqId());
+        //noticeFile.setType(noticeFileDTO.getType());
+//        noticeFile.setUserSeqId(noticeFileDTO.getUserSeqId());
         final Notice notice = noticeFileDTO.getNotice() == null ? null : noticeRepository.findById(noticeFileDTO.getNotice())
                 .orElseThrow(() -> new NotFoundException("notice not found"));
         noticeFile.setNotice(notice);

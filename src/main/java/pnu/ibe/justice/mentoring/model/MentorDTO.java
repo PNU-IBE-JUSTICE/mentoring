@@ -14,25 +14,27 @@ import pnu.ibe.justice.mentoring.domain.User;
 @Setter
 public class MentorDTO {
 
+    @NotNull(groups = CreateValidationGroup.class)
     private Integer seqId;
 
-    @NotNull
+    @NotNull (groups = EditValidationGroup.class)
     @Size(max = 255)
     private String title;
 
-    @NotNull
+    @NotNull(groups = CreateValidationGroup.class)
     @Size(max = 255)
     private String category;
 
-    @NotNull
+    @NotNull(groups = CreateValidationGroup.class)
     private Integer minMent;
 
-    @NotNull
+    @NotNull(groups = CreateValidationGroup.class)
     private Integer maxMent;
 
+    @NotNull(groups =EditValidationGroup.class )
     private String content;
 
-    @NotNull
+    @NotNull(groups = CreateValidationGroup.class)
     @Size(max = 255)
     private String team;
 
@@ -45,5 +47,8 @@ public class MentorDTO {
 
     //    private MentorFileDTO mentorFile;
     private MultipartFile file;
+
+    public interface CreateValidationGroup {}
+    public interface EditValidationGroup {}
 
 }

@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,6 +46,18 @@ public class MentorService {
                 .toList();
     }
 
+    public List<MentorDTO> findMentorsByCategory(String category) {
+        // 카테고리가 주어진 값과 일치하는 멘토를 찾음
+        List<Mentor> mentors = mentorRepository.findByCategory(category);
+
+        // Mentor 엔티티를 MentorDTO로 변환
+        return mentors.stream()
+                .map(mentor -> mapToDTO(mentor, new MentorDTO()))
+                .collect(Collectors.toList());
+    }
+
+
+
     public String saveFile(MultipartFile multipartFile, String uploadFolder){
         String fileUrl="";
         Path folderPath = Paths.get(uploadFolder + dateFolder);
@@ -53,7 +67,7 @@ public class MentorService {
             Path filePath = folderPath.resolve(multipartFile.getOriginalFilename());
             multipartFile.transferTo(filePath.toFile());
 
-            fileUrl = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring_git/upload/" + dateFolder + "/" + multipartFile.getOriginalFilename();
+            fileUrl = "/Users/gim-yeseul/Desktop/mentoring/mentoring/upload/" + dateFolder + "/" + multipartFile.getOriginalFilename();
             System.out.println("File saved at: " + fileUrl);
         }catch(Exception e) {
             System.out.println(e.getMessage());
@@ -65,6 +79,14 @@ public class MentorService {
         return mentorRepository.findById(seqId)
                 .map(mentor -> mapToDTO(mentor, new MentorDTO()))
                 .orElseThrow(NotFoundException::new);
+    }
+
+    // 사용자가 신청서를 가진 갯수를 리턴
+    public int getMentorsCountByUser(final Integer userSeqId) {
+        return  mentorRepository.selectJPQLById(userSeqId);
+    }
+    public int getMentorsByUser(final Integer userSeqId) {
+        return  mentorRepository.selectMentorSeqJPQLById(userSeqId);
     }
 
     public Integer create(final MentorDTO mentorDTO) {
@@ -102,19 +124,40 @@ public class MentorService {
     }
 
     private Mentor mapToEntity(final MentorDTO mentorDTO, final Mentor mentor) {
-        mentor.setTitle(mentorDTO.getTitle());
-        mentor.setCategory(mentorDTO.getCategory());
-        mentor.setMinMent(mentorDTO.getMinMent());
-        mentor.setMaxMent(mentorDTO.getMaxMent());
-        mentor.setContent(mentorDTO.getContent());
-        mentor.setTeam(mentorDTO.getTeam());
-        mentor.setMFId(mentorDTO.getMFId());
-        mentor.setStatus(mentorDTO.getStatus());
-        final User users = mentorDTO.getUsers() == null ? null : userRepository.findById(mentorDTO.getUsers().getSeqId())
-                .orElseThrow(() -> new NotFoundException("users not found"));
-        mentor.setUsers(users);
+        // Check if each field is not null before setting the value
+        if (mentorDTO.getTitle() != null) {
+            mentor.setTitle(mentorDTO.getTitle());
+        }
+        if (mentorDTO.getCategory() != null) {
+            mentor.setCategory(mentorDTO.getCategory());
+        }
+        if (mentorDTO.getMinMent() != null) {
+            mentor.setMinMent(mentorDTO.getMinMent());
+        }
+        if (mentorDTO.getMaxMent() != null) {
+            mentor.setMaxMent(mentorDTO.getMaxMent());
+        }
+        if (mentorDTO.getContent() != null) {
+            mentor.setContent(mentorDTO.getContent());
+        }
+        if (mentorDTO.getTeam() != null) {
+            mentor.setTeam(mentorDTO.getTeam());
+        }
+        if (mentorDTO.getMFId() != null) {
+            mentor.setMFId(mentorDTO.getMFId());
+        }
+        if (mentorDTO.getStatus() != null) {
+            mentor.setStatus(mentorDTO.getStatus());
+        }
+        if (mentorDTO.getUsers() != null) {
+            System.out.println(mentorDTO.getUsers().getSeqId());
+            final User users = userRepository.findById(mentorDTO.getUsers().getSeqId())
+                    .orElseThrow(() -> new NotFoundException("User not found"));
+            mentor.setUsers(users);
+        }
         return mentor;
     }
+
 
     public ReferencedWarning getReferencedWarning(final Integer seqId) {
         final ReferencedWarning referencedWarning = new ReferencedWarning();

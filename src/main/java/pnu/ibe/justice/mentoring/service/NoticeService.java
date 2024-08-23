@@ -1,8 +1,20 @@
 package pnu.ibe.justice.mentoring.service;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import pnu.ibe.justice.mentoring.domain.Notice;
 import pnu.ibe.justice.mentoring.domain.NoticeFile;
 import pnu.ibe.justice.mentoring.domain.User;
@@ -20,6 +32,8 @@ public class NoticeService {
     private final NoticeRepository noticeRepository;
     private final UserRepository userRepository;
     private final NoticeFileRepository noticeFileRepository;
+    String dateFolder = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+
 
     public NoticeService(final NoticeRepository noticeRepository,
             final UserRepository userRepository, final NoticeFileRepository noticeFileRepository) {
@@ -35,6 +49,23 @@ public class NoticeService {
                 .toList();
     }
 
+    public String saveFile(MultipartFile multipartFile, String uploadFolder){
+        String fileUrl="";
+        Path folderPath = Paths.get(uploadFolder + dateFolder);
+
+        try {
+            Files.createDirectories(folderPath);
+            Path filePath = folderPath.resolve(multipartFile.getOriginalFilename());
+            multipartFile.transferTo(filePath.toFile());
+
+            fileUrl = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring/upload/" + dateFolder + "/" + multipartFile.getOriginalFilename();
+            System.out.println("File saved at: " + fileUrl);
+        }catch(Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return multipartFile.getOriginalFilename();
+    }
+
     public NoticeDTO get(final Integer seqId) {
         return noticeRepository.findById(seqId)
                 .map(notice -> mapToDTO(notice, new NoticeDTO()))
@@ -43,6 +74,9 @@ public class NoticeService {
 
     public Integer create(final NoticeDTO noticeDTO) {
         final Notice notice = new Notice();
+        OffsetDateTime currentDateTime = OffsetDateTime.now();
+        notice.setDateCreated(currentDateTime);
+        notice.setLastUpdated(currentDateTime);
         mapToEntity(noticeDTO, notice);
         return noticeRepository.save(notice).getSeqId();
     }
@@ -63,6 +97,7 @@ public class NoticeService {
         noticeDTO.setTitle(notice.getTitle());
         noticeDTO.setContent(notice.getContent());
         noticeDTO.setIsPopup(notice.getIsPopup());
+        noticeDTO.setMFId(notice.getMFId());
         noticeDTO.setIsMust(notice.getIsMust());
         noticeDTO.setUsers(notice.getUsers() == null ? null : notice.getUsers());
         return noticeDTO;
@@ -73,6 +108,7 @@ public class NoticeService {
         notice.setContent(noticeDTO.getContent());
         notice.setIsPopup(noticeDTO.getIsPopup());
         notice.setIsMust(noticeDTO.getIsMust());
+        notice.setMFId(noticeDTO.getMFId());
         final User users = noticeDTO.getUsers() == null ? null : userRepository.findById(noticeDTO.getUsers().getSeqId())
                 .orElseThrow(() -> new NotFoundException("users not found"));
         notice.setUsers(users);
@@ -90,6 +126,11 @@ public class NoticeService {
             return referencedWarning;
         }
         return null;
+    }
+
+    public Page<Notice> getList(int page) {
+        Pageable pageable = PageRequest.of(page, 6);
+        return this.noticeRepository.findAll(pageable);
     }
 
 }
