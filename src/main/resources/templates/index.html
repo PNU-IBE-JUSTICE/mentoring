@@ -1,121 +1,209 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout-main}">
-  <head>
-    <title>Index Page</title>
-  </head>
-  <body>
+<head>
+  <title>Index Page</title>
+  <style>
+    /* 기존 스타일 유지 */
+    .facility-item {
+      padding: 30px;
+      min-height: 300px; /* 원하는 최소 높이로 설정 */
+    }
 
-    <div layout:fragment="content">
+    /* 추가된 CSS 스타일 */
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between; /* 남은 공간을 균등 분배 */
+    }
+
+    .col-lg-4, .col-md-6 {
+      flex: 1 1 30%; /* 기본적으로 각 div는 30%의 공간을 차지 */
+      box-sizing: border-box;
+    }
+
+    .sec-smart-schedule {
+      max-width: 100%; /* div가 부모 요소의 전체 너비를 차지 */
+      margin: 20px 0; /* 위아래 여백 */
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .sec-title {
+      font-size: 1.2em;
+      background-color: #f4f4f4;
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+      position: relative;
+    }
+
+    .more-link {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      color: #007bff;
+      cursor: pointer;
+    }
+
+    .sec-body {
+      padding: 10px;
+    }
+
+    .schedule-date {
+      display: flex;
+      align-items: baseline;
+    }
+
+    .schedule-month {
+      font-size: 3em;
+      color: #007bff;
+      margin-right: 10px;
+    }
+
+    .schedule-list {
+      max-height: 220px;
+      overflow-y: auto;
+      list-style-type: none;
+      padding-left: 0;
+      margin: 0;
+    }
+
+    .schedule-list li {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .schedule-list li:last-child {
+      border-bottom: none;
+    }
+
+    .list-date {
+      font-weight: bold;
+      color: #333;
+    }
+
+    .subject {
+      display: block;
+      margin-top: 5px;
+      color: #555;
+    }
+
+    /* Popup styling */
+    #schedulePopup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+      max-width: 500px;
+      background-color: white;
+      border: 1px solid #ccc;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    #schedulePopup .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 1.2em;
+      cursor: pointer;
+    }
+
+    #overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+
+    /* 반응형 디자인 */
+    @media (max-width: 768px) {
+      .col-lg-4, .col-md-6 {
+        flex: 1 1 100%; /* 모바일에서 각 div가 전체 너비를 차지 */
+      }
+      .row {
+        justify-content: center; /* 모바일에서 중앙 정렬 */
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div layout:fragment="content">
   <!-- Facilities Start -->
-      <div class="container-fluid pt-5">
-        <div class="container pb-3">
-          <div class="row">
-            <div class="col-lg-4 col-md-6 pb-1">
-              <div
-                class="d-flex bg-light shadow-sm border-top rounded mb-4"
-                style="padding: 30px"
-              >
-                <i
-                  class="flaticon-050-fence h1 font-weight-normal text-primary mb-3"
-                ></i>
-                <div class="pl-4">
-                  <h4>Play Ground</h4>
-                  <p class="m-0">
-                    Kasd labore kasd et dolor est rebum dolor ut, clita dolor vero
-                    lorem amet elitr vero...
-                  </p>
-                </div>
-              </div>
+  <div class="container-fluid pt-5">
+    <div class="container pb-3">
+      <div class="row">
+        <!-- 교체된 div 시작 -->
+        <div class="col-lg-4 col-md-6 pb-1">
+          <div class="d-flex bg-light shadow-sm border-top rounded mb-4 facility-item sec-smart-schedule">
+            <header>
+              <h2 class="sec-title more-lingk" href="#popup" onclick="openSchPop(); return false;">학사 일정</h2>
+            </header>
+            <div class="sec-body">
+              <ul class="schedule-list" style="height: 220px">
+                <li><span class="list-date">2024-08-29 (목) ~ 2024-08-31 (토)</span> <span class="subject">1차 커리큘럼 계획서 제출</span></li>
+                <li><span class="list-date">2024-09-02 (월) ~ 2024-09-08 (일)</span> <span class="subject">1주차</span></li>
+                <li><span class="list-date">2024-09-09 (월) ~ 2024-09-15 (일)</span> <span class="subject">2주차</span></li>
+                <li><span class="list-date">2024-09-16 (월) ~ 2024-09-22 (일)</span> <span class="subject">3주차</span></li>
+                <li><span class="list-date">2024-09-23 (월) ~ 2024-09-29 (일)</span> <span class="subject">4주차</span></li>
+                <li><span class="list-date">2024-09-30 (월) ~ 2024-10-06 (일)</span> <span class="subject">5주차</span></li>
+                <li><span class="list-date">2024-10-07 (월) ~ 2024-10-11 (금)</span> <span class="subject">6주차</span></li>
+                <li><span class="list-date">2024-10-12 (토) ~ 2024-10-15 (화)</span> <span class="subject">중간보고서 제출</span></li>
+                <li><span class="list-date">2024-10-20 (일) ~ 2024-10-27 (일)</span> <span class="subject">중간 점검 날짜</span></li>
+                <li><span class="list-date">2024-10-30 (수) ~ 2024-11-02 (토)</span> <span class="subject">2차 커리큘럼 계획서 제출</span></li>
+                <li><span class="list-date">2024-11-04 (월) ~ 2024-11-10 (일)</span> <span class="subject">2주차</span></li>
+                <li><span class="list-date">2024-11-11 (월) ~ 2024-11-17 (일)</span> <span class="subject">3주차</span></li>
+                <li><span class="list-date">2024-11-18 (월) ~ 2024-11-24 (일)</span> <span class="subject">4주차</span></li>
+                <li><span class="list-date">2024-11-25 (월) ~ 2024-12-01 (일)</span> <span class="subject">5주차</span></li>
+                <li><span class="list-date">2024-12-02 (월) ~ 2024-12-06 (금)</span> <span class="subject">6주차, 최종 보고서 제출</span></li>
+                <li><span class="list-date">2024-12-07 (토) ~ 2024-12-08 (일)</span> <span class="subject">최종 점검 날짜</span></li>
+              </ul>
             </div>
-            <div class="col-lg-4 col-md-6 pb-1">
-              <div
-                class="d-flex bg-light shadow-sm border-top rounded mb-4"
-                style="padding: 30px"
-              >
-                <i
-                  class="flaticon-022-drum h1 font-weight-normal text-primary mb-3"
-                ></i>
-                <div class="pl-4">
-                  <h4>Music and Dance</h4>
-                  <p class="m-0">
-                    Kasd labore kasd et dolor est rebum dolor ut, clita dolor vero
-                    lorem amet elitr vero...
-                  </p>
-                </div>
-              </div>
+          </div>
+        </div>
+        <!-- 교체된 div 끝 -->
+        <div class="col-lg-4 col-md-6 pb-1">
+          <div class="d-flex bg-light shadow-sm border-top rounded mb-4 facility-item">
+            <i class="flaticon-022-drum h1 font-weight-normal text-primary mb-3"></i>
+            <div class="pl-4">
+              <h4>Music and Dance</h4>
+              <p class="m-0">
+                Kasd labore kasd et dolor est rebum dolor ut, clita dolor vero
+                lorem amet elitr vero...
+              </p>
             </div>
-            <div class="col-lg-4 col-md-6 pb-1">
-              <div
-                class="d-flex bg-light shadow-sm border-top rounded mb-4"
-                style="padding: 30px"
-              >
-                <i
-                  class="flaticon-030-crayons h1 font-weight-normal text-primary mb-3"
-                ></i>
-                <div class="pl-4">
-                  <h4>Arts and Crafts</h4>
-                  <p class="m-0">
-                    Kasd labore kasd et dolor est rebum dolor ut, clita dolor vero
-                    lorem amet elitr vero...
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-4 col-md-6 pb-1">
-              <div
-                class="d-flex bg-light shadow-sm border-top rounded mb-4"
-                style="padding: 30px"
-              >
-                <i
-                  class="flaticon-017-toy-car h1 font-weight-normal text-primary mb-3"
-                ></i>
-                <div class="pl-4">
-                  <h4>Safe Transportation</h4>
-                  <p class="m-0">
-                    Kasd labore kasd et dolor est rebum dolor ut, clita dolor vero
-                    lorem amet elitr vero...
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-4 col-md-6 pb-1">
-              <div
-                class="d-flex bg-light shadow-sm border-top rounded mb-4"
-                style="padding: 30px"
-              >
-                <i
-                  class="flaticon-025-sandwich h1 font-weight-normal text-primary mb-3"
-                ></i>
-                <div class="pl-4">
-                  <h4>Healthy food</h4>
-                  <p class="m-0">
-                    Kasd labore kasd et dolor est rebum dolor ut, clita dolor vero
-                    lorem amet elitr vero...
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-4 col-md-6 pb-1">
-              <div
-                class="d-flex bg-light shadow-sm border-top rounded mb-4"
-                style="padding: 30px"
-              >
-                <i
-                  class="flaticon-047-backpack h1 font-weight-normal text-primary mb-3"
-                ></i>
-                <div class="pl-4">
-                  <h4>Educational Tour</h4>
-                  <p class="m-0">
-                    Kasd labore kasd et dolor est rebum dolor ut, clita dolor vero
-                    lorem amet elitr vero...
-                  </p>
-                </div>
-              </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-6 pb-1">
+          <div class="d-flex bg-light shadow-sm border-top rounded mb-4 facility-item">
+            <i class="flaticon-030-crayons h1 font-weight-normal text-primary mb-3"></i>
+            <div class="pl-4">
+              <h4>Arts and Crafts</h4>
+              <p class="m-0">
+                Kasd labore kasd et dolor est rebum dolor ut, clita dolor vero
+                lorem amet elitr vero...
+              </p>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </body>
+  </div>
+</div>
+</body>
 </html>

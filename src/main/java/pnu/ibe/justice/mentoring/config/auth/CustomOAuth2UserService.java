@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserServ
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
@@ -44,8 +45,16 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         // OAuth2UserService를 통해 가져온 OAuth2User의 attribute 등을 담을 클래스
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
+
         // 사용자 저장 또는 업데이트
-        User user = saveOrUpdate(attributes);
+
+        User user= new User();
+
+        try {
+            user = saveOrUpdate(attributes);
+        } catch (Exception e) {
+            throw new OAuth2AuthenticationException("ERROR Email");
+        }
 
         // 세션에 사용자 정보 저장
         httpSession.setAttribute("user", new SessionUser(user));
@@ -56,7 +65,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 attributes.getNameAttributeKey());
     }
 
-    private User saveOrUpdate(OAuthAttributes attributes) {
+    private User saveOrUpdate(OAuthAttributes attributes) throws OAuth2AuthenticationException{
         User user = userRepository.findByEmail(attributes.getEmail())
                 // 구글 사용자 정보 업데이트(이미 가입된 사용자) => 업데이트
                 .map(entity -> entity.update(attributes.getName(), attributes.getEmail()))

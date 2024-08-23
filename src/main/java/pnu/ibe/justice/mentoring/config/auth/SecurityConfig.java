@@ -1,5 +1,6 @@
 package pnu.ibe.justice.mentoring.config.auth;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,7 +40,7 @@ public class SecurityConfig {
                         //.requestMatchers("/admin/**").hasRole(Role.ADMIN.name())
                         .requestMatchers("/admin/**").hasRole(Role.ADMIN.name())
                         .requestMatchers("/posts/new", "/comments/save").hasRole(Role.GUEST.name())
-                        .requestMatchers("/","/h2-console/**", "/login/*","/notice/**","/lectureList/**",
+                        .requestMatchers("/","/error","/h2-console/**", "/login/*","/notice/**","/lectureList/**",
                                 "/logout/*","/favicon.ico","/lib/**", "/css/**","/js/**","/images/**","/scss/**").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -55,6 +56,12 @@ public class SecurityConfig {
                 .successHandler((request, response, authentication) -> {
                             response.sendRedirect("/");
                         })
+                .failureHandler(((request, response, exception) -> {
+                        System.out.println(exception.toString());
+                        System.out.println(exception.getMessage());
+                        response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                        response.sendRedirect("/error");
+                    }))
 
                 );
 

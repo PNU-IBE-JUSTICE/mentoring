@@ -50,6 +50,7 @@ public class OAuthAttributes {
     // User 엔티티 생성
     public User toEntity() {
         User user = new User();
+        user.setName(name);
         user.setEmail(email);
         user.setRole(Role.GUEST);
         return user;

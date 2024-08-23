@@ -58,8 +58,10 @@ public class MenMentorController {
         // 예시: 예외 발생 처리
         int cnt = mentorService.getMentorsCountByUser(user.getSeqId());
         model.addAttribute("mentorsCount", cnt);
-        Integer mentorSeqId = mentorService.getMentorsByUser(user.getSeqId());
-        model.addAttribute("mentorsSeqId", mentorSeqId);
+        if (cnt>0) {
+            int mentorSeqId = mentorService.getMentorsByUser(user.getSeqId());
+            model.addAttribute("mentorsSeqId", mentorSeqId);
+        }
         return "pages/mentorApplication";
     }
 
