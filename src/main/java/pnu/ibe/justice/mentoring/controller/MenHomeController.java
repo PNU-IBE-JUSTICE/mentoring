@@ -10,8 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import pnu.ibe.justice.mentoring.config.auth.LoginUser;
 import pnu.ibe.justice.mentoring.config.auth.SessionUser;
 import pnu.ibe.justice.mentoring.domain.User;
+import pnu.ibe.justice.mentoring.model.NoticeDTO;
+import pnu.ibe.justice.mentoring.service.NoticeService;
 
 import java.awt.print.Pageable;
+import java.util.List;
 
 
 @Controller
@@ -21,6 +24,9 @@ public class MenHomeController {
 
     private final HttpSession httpSession;
 
+    private final NoticeService noticeService;
+
+
     @ModelAttribute("user")
     public SessionUser getSettings(@LoginUser SessionUser user) {
         return user;
@@ -28,6 +34,11 @@ public class MenHomeController {
 
     @GetMapping("")
     public String index(Model model) {
+
+        // null 체크 후 모델에 값 추가
+        model.addAttribute("noticeIsMustList", noticeService.findNoticeByIsmust(Boolean.TRUE));
+
+
         return "index";
     }
 

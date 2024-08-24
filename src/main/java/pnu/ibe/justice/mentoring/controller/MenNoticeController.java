@@ -19,6 +19,8 @@ import pnu.ibe.justice.mentoring.service.NoticeFileService;
 import pnu.ibe.justice.mentoring.service.NoticeService;
 import pnu.ibe.justice.mentoring.util.CustomCollectors;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/notice")
@@ -69,4 +71,25 @@ public class MenNoticeController {
         }
         return "pages/noticeDetail";
     }
+
+
+    @GetMapping(value ="/ismust")
+    public String ismust(Model model) {
+
+        // 리스트에서 첫 번째 NoticeDTO를 가져옵니다.
+        // null 체크 후 모델에 값 추가
+        System.out.println("success ismust");
+        if (noticeService.findNoticeByIsmust(Boolean.TRUE) != null) {
+            model.addAttribute("noticeIsMust", noticeService.findNoticeByIsmust(Boolean.TRUE));
+            System.out.println(noticeService.findNoticeByIsmust(Boolean.TRUE).getFirst());
+        } else {
+            // null인 경우 모델에 0을 추가
+            model.addAttribute("noticeIsMust", 0);
+            System.out.println(0);
+        }
+
+        return "index";
+    }
+
+
 }
