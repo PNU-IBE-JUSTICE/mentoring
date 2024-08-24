@@ -66,6 +66,16 @@
               id="navbarCollapse"
       >
         <div class="navbar-nav font-weight-bold mx-auto py-0">
+          <div class="nav-item dropdown">
+          <a
+                  th:href="@{/}"
+                  class="nav-link dropdown-toggle"
+                  data-toggle="dropdown">소개</a>
+          <div class="dropdown-menu rounded-0 m-0">
+            <a th:href="@{/peopleList}" class="dropdown-item">운영진</a>
+            <a th:href="@{/introduce}" class="dropdown-item">사업 소개</a>
+          </div>
+          </div>
           <a th:href="@{/notice}" class="nav-item nav-link">공지사항</a>
           <a th:href="@{/lectureList}" class="nav-item nav-link">강의목록</a>
           <a th:href="@{/question}" class="nav-item nav-link">질문게시판</a>
@@ -77,7 +87,8 @@
                     data-toggle="dropdown">마이페이지</a>
             <div class="dropdown-menu rounded-0 m-0">
               <a th:href="@{/MemberIfForm/edit}" class="dropdown-item">회원정보</a>
-              <a th:href="@{/mentorApplication}" class="dropdown-item">신청내역</a>
+              <a th:href="@{/mentorApplication}" class="dropdown-item">멘토신청내역</a>
+              <a th:href="@{/menteeApplication}" class="dropdown-item">멘티신청내역</a>
             </div>
           </div>
 
@@ -135,7 +146,8 @@
             <span class="text-white">IBE_JUSTICE</span>
           </a>
           <p>
-            현 사업은 정보의생명공학대학 학생회 정의 1기에서 하반기 사업으로 진행하는 사업안입니다.
+          <div>현 사업은 정보의생명공학대학 학생회 정의에서 하반기 사업으로 진행하는 사업안입니다.</div>
+          <div>부산대학교 소프트웨어 융합 교육원과 정보의생명공학대학이 함께합니다.</div>
           </p>
           <div class="d-flex justify-content-start mt-4">
             <a
@@ -155,6 +167,12 @@
               style="width: 38px; height: 38px"
               href="https://www.instagram.com/pnu_ibe/"
               ><i class="fab fa-instagram"></i
+            ></a>
+            <a
+                    class="btn btn-outline-primary rounded-circle text-center mr-2 px-0"
+                    style="width: 38px; height: 38px"
+                    href="https://swedu.pusan.ac.kr/swedu/index.do"
+            ><i class="fas fa-building"></i
             ></a>
           </div>
         </div>
