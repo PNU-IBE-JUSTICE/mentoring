@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout-main}">
+<head>
+  <title>People</title>
+  <!-- Add Bootstrap CSS -->
+</head>
+<style>
+  #portfolio-filters .list-inline-item {
+    display: inline-block; /* li 항목들을 한 줄로 배치 */
+    margin-right: 5px; /* 항목들 사이의 간격을 조정 */
+  }
+
+</style>
+<body>
+
+<div layout:fragment="content">
+  <!--lecturelist 본문-->
+
+  <div class="row">
+    <div class="col-12 text-center mb-2">
+      <ul class="list-inline mb-4" id="portfolio-filters">
+        <li th:classappend="${people==0} ? 'active' : ''" class="list-inline-item" data-filter="*">
+          <a class="btn btn-outline-primary" th:href="@{/peopleList(pSort=0)}">담당자</a>
+        </li>
+        <li th:classappend="${people==1} ? 'active' : ''" class="list-inline-item" data-filter=".프로젝트">
+          <a class="btn btn-outline-primary" th:href="@{/peopleList(pSort=1)}">교수진</a>
+        </li>
+        <li th:classappend="${people==2} ? 'active' : ''" class="list-inline-item" data-filter=".학부수업">
+          <a class="btn btn-outline-primary" th:href="@{/peopleList(pSort=2)}">강사진</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="row justify-content-center">
+    <!-- people pSort 0일 때만 표시 -->
+    <div class="col-lg-8 mb-4" th:if="${people == 0}">
+      <div class="container-fluid pt-5">
+        <div class="container">
+          <div class="text-center pb-2">
+            <p class="section-title px-5">
+              <span class="px-2">멘토링 담당 학생회</span>
+            </p>
+            <h1 class="mb-4">학생회</h1>
+          </div>
+          <div class="row">
+            <!-- Example Item -->
+            <div class="col-md-6 col-lg-3 text-center team mb-5">
+              <div class="position-relative overflow-hidden mb-4" style="border-radius: 100%">
+                <!-- Image and Social Media Links Removed -->
+              </div>
+              <h4>김예슬</h4>
+              <a  href="mailto:yesul0718@pusan.ac.kr ?subject=홈페이지서버오류 " target="_blank">문의하기</a>
+              <div>멘토링 사업 총 책임자, 홈페이지 서버 구현</div>
+              <div>홈페이지 서버 문제 시 연락주시길 바랍니다. </div>
+            </div>
+            <div class="col-md-6 col-lg-3 text-center team mb-5">
+              <div class="position-relative overflow-hidden mb-4" style="border-radius: 100%">
+                <!-- Image and Social Media Links Removed -->
+              </div>
+              <h4>김예슬</h4>
+              <a  href="mailto:yesul0718@pusan.ac.kr ?subject=홈페이지서버오류 " target="_blank">문의하기</a>
+              <div>멘토링 사업 총 책임자, 홈페이지 서버 구현</div>
+              <div>홈페이지 서버 문제 시 연락주시길 바랍니다. </div>
+            </div>
+            <div class="col-md-6 col-lg-3 text-center team mb-5">
+              <div class="position-relative overflow-hidden mb-4" style="border-radius: 100%">
+                <!-- Image and Social Media Links Removed -->
+              </div>
+              <h4>김예슬</h4>
+              <a  href="mailto:yesul0718@pusan.ac.kr ?subject=홈페이지서버오류 " target="_blank">문의하기</a>
+              <div>멘토링 사업 총 책임자, 홈페이지 서버 구현</div>
+              <div>홈페이지 서버 문제 시 연락주시길 바랍니다. </div>
+            </div>
+            <div class="col-md-6 col-lg-3 text-center team mb-5">
+              <div class="position-relative overflow-hidden mb-4" style="border-radius: 100%">
+              </div>
+              <h4>김예슬</h4>
+              <a  href="mailto:yesul0718@pusan.ac.kr ?subject=홈페이지서버오류 " target="_blank">문의하기</a>
+              <div>멘토링 사업 총 책임자, 홈페이지 서버 구현</div>
+              <div>홈페이지 서버 문제 시 연락주시길 바랍니다. </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- people pSort 1일 때만 표시 -->
+    <div class="col-lg-4 mb-4" th:if="${people == 1}">
+      <div class="container-fluid pt-5">
+        <div class="container">
+          <div class="text-center pb-2">
+            <p class="section-title px-5">
+              <span class="px-2">도움 주신 교수님</span>
+            </p>
+            <h1 class="mb-4">교수진 명단</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- people pSort 2일 때만 표시 -->
+    <div class="col-lg-4 mb-4" th:if="${pSort == 2}">
+      <div class="container-fluid pt-5">
+        <div class="container">
+          <div class="text-center pb-2">
+            <p class="section-title px-5">
+              <span class="px-2">산업체 멘토링 멘토</span>
+            </p>
+            <h1 class="mb-4">강사진 명단</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Add Bootstrap JS and dependencies -->
+
+</body>
+</html>

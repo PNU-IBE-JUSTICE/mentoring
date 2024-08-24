@@ -45,14 +45,14 @@ public class LectureListController {
     }
 
     @GetMapping
-    public String list(final Model model, @RequestParam(value = "caSort" , required = false, defaultValue = "0") String caSort) {
+    public String list(final Model model, @RequestParam(value = "caSort" , required = false, defaultValue = "0") int caSort) {
         System.out.println(caSort);
         System.out.println(mentorService.findMentorsByCategory("2"));
         model.addAttribute("mentors", mentorService.findAll());
-        if (caSort.equals("0")) {
+        if (caSort == 0) {
             System.out.println(caSort);
             model.addAttribute("category",mentorService.findAll());
-        } else if (caSort.equals("1")) {
+        } else if (caSort == 1) {
 
 
             model.addAttribute("category",mentorService.findMentorsByCategory("1"));
