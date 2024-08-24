@@ -22,6 +22,7 @@ public class QuestionFileDTO {
     private byte[] data;
 
     private Integer question;
+    private String filename;
 
     private MultipartFile file;
 

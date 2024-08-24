@@ -56,14 +56,6 @@ public class QuestionService {
                 .orElseThrow(NotFoundException::new);
     }
 
-    public Question getQuestion(Integer seqId) {
-        Optional<Question> question = this.questionRepository.findById(seqId);
-        if (question.isPresent()) {
-            return question.get();
-        } else {
-            throw new DataNotFoundException("question not found");
-        }
-    }
     public Question create(QuestionDTO questionDTO) {
         Question question = new Question();
 

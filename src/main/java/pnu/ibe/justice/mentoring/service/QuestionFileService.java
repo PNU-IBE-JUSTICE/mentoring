@@ -64,10 +64,14 @@ public class QuestionFileService {
 
         // DTO에 경로 설정
         questionFileDTO.setFileSrc(fileWebPath);
+        questionFileDTO.setFilename(fileName); // 원본 파일 이름 설정
 
-        // 데이터베이스에 저장 로직
-        // questionFileRepository.save(...);
+        // QuestionFile 엔티티 생성
+        QuestionFile questionFile = new QuestionFile();
+        mapToEntity(questionFileDTO, questionFile);
+        questionFileRepository.save(questionFile);
     }
+
 
     public void save(QuestionFileDTO questionFileDTO) throws IOException {
         QuestionFile questionFile = new QuestionFile();
@@ -91,10 +95,17 @@ public class QuestionFileService {
                 .orElseThrow(NotFoundException::new);
     }
 
-    public Integer create(final QuestionFileDTO questionFileDTO) {
-        final QuestionFile questionFile = new QuestionFile();
-        mapToEntity(questionFileDTO, questionFile);
-        return questionFileRepository.save(questionFile).getSeqId();
+    public QuestionFile create(QuestionFileDTO questionFileDTO) {
+        QuestionFile questionFile = new QuestionFile();
+
+        if (questionFileDTO.getQuestion() != null) {
+            Question question = questionRepository.findById(questionFileDTO.getQuestion())
+                    .orElseThrow(() -> new NotFoundException("Question not found"));
+            questionFile.setQuestion(question);
+        }
+
+        questionFileRepository.save(questionFile);
+        return questionFile;
     }
 
     public void update(final Integer seqId, final QuestionFileDTO questionFileDTO) {
@@ -108,8 +119,7 @@ public class QuestionFileService {
         questionFileRepository.deleteById(seqId);
     }
 
-    private QuestionFileDTO mapToDTO(final QuestionFile questionFile,
-            final QuestionFileDTO questionFileDTO) {
+    private QuestionFileDTO mapToDTO(final QuestionFile questionFile, final QuestionFileDTO questionFileDTO) {
         questionFileDTO.setSeqId(questionFile.getSeqId());
         questionFileDTO.setFileSrc(questionFile.getFileSrc());
         questionFileDTO.setType(questionFile.getType());
@@ -127,4 +137,9 @@ public class QuestionFileService {
         return questionFile;
     }
 
+    public List<QuestionFile> findByQuestionId(Integer seqId) {
+        Question question = questionRepository.findById(seqId)
+                .orElseThrow(() -> new RuntimeException("Question not found"));
+        return questionFileRepository.findByQuestion(question);
+    }
 }

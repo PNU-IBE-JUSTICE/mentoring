@@ -84,7 +84,7 @@ public class QuestionController {
 
     @PostMapping("/add")
     public String add(@ModelAttribute("question") @Valid final QuestionDTO questionDTO,
-                      @RequestParam("file") MultipartFile file,
+                      @RequestParam(value = "file", required = false) MultipartFile file,
                       final BindingResult bindingResult,
                       final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
@@ -94,7 +94,7 @@ public class QuestionController {
         try {
             Question createdQuestion = questionService.create(questionDTO);
 
-            if (!file.isEmpty()) {
+            if (file != null && !file.isEmpty()) {
                 QuestionFileDTO questionFileDTO = new QuestionFileDTO();
                 questionFileService.saveFile(questionFileDTO, file, "question");
 
@@ -138,7 +138,7 @@ public class QuestionController {
                     WebUtils.getMessage(referencedWarning.getKey(), referencedWarning.getParams().toArray()));
         } else {
             questionService.delete(seqId);
-            System.out.println("delete doene");
+            System.out.println("delete done");
             redirectAttributes.addFlashAttribute(WebUtils.MSG_INFO, WebUtils.getMessage("question.delete.success"));
         }
 
@@ -150,9 +150,11 @@ public class QuestionController {
         // 기존에 사용하던 DTO 대신 엔티티를 직접 가져옴
         QuestionDTO question = questionService.get(seqId);
         List<Answer> answers = answerService.getAnswersForQuestion(seqId);
+        List<QuestionFile> questionFiles = questionFileService.findByQuestionId(seqId);
 
         model.addAttribute("question", question);
         model.addAttribute("answers", answers);
+        model.addAttribute("questionFiles", questionFiles);
         return "question/detail";
     }
 

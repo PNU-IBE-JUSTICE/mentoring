@@ -16,8 +16,13 @@
     <div class="card mb-4">
         <div class="card-body">
             <p class="card-text" th:text="${question.content}">질문 내용이 여기에 표시됩니다.</p>
+            <p class="card-text" th:text="${question.name}">작성자 이름이 여기에 표시됩니다.</p>
         </div>
-        <!-- 작성일 -->
+
+        <div class="file-body" th:each="file : ${questionFiles}">
+            <a th:text="${file.fileSrc}">파일 이름</a>
+        </div>
+
         <div class="text-muted mb-4">
             <small>작성일: <span th:text="${question.dateCreated}">YYYY-MM-DD</span></small>
         </div>
@@ -32,26 +37,29 @@
 
     <!-- 답변 등록하기 버튼 -->
     <div class="d-flex justify-content-end">
-        <a th:href="@{/answers/add}" class="btn btn-primary">답변 등록하기</a>
+        <a th:href="@{/answers/add/{seqId}(seqId=${question.seqId})}" class="btn btn-primary">답변 등록하기</a>
     </div>
 
-    <h4>답변</h4>
-    <div th:each="answer : ${answers}" class="card mb-3">
-        <div class="card-body">
-            <p th:text="${answer.content}">답변 내용</p>
-            <div class="text-muted">
-                <small>작성일: <span th:text="${answer.dateCreated}">YYYY-MM-DD</span></small>
-            </div>
-            <div>
-                <a th:href="@{/answers/edit/{seqId}(seqId=${answer.seqId})}" class="btn btn-sm btn-secondary">[[#{answer.list.edit}]]</a>
-                <form th:action="@{/answers/delete/{seqId}(seqId=${answer.seqId})}"
-                      th:hx-confirm="#{delete.confirm}" method="POST" class="d-inline">
-                    <input type="hidden" name="question" th:value="${question.seqId}"/>
-                    <button type="submit" class="btn btn-sm btn-secondary">[[#{answer.list.delete}]]</button>
-                </form>
+    <div th:if="${!answers.isEmpty()}">
+        <h4>답변</h4>
+        <div th:each="answer : ${answers}" class="card mb-3">
+            <div class="card-body">
+                <p th:text="${answer.content}">답변 내용</p>
+                <div class="text-muted">
+                    <small>작성일: <span th:text="${answer.dateCreated}">YYYY-MM-DD</span></small>
+                </div>
+                <div>
+                    <a th:href="@{/answers/edit/{seqId}(seqId=${answer.seqId})}" class="btn btn-sm btn-secondary">[[#{answer.list.edit}]]</a>
+                    <form th:action="@{/answers/delete/{seqId}(seqId=${answer.seqId})}"
+                          th:hx-confirm="#{delete.confirm}" method="POST" class="d-inline">
+                        <input type="hidden" name="question" th:value="${question.seqId}"/>
+                        <button type="submit" class="btn btn-sm btn-secondary">[[#{answer.list.delete}]]</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
+
 </div>
 </body>
 </html>

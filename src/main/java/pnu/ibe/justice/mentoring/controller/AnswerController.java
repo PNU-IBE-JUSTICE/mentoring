@@ -60,26 +60,27 @@ public class AnswerController {
         return "answer/list";
     }
 
-    @GetMapping("/add")
-    public String add(@ModelAttribute("answer") final AnswerDTO answerDTO) {
+    @GetMapping("/add/{seqId}")
+    public String add(@PathVariable(name = "seqId") final Integer seqId, Model model) {
+        model.addAttribute("answer", new AnswerDTO());  // 새로운 빈 answer 객체 추가
+        model.addAttribute("seqId", seqId);
+
         return "answer/add";
     }
 
-    @PostMapping("/add")
-    public String addAnswer(@RequestParam("question") Integer question,
+    @PostMapping("/add/{seqId}")
+    public String addAnswer(@PathVariable("seqId") Integer question,
                             @RequestParam("content") String content,
-                            @RequestParam("file") MultipartFile file,
+                            @RequestParam(value = "file", required = false) MultipartFile file,
                             final RedirectAttributes redirectAttributes) {
         AnswerDTO answerDTO = new AnswerDTO();
-        answerDTO.setQuestion(Math.toIntExact(question));
+        answerDTO.setQuestion(question);  // question 값을 seqId로 설정
         answerDTO.setContent(content);
 
-        Answer createdAnswer = answerService.create(answerDTO);
-
         try {
-            if (!file.isEmpty()) {
+            Answer createdAnswer = answerService.create(answerDTO);
+            if (file != null && !file.isEmpty()) {
                 AnswerFileDTO answerFileDTO = new AnswerFileDTO();
-                // "answer"라는 type 인자를 추가하여 saveFile 메서드를 호출합니다.
                 answerFileService.saveFile(answerFileDTO, file, "answer");
 
                 answerFileDTO.setAnswer(createdAnswer.getSeqId());
@@ -92,6 +93,7 @@ public class AnswerController {
 
         return "redirect:/questions/detail/" + question;
     }
+
 
 
     @GetMapping("/edit/{seqId}")

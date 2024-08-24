@@ -76,7 +76,14 @@ public class AnswerService {
         if (answerDTO.getQuestion() != null) {
             Question question = questionRepository.findById(answerDTO.getQuestion())
                     .orElseThrow(() -> new NotFoundException("Question not found"));
-            answer.setQuestion(question); // User 객체를 직접 설정
+            answer.setQuestion(question);
+        }
+
+        if (answerDTO.getUsers() != null) {
+            User user = userRepository.findById(answerDTO.getUsers())
+                    .orElseThrow(() -> new NotFoundException("User not found"));
+            answer.setUsers(user); // User 객체를 직접 설정
+            System.out.println("usreer");
         }
 
         answerRepository.save(answer);

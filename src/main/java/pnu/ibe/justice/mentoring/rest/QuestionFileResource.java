@@ -41,7 +41,7 @@ public class QuestionFileResource {
     @PostMapping
     public ResponseEntity<Integer> createQuestionFile(
             @RequestBody @Valid final QuestionFileDTO questionFileDTO) {
-        final Integer createdSeqId = questionFileService.create(questionFileDTO);
+        final Integer createdSeqId = questionFileService.create(questionFileDTO).getSeqId();
         return new ResponseEntity<>(createdSeqId, HttpStatus.CREATED);
     }
 
