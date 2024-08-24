@@ -1,0 +1,1 @@
+insert into users values(3,202155532,1,now(),now(),'장전캠퍼스','정보의생명공학대학 정보컴퓨터공학부','yesul0718@pusan.ac.kr','김예슬','01041930473','0','ADMIN');

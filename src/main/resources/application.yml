@@ -1,12 +1,13 @@
 spring:
   profiles:
-    include: oauth
+ #   include: oauth
     active: local
   mvc:
     format:
       date: yyyy-MM-dd
       date-time: yyyy-MM-dd'T'HH:mm:ss
       time: HH:mm:ss
+
 error:
   handling:
     http-status-in-json-response: true
@@ -24,6 +25,7 @@ thymeleaf:
   prefix: classpath:/templates
   suffix: .html
   enabled: true
+
 
 
 
