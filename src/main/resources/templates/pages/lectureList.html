@@ -20,29 +20,21 @@
 <div layout:fragment="content">
     <!--lecturelist 본문-->
 
-<!--    <form th:action="@{/lectureList}" id="sortForm" method="get">-->
-<!--        <select class="bg-gray-300 px-1 py-1 rounded" name="caSort" onchange="onChangeSort(this)" th:value="${param.caSort}">-->
-<!--            <option value="0" th:selected=" ${param.caSort == '0'} ">전체보기</option>-->
-<!--            <option value="1"  th:selected=" ${param.caSort == '1'} ">프로젝트</option>-->
-<!--            <option value="2"  th:selected=" ${param.caSort == '2'} ">학부수업</option>-->
-<!--        </select>-->
-
-<!--    </form>-->
-<!--    <div class="row">-->
-<!--        <div class="col-12 text-center mb-2">-->
-<!--            <ul class="list-inline mb-4" id="portfolio-filters">-->
-<!--                <li class="btn btn-outline-primary m-1 active" data-filter="*">-->
-<!--                    All-->
-<!--                </li>-->
-<!--                <li class="btn btn-outline-primary m-1" data-filter=".프로젝트">-->
-<!--                    프로젝트-->
-<!--                </li>-->
-<!--                <li class="btn btn-outline-primary m-1" data-filter=".학부수업">-->
-<!--                    학과수업-->
-<!--                </li>-->
-<!--            </ul>-->
-<!--        </div>-->
-<!--    </div>-->
+    <div class="row">
+        <div class="col-12 text-center mb-2">
+            <ul class="list-inline mb-4" id="portfolio-filters">
+                <li class="btn btn-outline-primary m-1 " th:classappend="${caSort==0} ? 'active' : '' " data-filter="*">
+                    <a th:href="@{/lectureList(caSort=0)}">전체</a>
+                </li>
+                <li class="btn btn-outline-primary m-1 " th:classappend="${caSort==1} ? 'active' : '' " data-filter=".프로젝트">
+                    <a th:href="@{/lectureList(caSort=1)}">프로젝트</a>
+                </li>
+                <li class="btn btn-outline-primary m-1" th:classappend="${caSort==2} ? 'active' : '' " data-filter=".학부수업">
+                    <a th:href="@{/lectureList(caSort=2)}">학부수업</a>
+                </li>
+            </ul>
+        </div>
+    </div>
 
     <div class="row pb-3" style="position: relative; min-height: 200px;">
         <!--        sessionuser의 seqId값을 가져와서, 그 아이디로 있는 멘토가 있는지 확인. 멘토가 없다면 화면 띄우기 -->

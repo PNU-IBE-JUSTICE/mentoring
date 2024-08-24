@@ -25,6 +25,10 @@
     <!-- Customized Bootstrap Stylesheet -->
     <link href="/css/style.css" rel="stylesheet" />
     <style>
+      /*.justice-big-icon {*/
+      /*  width: ; !* 필요에 따라 조정 *!*/
+      /*  height: 60px; !* 필요에 따라 조정 *!*/
+      /*}*/
       .justice-icon-icon {
         width: 90px; /* 필요에 따라 조정 */
         height: 60px; /* 필요에 따라 조정 */
@@ -94,22 +98,23 @@
     <div class="container-fluid bg-primary px-0 px-md-5 mb-5">
       <div class="row align-items-center px-3">
         <div class="col-lg-6 text-center text-lg-left">
-          <h4 class="text-white mb-4 mt-5">Mentoring Center</h4>
-          <h1 class="display-3 font-weight-bold text-white">
-            New Approach to Mentoring Education
-          </h1>
+          <h4 class="text-white mb-4 mt-5">Mentoring program</h4>
+          <h2 class="display-3 font-weight-bold text-white">
+            <div>정보의생명공학대학</div>
+            <div>학생회 "정의"</div>
+          </h2>
           <p class="text-white mb-4">
-            ...
+            2024년 2학기 멘토링 프로그램
           </p>
         </div>
         <div class="col-lg-6 text-center text-lg-right">
-          <img class="img-fluid mt-5" src="img/header.png" alt="" />
+          <img class="img-fluid mt-5 mb-5" src="/images/justicemarkwhite.png" alt=""/>
         </div>
       </div>
     </div>
     <!-- Header End -->
 
-    <div class="container-fluid pt-5">
+    <div class="container-fluid pt-1">
       <div class="container">
         <div layout:fragment="content" />
       </div>
@@ -181,7 +186,7 @@
         <div class="col-lg-4 col-md-6 mb-5">
           <h3 class="text-primary mb-4">Quick Links</h3>
           <div class="d-flex flex-column justify-content-start">
-            <a class="text-white mb-2" href="#"
+            <a class="text-white mb-2" th:href="@{/}"
               ><i class="fa fa-angle-right mr-2"></i>Home</a
             >
             <a class="text-white mb-2" th:href="@{/notice}"
