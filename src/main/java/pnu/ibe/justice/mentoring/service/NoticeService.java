@@ -47,11 +47,11 @@ public class NoticeService {
 
     public List<NoticeDTO> findNoticeByIsmust(Boolean ismust) {
         // 카테고리가 주어진 값과 일치하는 멘토를 찾음
-        List<Notice> mentors = noticeRepository.findByIsMust(ismust);
+        List<Notice> notices = noticeRepository.findByIsMust(ismust);
 
         // notice 엔티티를 noticeDTO 변환
-        return mentors.stream()
-                .map(mentor -> mapToDTO(mentor, new NoticeDTO()))
+        return notices.stream()
+                .map(notice -> mapToDTO(notice, new NoticeDTO()))
                 .collect(Collectors.toList());
     }
 

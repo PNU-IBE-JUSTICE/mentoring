@@ -224,7 +224,7 @@
             </header>
             <div class="sec-body">
               <ul class="schedule-list" style="height: 220px">
-                <li th:each="noticeIsMust : ${noticeIsMustList}"><span class="list-date" >[[${noticeIsMust.title}]]</span> <span class="subject">[[${#strings.abbreviate(noticeIsMust.content, 15)}]]</span></li>
+                <li th:each="noticeIsMust : ${noticeIsMustList}"><a  th:href="@{|/notice/detail/${noticeIsMust.seqId}|}" class="list-date" >[[${noticeIsMust.title}]]</a> <span class="subject">[[${#strings.abbreviate(noticeIsMust.content, 15)}]] ...</span></li>
               </ul>
             </div>
           </div>
