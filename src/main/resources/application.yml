@@ -7,6 +7,17 @@ spring:
       date: yyyy-MM-dd
       date-time: yyyy-MM-dd'T'HH:mm:ss
       time: HH:mm:ss
+  ecurity:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 1065975634829-jkq80gv78ojclbfgs9pr0830cnjclt1d.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - email
+              - profile
+            redirect-uri: http://localhost:8080/login/oauth2/code/google
 
 error:
   handling:

@@ -1,10 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:c="" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout-main}">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+  <title>Index Page</title>
+  <style>
+    .notice-content {
+      max-width: 100%;
+      overflow-wrap: break-word; /* 긴 단어가 줄 바꿈되도록 */
+    }
+
+    .notice-content div {
+      white-space: pre-wrap; /* 줄바꿈과 공백을 유지하며, 콘텐츠가 화면에 맞게 줄바꿈됨 */
+    }
+  </style>
+
 </head>
 <body>
+<div layout:fragment="content">
+  <!-- Facilities Start -->
+  <!-- Detail Start -->
+  <div class="container py-5" th:object="${question}">
 
+    <div class="d-flex flex-column text-left mb-3">
+      <h1 class="mb-3" th:text="${question.title}"></h1>
+      <div class="d-flex">
+        <p class="mr-3"><i class="fa fa-user text-primary"></i> <span th:text="${question.users.getName()}"></span></p>
+      </div>
+    </div>
+    <div class="mb-5 notice-content">
+      <div th:utext="${question.content}"></div>
+    </div>
+    <div>
+      <a th:href="@{/question}" class="btn btn-secondary">[[#{question.list.back}]]</a>
+    </div>
+  </div>
+  <!-- Detail End -->
+</div>
 </body>
 </html>

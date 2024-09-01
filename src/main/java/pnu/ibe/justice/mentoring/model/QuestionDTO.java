@@ -1,9 +1,15 @@
 package pnu.ibe.justice.mentoring.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
+import pnu.ibe.justice.mentoring.domain.User;
 
-
+@Getter
+@Setter
 public class QuestionDTO {
 
     private Integer seqId;
@@ -14,7 +20,12 @@ public class QuestionDTO {
 
     private String content;
 
-    private Integer users;
+    private User users;
+
+    private MultipartFile file;
+
+    @JsonProperty("mFId")
+    private Integer mFId;
 
     public Integer getSeqId() {
         return seqId;
@@ -38,14 +49,6 @@ public class QuestionDTO {
 
     public void setContent(final String content) {
         this.content = content;
-    }
-
-    public Integer getUsers() {
-        return users;
-    }
-
-    public void setUsers(final Integer users) {
-        this.users = users;
     }
 
 }
