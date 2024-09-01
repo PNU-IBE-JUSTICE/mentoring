@@ -72,21 +72,6 @@
         </div>
     </div>
 
-    <div class="row pb-3" style="position: relative; min-height: 200px;">
-        <!--        sessionuser의 seqId값을 가져와서, 그 아이디로 있는 멘토가 있는지 확인. 멘토가 없다면 화면 띄우기 -->
-        <!-- mentor 목록이 없는 경우 -->
-        <div class="d-flex justify-content-center align-items-center"
-             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-            <div class="col-12">
-                <div class="alert alert-info text-center" role="alert">
-                    아직 멘토 선정이 되지 않았습니다.
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-
     <div class="row">
         <!-- mentor의 status가 1일 때만 표시 -->
         <div class="col-lg-4 mb-4" th:each="mentor : ${category}" th:if="${mentor.status == 1}">

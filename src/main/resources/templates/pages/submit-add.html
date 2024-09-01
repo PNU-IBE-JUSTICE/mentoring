@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout-main}">
+<head>
+    <title>멘토 추가</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="row pb-3" style="position: relative; min-height: 200px;">
+        <div class="container-fluid pt-5">
+            <div class="container">
+                <div class="text-center pb-2">
+                    <p class="section-title px-5">
+                        <span class="px-2">멘토 신청서</span>
+                    </p>
+                    <h1 class="mb-4">첨부파일 필수</h1>
+                    <h5 class="mb-4">신청서 파일을 제외한 정보들만 멘티분들께 제공되니, "내용" 항목에 충분한 정보를 기재해주세요. ex.멘티최소역량 등등 </h5>
+                </div>
+                <div>
+                    <div class="contact-form">
+                        <form th:action="@{/submit/add}" th:object="${post}" method="post" enctype="multipart/form-data">
+                            <!-- 멘토 추가 폼 필드들 -->
+                            <div class="control-group">
+                                <input type="text" class="form-control" th:field="*{title}" placeholder="제목" required="required" />
+                                <p class="help-block text-danger"></p>
+                            </div>
+                            <div class="control-group">
+                                <input type="text" class="form-control" READONLY th:object="${User}" th:field="*{name}" placeholder="이름" required="required" />
+                                <p class="help-block text-danger"></p>
+                            </div>
+                            <div class="control-group">
+                                <input type="text" class="form-control" READONLY th:object="${UserMentor}" th:field="*{team}" placeholder="이름" required="required" />
+                                <p class="help-block text-danger"></p>
+                            </div>
+
+                            <div class="control-group">
+                                <input type="text" class="form-control" READONLY th:object="${UserMentor}" th:field="*{category}" placeholder="이름" required="required" />
+                                <p class="help-block text-danger"></p>
+                            </div>
+                            <div class="control-group">
+                                <label for="subCategory">멘토링 주제 선택</label>
+                                <select id="subCategory" th:field="*{subCategory}" class="form-control" required>
+                                    <option value="" disabled selected>멘토링 주제 선택</option>
+                                    <!-- Thymeleaf를 사용하여 enum 값을 반복해서 옵션으로 추가 -->
+                                    <option
+                                            th:each="subCategory : ${T(pnu.ibe.justice.mentoring.model.SubCategory).values()}"
+                                            th:value="${subCategory.name()}"
+                                            th:text="${subCategory.displayName}"></option>
+                                </select>
+                                <p class="help-block text-danger"></p>
+                            <div class="form-group">
+                                <label for="content">내용</label>
+                                <textarea id="content" class="form-control" th:field="*{content}" placeholder="내용" required="required" rows="4"></textarea>
+                                <p class="help-block text-danger"></p>
+                            </div>
+                            <div class="control-group">
+                                <div th:replace="~{fragments/forms::inputRow(object='post', field='file', required=true, type='file1')}" />
+                                <p class="help-block text-danger"></p>
+                            </div>
+                            <input class="btn btn-primary" type="submit" value="게시물 작성하기" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

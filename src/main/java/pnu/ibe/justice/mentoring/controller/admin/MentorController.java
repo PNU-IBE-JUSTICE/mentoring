@@ -104,6 +104,7 @@ public class MentorController {
             return "admin/mentor/edit";
         }
         mentorService.update(seqId, mentorDTO);
+        System.out.println();
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("mentor.update.success"));
         return "redirect:/admin/mentors";
     }

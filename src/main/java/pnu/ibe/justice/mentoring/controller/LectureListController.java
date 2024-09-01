@@ -53,8 +53,6 @@ public class LectureListController {
             System.out.println(caSort);
             model.addAttribute("category",mentorService.findAll());
         } else if (caSort == 1) {
-
-
             model.addAttribute("category",mentorService.findMentorsByCategory("1"));
         } else  {
             model.addAttribute(("category"),mentorService.findMentorsByCategory("2"));

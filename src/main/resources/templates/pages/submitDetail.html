@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:c="" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout-main}">
+<head>
+    <title>Index Page</title>
+    <style>
+        .notice-content {
+            max-width: 100%;
+            overflow-wrap: break-word; /* 긴 단어가 줄 바꿈되도록 */
+        }
+
+        .notice-content div {
+            white-space: pre-wrap; /* 줄바꿈과 공백을 유지하며, 콘텐츠가 화면에 맞게 줄바꿈됨 */
+        }
+    </style>
+
+</head>
+<body>
+<div layout:fragment="content">
+    <!-- Facilities Start -->
+    <!-- Detail Start -->
+    <div class="container py-5" th:object="${post}">
+
+        <div class="d-flex flex-column text-left mb-3">
+            <p class="section-title pr-5">
+                <span th:text="${post.subCategory}"></span>
+            </p>
+            <h1 class="mb-3" th:text="${post.title}"></h1>
+            <div class="d-flex">
+                <p class="mr-3"><i class="fa fa-user text-primary"></i> <span th:text="${post.users.getName()}"></span></p>
+                <p class="mr-3"><i class="fa fa-folder text-primary"></i>  <span th:text="${post.category}"></span></p>
+            </div>
+        </div>
+        <div class="mb-5 notice-content">
+            <div th:utext="${post.content}"></div>
+        </div>
+        <!-- 첨부파일 다운로드 버튼 -->
+        <div class="mb-4"  th:if="${post.getMFId() != null}">
+            <a th:href="|/submit/${post.MFId}/download|"
+               class="btn btn-outline-primary d-flex align-items-center"
+               hx-no-boost="true" download target="_blank">
+                <i class="fa fa-download mr-2"></i>
+                <span th:text="${filename}">Download File</span>
+            </a>
+        </div>
+        <div>
+            <a th:href="@{/post}" class="btn btn-secondary">[[#{post.list.back}]]</a>
+        </div>
+    </div>
+    <!-- Detail End -->
+</div>
+</body>
+</html>

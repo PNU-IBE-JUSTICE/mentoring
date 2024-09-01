@@ -1,52 +1,34 @@
 package pnu.ibe.justice.mentoring.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
-
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.OffsetDateTime;
 
 @Entity
-@Table(name = "UserFiles")
+@Table(name = "SubmitreportFile")
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
-public class UserFile {
-
+public class SubmitReportFile {
     @Id
     @Column(nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer seqId;
 
     @Column
-    private String fileSrc;
-
-    @Column
-    private String type;
-
-    @Column
-    private LocalDate expireDt;
-
-    @Column
     private Integer userSeqId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(nullable = false)
+    private String fileSrc;
+
+    @ManyToOne(fetch = FetchType.LAZY) //ys
+    @JoinColumn(name = "submitreport_id")
+    private SubmitReport submitReport;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
@@ -55,4 +37,5 @@ public class UserFile {
     @LastModifiedDate
     @Column(nullable = false)
     private OffsetDateTime lastUpdated;
+
 }

@@ -14,6 +14,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriUtils;
 import pnu.ibe.justice.mentoring.domain.Mentor;
 import pnu.ibe.justice.mentoring.domain.MentorFile;
+import pnu.ibe.justice.mentoring.domain.NoticeFile;
+import pnu.ibe.justice.mentoring.domain.UserFile;
 import pnu.ibe.justice.mentoring.model.MentorFileDTO;
 import pnu.ibe.justice.mentoring.repos.MentorRepository;
 import pnu.ibe.justice.mentoring.service.MentorFileService;
@@ -61,9 +63,10 @@ public class MentorFileController {
 
         MentorFile mentorFile = mentorFileService.findFileById(mFId);
         String mentorFileName = mentorFile.getFileSrc();
-        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy");
         String formattedDate = mentorFile.getDateCreated().format(outputFormatter);
-        File file = new File(uploadFolder + formattedDate +"/" + mentorFileName);
+        String MentorFileApplication = "mentorApplication";
+        File file = new File(uploadFolder + "/"+ formattedDate + "/" + MentorFileApplication +"/" + mentorFileName);
         UrlResource urlResource = new UrlResource(file.toURI());
         String encodedUploadFileName = UriUtils.encode(mentorFileName, StandardCharsets.UTF_8);
         String contentDisposition = "attachment;  filename=\""  + encodedUploadFileName + "\"";

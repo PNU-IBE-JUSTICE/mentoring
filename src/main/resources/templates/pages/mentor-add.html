@@ -43,12 +43,18 @@
                                 <p class="help-block text-danger"></p>
                             </div>
                             <div class="control-group">
-                                <input type="text" class="form-control" th:field="*{minMent}" placeholder="최소멘티수" required="required" />
-                                <p class="help-block text-danger"></p>
+                                <input type="number" class="form-control" th:field="*{minMent}" placeholder="최소멘티수" required="required" />
+                                <!-- 숫자가 아닐 때 오류 메시지 표시 -->
+                                <p class="help-block text-danger"
+                                   th:if="${#fields.hasErrors('minMent')}"
+                                   th:text="${#fields.errors('minMent')}">이 입력칸을 작성하세요</p>
                             </div>
                             <div class="control-group">
-                                <input type="text" class="form-control" th:field="*{maxMent}" placeholder="최대멘티수" required="required" />
-                                <p class="help-block text-danger"></p>
+                                <input type="number" class="form-control" th:field="*{maxMent}" placeholder="최대멘티수" required="required" />
+                                <!-- 숫자가 아닐 때 오류 메시지 표시 -->
+                                <p class="help-block text-danger"
+                                   th:if="${#fields.hasErrors('maxMent')}"
+                                   th:text="${#fields.errors('maxMent')}">이 입력칸을 작성하세요</p>
                             </div>
                             <div class="control-group">
                                 <div th:replace="~{fragments/forms::inputRow(object='mentor', field='file', required=true, type='file')}" />

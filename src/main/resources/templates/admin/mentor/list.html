@@ -25,6 +25,9 @@
                 <th scope="col">[[#{mentor.team.label}]]</th>
                 <th scope="col">[[#{mentor.mFId.label}]]</th>
                 <th scope="col">[[#{mentor.status.label}]]</th>
+                <th scope="col">[[#{mentor.user_id.label}]]</th>
+                <th scope="col">[[#{mentor.user_name.label}]]</th>
+                <th scope="col">[[#{mentor.user_phone.label}]]</th>
                 <th scope="col">file</th>
                 <th><!-- --></th>
             </tr>
@@ -39,6 +42,9 @@
                 <td>[[${mentor.team}]]</td>
                 <td>[[${mentor.mFId}]]</td>
                 <td>[[${mentor.status}]]</td>
+                <td>[[${mentor.users.seqId}]]</td>
+                <td>[[${mentor.users.name}]]</td>
+                <td>[[${mentor.users.phone}]]</td>
                 <td><a th:href="|/admin/mentorFiles/${mentor.mFId}/download|" hx-no-boost="true" download  target="_blank" th:text="${mentor.getMFId()}"/></td>
 
                 <td>

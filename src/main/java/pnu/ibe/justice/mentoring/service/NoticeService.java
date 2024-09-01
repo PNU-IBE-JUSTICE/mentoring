@@ -71,9 +71,9 @@ public class NoticeService {
             Files.createDirectories(folderPath);
             Path filePath = folderPath.resolve(multipartFile.getOriginalFilename());
             multipartFile.transferTo(filePath.toFile());
-
             fileUrl = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring/upload/" + dateFolder + "/" + multipartFile.getOriginalFilename();
             System.out.println("File saved at: " + fileUrl);
+            System.out.println(dateFolder);
         }catch(Exception e) {
             System.out.println(e.getMessage());
         }
@@ -143,7 +143,7 @@ public class NoticeService {
     }
 
     public Page<Notice> getList(int page) {
-        Pageable pageable = PageRequest.of(page, 6);
+        Pageable pageable = PageRequest.of(page, 6, Sort.by(Sort.Direction.DESC, "dateCreated"));
         return this.noticeRepository.findAll(pageable);
     }
 

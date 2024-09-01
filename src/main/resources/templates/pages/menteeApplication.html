@@ -7,48 +7,43 @@
 <body>
 
 <div layout:fragment="content" >
-    <div class="row pb-3" style="position: relative; min-height: 200px;">
-        <!--        sessionuser의 seqId값을 가져와서, 그 아이디로 있는 멘토가 있는지 확인. 멘토가 없다면 화면 띄우기 -->
-        <!-- mentor 목록이 없는 경우 -->
-        <div class="d-flex justify-content-center align-items-center"
-             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-            <div class="col-12">
-                <div class="alert alert-info text-center" role="alert">
-                    아직 신청 기간이 아닙니다.
-                </div>
-
-            </div>
-        </div>
-    </div>
-    <!--멘티신청서상태--->
-<!--    <div th:if = "${menteesCount == 0 }" class="row pb-3" style="position: relative; min-height: 200px;">-->
-<!--        &lt;!&ndash;        sessionuser의 seqId값을 가져와서, 그 아이디로 있는 멘토가 있는지 확인. 멘토가 없다면 화면 띄우기 &ndash;&gt;-->
-<!--        &lt;!&ndash; mentee 목록이 없는 경우 &ndash;&gt;-->
-<!--        <div class="d-flex justify-content-center align-items-center"-->
-<!--             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">-->
-<!--            <div class="col-12">-->
-<!--                <div class="alert alert-info text-center" role="alert">-->
-<!--                    멘토 신청서를 작성하기-->
-<!--                </div>-->
-<!--                <a th:href="@{/menteeApplication/add}" class="btn btn-primary px-4 text-center">신청서 작성하러 가기</a>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-
-<!--    <div th:if = "${menteesCount >0 }" class="row pb-3" style="position: relative; min-height: 200px;">-->
+<!--    <div class="row pb-3" style="position: relative; min-height: 200px;">-->
 <!--        &lt;!&ndash;        sessionuser의 seqId값을 가져와서, 그 아이디로 있는 멘토가 있는지 확인. 멘토가 없다면 화면 띄우기 &ndash;&gt;-->
 <!--        &lt;!&ndash; mentor 목록이 없는 경우 &ndash;&gt;-->
 <!--        <div class="d-flex justify-content-center align-items-center"-->
 <!--             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">-->
 <!--            <div class="col-12">-->
-<!--                <a th:href="@{/mentorApplication/edit/{id}(id=${mentorsSeqId})}" class="btn btn-primary px-4">신청서 수정하러 가기</a>-->
+<!--                <div class="alert alert-info text-center" role="alert">-->
+<!--                    아직 신청 기간이 아닙니다.-->
+<!--                </div>-->
+
 <!--            </div>-->
 <!--        </div>-->
 <!--    </div>-->
+    <div th:if = "${menteesCount == 0 }" class="row pb-3" style="position: relative; min-height: 200px;">
+        <!--        sessionuser의 seqId값을 가져와서, 그 아이디로 있는 멘토가 있는지 확인. 멘토가 없다면 화면 띄우기 -->
+        <!-- mentee 목록이 없는 경우 -->
+        <div class="d-flex justify-content-center align-items-center"
+             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+            <div class="col-12">
+                <div class="alert alert-info text-center" role="alert">
+                    멘티 신청서를 작성하기
+                </div>
+                <a th:href="@{/menteeApplication/add}" class="btn btn-primary px-4 text-center">신청서 작성하러 가기</a>
+            </div>
+        </div>
+    </div>
 
-    <!---맨티 신청서 상태-->
-
-
+    <div th:if = "${menteesCount >0 }" class="row pb-3" style="position: relative; min-height: 200px;">
+        <!--        sessionuser의 seqId값을 가져와서, 그 아이디로 있는 멘토가 있는지 확인. 멘토가 없다면 화면 띄우기 -->
+        <!-- mentor 목록이 없는 경우 -->
+        <div class="d-flex justify-content-center align-items-center"
+             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+            <div class="col-12">
+                신청서 작성이 완료되었습니다.
+            </div>
+        </div>
+    </div>
 </div>
 
 </body>

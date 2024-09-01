@@ -29,8 +29,7 @@ public class MentorService {
     private final MentorRepository mentorRepository;
     private final UserRepository userRepository;
     private final MentorFileRepository mentorFileRepository;
-    String dateFolder = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-
+    String dateFolder = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy"));
 
     public MentorService(final MentorRepository mentorRepository,
                          final UserRepository userRepository, final MentorFileRepository mentorFileRepository) {
@@ -60,14 +59,15 @@ public class MentorService {
 
     public String saveFile(MultipartFile multipartFile, String uploadFolder){
         String fileUrl="";
-        Path folderPath = Paths.get(uploadFolder + dateFolder);
+        String mentorapplication = "/mentorApplication/";
+        Path folderPath = Paths.get(uploadFolder + dateFolder +mentorapplication );
 
         try {
             Files.createDirectories(folderPath);
             Path filePath = folderPath.resolve(multipartFile.getOriginalFilename());
             multipartFile.transferTo(filePath.toFile());
 
-            fileUrl = "/Users/gim-yeseul/Desktop/mentoring/mentoring/upload/" + dateFolder + "/" + multipartFile.getOriginalFilename();
+            fileUrl = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring/upload/" + dateFolder + "/" + mentorapplication + "/"  + multipartFile.getOriginalFilename();
             System.out.println("File saved at: " + fileUrl);
         }catch(Exception e) {
             System.out.println(e.getMessage());
@@ -87,6 +87,14 @@ public class MentorService {
     }
     public int getMentorsByUser(final Integer userSeqId) {
         return  mentorRepository.selectMentorSeqJPQLById(userSeqId);
+    }
+
+    public MentorDTO findMentorByUserId(final Integer userSeqId) {
+        Mentor mentor = mentorRepository.findMentorByUserId(userSeqId);
+        if (mentor == null) {
+            throw new NotFoundException();
+        }
+        return mapToDTO(mentor, new MentorDTO());
     }
 
     public Integer create(final MentorDTO mentorDTO) {

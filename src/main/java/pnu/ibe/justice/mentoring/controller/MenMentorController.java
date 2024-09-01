@@ -21,7 +21,6 @@ import pnu.ibe.justice.mentoring.util.CustomCollectors;
 import pnu.ibe.justice.mentoring.util.NotFoundException;
 import pnu.ibe.justice.mentoring.util.WebUtils;
 import jakarta.validation.Valid;
-
 @Controller
 @RequestMapping("/mentorApplication")
 public class MenMentorController {
@@ -34,7 +33,7 @@ public class MenMentorController {
     private final MentorService mentorService;
     private final UserRepository userRepository;
     private final MentorFileService mentorFileService;
-    private String uploadFolder = "/Users/gim-yeseul/Desktop/mentoring/mentoring/upload/";
+    private String uploadFolder = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring/upload/";
     private final UserService userService;
 
     public MenMentorController(final MentorService mentorService,
@@ -67,7 +66,6 @@ public class MenMentorController {
 
     @GetMapping("/add")
     public String add(@ModelAttribute("mentor") final MentorDTO mentorDTO, final Model model, @LoginUser SessionUser user) {
-        System.out.println("dnsjfkdsnfdjkcnjxvk");
         if ( mentorService.getMentorsCountByUser(user.getSeqId() ) > 0) {
             model.addAttribute("status","오류");
             model.addAttribute("error","신청서가 이미 존재합니다.");
@@ -78,28 +76,24 @@ public class MenMentorController {
     }
 
     @PostMapping("/add")
-    public String add(@ModelAttribute("mentor") @Valid final MentorDTO mentorDTO, @LoginUser SessionUser sessionUser,
+    public String add(@ModelAttribute("mentor") @Valid final MentorDTO mentorDTO,final Model model, @LoginUser SessionUser sessionUser,
                       final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return "pages/mentor-add"; // 폼 유효성 검사 실패 시 멘토 추가 페이지로 리다이렉트
+            model.addAttribute("status","오류");
+            model.addAttribute("error","다시 시도해주세요.");
+            return "error"; // 폼 유효성 검사 실패 시 멘토 추가 페이지로 리다이렉트
         }
-        System.out.println(mentorDTO);
         String fileUrl = mentorService.saveFile(mentorDTO.getFile(), uploadFolder);
         final User users = userRepository.findById(sessionUser.getSeqId())
                 .orElseThrow(() -> new NotFoundException("User not found"));
         mentorDTO.setUsers(users);
-        System.out.println("0");
-        System.out.println(mentorDTO);
         Integer seqId = mentorService.create(mentorDTO);
-        System.out.println("1");
-        System.out.println("2");
         MentorFileDTO mentorFileDTO = new MentorFileDTO();
         mentorFileDTO.setFileSrc(fileUrl);
         mentorFileDTO.setMentor(seqId);
         Integer mentorFileId = mentorFileService.create(mentorFileDTO);
         mentorDTO.setMFId(mentorFileId);
         mentorService.update(seqId, mentorDTO);
-        System.out.println("success upupup");
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("mentor.create.success"));
         return "redirect:/"; // 성공 후 멘토 페이지로 리다이렉트
     }
@@ -121,13 +115,10 @@ public class MenMentorController {
     @PostMapping("/edit")
     public String edit(@ModelAttribute("modifyMentor") @Validated(MentorDTO.EditValidationGroup.class) final MentorDTO mentorDTO, @LoginUser SessionUser sessionUser,
                        final BindingResult bindingResult, final RedirectAttributes redirectAttributes) {
-        System.out.println(mentorDTO);
-        System.out.println("edit 접속함");
         if (bindingResult.hasErrors()) {
             return "pages/mentor-edit"; // 폼 유효성 검사 실패 시 멘토 수정 페이지로 리다이렉트
         }
         mentorService.update(mentorDTO.getSeqId(), mentorDTO);
-        System.out.println("update perff");
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("user.update.success"));
         return "redirect:/mentorApplication"; // 성공 후 홈 페이지로 리다이렉트
     }

@@ -6,13 +6,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import pnu.ibe.justice.mentoring.domain.Notice;
-import pnu.ibe.justice.mentoring.domain.NoticeFile;
-import pnu.ibe.justice.mentoring.domain.User;
-import pnu.ibe.justice.mentoring.model.NoticeDTO;
-import pnu.ibe.justice.mentoring.repos.NoticeFileRepository;
-import pnu.ibe.justice.mentoring.repos.NoticeRepository;
-import pnu.ibe.justice.mentoring.repos.UserRepository;
+import pnu.ibe.justice.mentoring.domain.*;
+import pnu.ibe.justice.mentoring.model.MentorDTO;
+import pnu.ibe.justice.mentoring.model.SubCategory;
+import pnu.ibe.justice.mentoring.model.SubmitReportDTO;
+import pnu.ibe.justice.mentoring.repos.*;
 import pnu.ibe.justice.mentoring.util.NotFoundException;
 import pnu.ibe.justice.mentoring.util.ReferencedWarning;
 
@@ -23,40 +21,40 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SubmitService {
 
-    private final NoticeRepository noticeRepository;
+    private final SubmitReportRepository submitReportRepository;
+    private final SubmitReportFileRepository submitReportFileRepository;
     private final UserRepository userRepository;
-    private final NoticeFileRepository noticeFileRepository;
-    String dateFolder = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-
-
-    public SubmitService(final NoticeRepository noticeRepository,
-                         final UserRepository userRepository, final NoticeFileRepository noticeFileRepository) {
-        this.noticeRepository = noticeRepository;
+    String dateFolder = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy"));
+    public SubmitService(final SubmitReportRepository submitReportRepository,
+                         final UserRepository userRepository, final SubmitReportFileRepository submitReportFileRepository) {
         this.userRepository = userRepository;
-        this.noticeFileRepository = noticeFileRepository;
+        this.submitReportRepository = submitReportRepository;
+        this.submitReportFileRepository = submitReportFileRepository;
     }
 
-    public List<NoticeDTO> findAll() {
-        final List<Notice> notices = noticeRepository.findAll(Sort.by("seqId"));
-        return notices.stream()
-                .map(notice -> mapToDTO(notice, new NoticeDTO()))
+    public List<SubmitReportDTO> findAll() {
+        final List<SubmitReport> submitReports = submitReportRepository.findAll(Sort.by("seqId"));
+        return submitReports.stream()
+                .map(submitReport -> mapToDTO(submitReport, new SubmitReportDTO()))
                 .toList();
     }
 
-    public String saveFile(MultipartFile multipartFile, String uploadFolder){
+    public String saveFile(MultipartFile multipartFile, String uploadFolder,String subcategoryName){
         String fileUrl="";
-        Path folderPath = Paths.get(uploadFolder + dateFolder);
-
+        String ReportSubmit = "ReportSubmit/";
+        String subcategory = subcategoryName;
+        Path folderPath = Paths.get(uploadFolder+ dateFolder +"/"+ ReportSubmit + subcategory);
         try {
             Files.createDirectories(folderPath);
             Path filePath = folderPath.resolve(multipartFile.getOriginalFilename());
             multipartFile.transferTo(filePath.toFile());
 
-            fileUrl = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring/upload/" + dateFolder + "/" + multipartFile.getOriginalFilename();
+            fileUrl = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring/upload/" + dateFolder + "/" + ReportSubmit +"/"+ subcategory + "/"  + multipartFile.getOriginalFilename();
             System.out.println("File saved at: " + fileUrl);
         }catch(Exception e) {
             System.out.println(e.getMessage());
@@ -64,70 +62,102 @@ public class SubmitService {
         return multipartFile.getOriginalFilename();
     }
 
-    public NoticeDTO get(final Integer seqId) {
-        return noticeRepository.findById(seqId)
-                .map(notice -> mapToDTO(notice, new NoticeDTO()))
+    public SubmitReportDTO get(final Integer seqId) {
+        return submitReportRepository.findById(seqId)
+                .map(submitReport -> mapToDTO(submitReport, new SubmitReportDTO()))
                 .orElseThrow(NotFoundException::new);
     }
 
-    public Integer create(final NoticeDTO noticeDTO) {
-        final Notice notice = new Notice();
+    public SubmitReportDTO findByMFId(final Integer MfId) {
+        return submitReportRepository.findBymFId(MfId)
+                .map(submitReport -> mapToDTO(submitReport, new SubmitReportDTO()))
+                .orElseThrow(NotFoundException::new);
+    }
+
+    public List<SubmitReportDTO> findBySubCategory(SubCategory category) {
+        // 카테고리가 주어진 값과 일치하는 멘토를 찾음
+        List<SubmitReport> submitReports = submitReportRepository.findBySubCategory(category);
+
+        // Mentor 엔티티를 MentorDTO로 변환
+        return submitReports.stream()
+                .map(submitReport -> mapToDTO(submitReport, new SubmitReportDTO()))
+                .collect(Collectors.toList());
+    }
+
+
+
+    public Integer create(final SubmitReportDTO submitReportDTO) {
+        final SubmitReport submitReport = new SubmitReport();
         OffsetDateTime currentDateTime = OffsetDateTime.now();
-        notice.setDateCreated(currentDateTime);
-        notice.setLastUpdated(currentDateTime);
-        mapToEntity(noticeDTO, notice);
-        return noticeRepository.save(notice).getSeqId();
+        submitReport.setDateCreated(currentDateTime);
+        submitReport.setLastUpdated(currentDateTime);
+        mapToEntity(submitReportDTO, submitReport);
+        return submitReportRepository.save(submitReport).getSeqId();
     }
 
-    public void update(final Integer seqId, final NoticeDTO noticeDTO) {
-        final Notice notice = noticeRepository.findById(seqId)
+    public void update(final Integer seqId, final SubmitReportDTO submitReportDTO) {
+        final SubmitReport submitReport = submitReportRepository.findById(seqId)
                 .orElseThrow(NotFoundException::new);
-        mapToEntity(noticeDTO, notice);
-        noticeRepository.save(notice);
+        mapToEntity(submitReportDTO, submitReport);
+        submitReportRepository.save(submitReport);
     }
 
     public void delete(final Integer seqId) {
-        noticeRepository.deleteById(seqId);
+        submitReportRepository.deleteById(seqId);
     }
 
-    private NoticeDTO mapToDTO(final Notice notice, final NoticeDTO noticeDTO) {
-        noticeDTO.setSeqId(notice.getSeqId());
-        noticeDTO.setTitle(notice.getTitle());
-        noticeDTO.setContent(notice.getContent());
-        noticeDTO.setIsPopup(notice.getIsPopup());
-        noticeDTO.setMFId(notice.getMFId());
-        noticeDTO.setIsMust(notice.getIsMust());
-        noticeDTO.setUsers(notice.getUsers() == null ? null : notice.getUsers());
-        return noticeDTO;
+    private SubmitReportDTO mapToDTO(final SubmitReport submitReport, final SubmitReportDTO submitReportDTO) {
+        submitReportDTO.setSeqId(submitReport.getSeqId());
+        submitReportDTO.setContent(submitReport.getContent());
+        submitReportDTO.setMFId(submitReport.getMFId());
+        submitReportDTO.setTitle(submitReport.getTitle());
+        submitReportDTO.setCategory(submitReport.getCategory());
+        submitReportDTO.setDateCreated(submitReport.getDateCreated());
+        submitReportDTO.setLastUpdated(submitReport.getLastUpdated());
+        submitReportDTO.setSubCategory(submitReport.getSubCategory());
+        submitReportDTO.setUsers(submitReport.getUsers() == null ? null : submitReport.getUsers());
+        return submitReportDTO;
     }
 
-    private Notice mapToEntity(final NoticeDTO noticeDTO, final Notice notice) {
-        notice.setTitle(noticeDTO.getTitle());
-        notice.setContent(noticeDTO.getContent());
-        notice.setIsPopup(noticeDTO.getIsPopup());
-        notice.setIsMust(noticeDTO.getIsMust());
-        notice.setMFId(noticeDTO.getMFId());
-        final User users = noticeDTO.getUsers() == null ? null : userRepository.findById(noticeDTO.getUsers().getSeqId())
+    private SubmitReport mapToEntity(final SubmitReportDTO submitReportDTO, final SubmitReport submitReport) {
+        submitReport.setTitle(submitReportDTO.getTitle());
+        submitReport.setContent(submitReportDTO.getContent());
+        submitReport.setMFId(submitReportDTO.getMFId());
+        submitReport.setCategory(submitReportDTO.getCategory());
+        submitReport.setTeam(submitReportDTO.getTeam());
+        submitReport.setSubCategory(submitReportDTO.getSubCategory());
+        final User users = submitReportDTO.getUsers() == null ? null : userRepository.findById(submitReportDTO.getUsers().getSeqId())
                 .orElseThrow(() -> new NotFoundException("users not found"));
-        notice.setUsers(users);
-        return notice;
+        submitReport.setUsers(users);
+        return submitReport;
     }
 
     public ReferencedWarning getReferencedWarning(final Integer seqId) {
         final ReferencedWarning referencedWarning = new ReferencedWarning();
-        final Notice notice = noticeRepository.findById(seqId)
+        final SubmitReport submitReport = submitReportRepository.findById(seqId)
                 .orElseThrow(NotFoundException::new);
-        final NoticeFile noticeNoticeFile = noticeFileRepository.findFirstByNotice(notice);
-        if (noticeNoticeFile != null) {
+        final SubmitReportFile submitReportFile = submitReportFileRepository.findFirstBySubmitReport(submitReport);
+        if (submitReportFile != null) {
             referencedWarning.setKey("notice.noticeFile.notice.referenced");
-            referencedWarning.addParam(noticeNoticeFile.getSeqId());
+            referencedWarning.addParam(submitReportFile.getSeqId());
             return referencedWarning;
         }
         return null;
     }
 
-    public Page<Notice> getList(int page) {
-        Pageable pageable = PageRequest.of(page, 6);
-        return this.noticeRepository.findAll(pageable);
+    public Page<SubmitReport> getList(int page) {
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "dateCreated"));
+        return this.submitReportRepository.findAll(pageable);
     }
+
+    public Page<SubmitReport> getList(int page, SubCategory subCategory) {
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "dateCreated"));
+
+        if (subCategory == null) {
+            return this.submitReportRepository.findAll(pageable);
+        } else {
+            return this.submitReportRepository.findBySubCategory(subCategory, pageable);
+        }
+    }
+
 }
