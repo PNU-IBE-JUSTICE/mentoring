@@ -1,3 +1,4 @@
+
 spring:
   security:
     oauth2:
@@ -10,6 +11,5 @@ spring:
               - email
               - profile
             redirect-uri: http://ec2-43-201-59-98.ap-northeast-2.compute.amazonaws.com:8080/login/oauth2/code/google
-
 
 #google login oauth 설정_ #1
