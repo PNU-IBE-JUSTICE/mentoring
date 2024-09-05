@@ -76,7 +76,6 @@
         <!-- mentor의 status가 1일 때만 표시 -->
         <div class="col-lg-4 mb-4" th:each="mentor : ${category}" th:if="${mentor.status == 1}">
             <div class="card border-0 shadow-sm mb-2">
-                <img class="card-img-top mb-2" src="/images/blog-1.jpg" alt="" />
                 <div class="card-body bg-light text-center p-4">
                     <h6 class="mb-3">group name:[[${mentor.team}]]</h6>
                     <h4 class="">[[${mentor.title}]]</h4>

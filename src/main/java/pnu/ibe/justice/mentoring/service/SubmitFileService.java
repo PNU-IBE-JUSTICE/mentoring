@@ -74,6 +74,7 @@ public class SubmitFileService {
 
     private SubmitReportFileDTO mapToDTO(final SubmitReportFile submitReportFile, final SubmitReportFileDTO submitReportFileDTO) {
         submitReportFileDTO.setFileSrc(submitReportFile.getFileSrc());
+        submitReportFileDTO.setUuid(submitReportFileDTO.getUuid());
 //        noticeFileDTO.setType(noticeFile.getType());
         submitReportFileDTO.setUserSeqId(submitReportFile.getUserSeqId());
         submitReportFileDTO.setSubmitreport(submitReportFile.getSubmitReport() == null ? null : submitReportFile.getSubmitReport().getSeqId());
@@ -82,10 +83,11 @@ public class SubmitFileService {
 
     private SubmitReportFile mapToEntity(final SubmitReportFileDTO submitReportFileDTO, final SubmitReportFile submitReportFile) {
         submitReportFile.setFileSrc(submitReportFileDTO.getFileSrc());
+        submitReportFile.setUuid(submitReportFileDTO.getUuid());
         //noticeFile.setType(noticeFileDTO.getType());
         submitReportFile.setUserSeqId(submitReportFileDTO.getUserSeqId());
         final SubmitReport submitReport = submitReportFileDTO.getSubmitreport() == null ? null : submitReportRepository.findById(submitReportFileDTO.getSubmitreport())
-                .orElseThrow(() -> new NotFoundException("notice not found"));
+                .orElseThrow(() -> new NotFoundException("submitreport not found"));
         submitReportFile.setSubmitReport(submitReport);
         return submitReportFile;
     }

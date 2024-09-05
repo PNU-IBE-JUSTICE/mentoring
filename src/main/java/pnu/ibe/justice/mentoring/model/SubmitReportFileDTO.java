@@ -1,5 +1,6 @@
 package pnu.ibe.justice.mentoring.model;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -20,5 +21,7 @@ public class SubmitReportFileDTO {
     private Integer submitreport;
 
     private Integer userSeqId;
+
+    private String uuid;
 
 }

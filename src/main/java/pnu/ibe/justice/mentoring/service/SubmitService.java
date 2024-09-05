@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 import pnu.ibe.justice.mentoring.domain.*;
 import pnu.ibe.justice.mentoring.model.MentorDTO;
@@ -20,7 +21,10 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,22 +48,33 @@ public class SubmitService {
                 .toList();
     }
 
-    public String saveFile(MultipartFile multipartFile, String uploadFolder,String subcategoryName){
-        String fileUrl="";
+    public Map<String,String> saveFile(MultipartFile multipartFile, String uploadFolder,String subcategoryName) {
+        String fileUrl = "";
         String ReportSubmit = "ReportSubmit/";
         String subcategory = subcategoryName;
-        Path folderPath = Paths.get(uploadFolder+ dateFolder +"/"+ ReportSubmit + subcategory);
+        Path folderPath = Paths.get(uploadFolder + dateFolder + "/" + ReportSubmit + subcategory);
+        Map<String, String> originName_map=new HashMap<>();
         try {
             Files.createDirectories(folderPath);
-            Path filePath = folderPath.resolve(multipartFile.getOriginalFilename());
+            String originName = multipartFile.getOriginalFilename();
+            String uuid = uploadFileNameMake();
+            originName_map.put("origin",originName);
+            originName_map.put("uuid",uuid);
+            String filesrc= uuid+"_"+originName;
+            fileUrl = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring/upload/" + dateFolder + "/" + ReportSubmit + "/" + subcategory + "/" + filesrc;
+            Path filePath = folderPath.resolve(filesrc);
             multipartFile.transferTo(filePath.toFile());
-
-            fileUrl = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring/upload/" + dateFolder + "/" + ReportSubmit +"/"+ subcategory + "/"  + multipartFile.getOriginalFilename();
             System.out.println("File saved at: " + fileUrl);
-        }catch(Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        return multipartFile.getOriginalFilename();
+        return originName_map;
+    }
+
+    private String uploadFileNameMake(){
+        UUID uuid = UUID.randomUUID();
+        String uuid_S = uuid.toString();
+        return uuid_S;
     }
 
     public SubmitReportDTO get(final Integer seqId) {
@@ -102,6 +117,8 @@ public class SubmitService {
         submitReportRepository.save(submitReport);
     }
 
+
+
     public void delete(final Integer seqId) {
         submitReportRepository.deleteById(seqId);
     }
@@ -111,7 +128,14 @@ public class SubmitService {
         submitReportDTO.setContent(submitReport.getContent());
         submitReportDTO.setMFId(submitReport.getMFId());
         submitReportDTO.setTitle(submitReport.getTitle());
-        submitReportDTO.setCategory(submitReport.getCategory());
+        submitReportDTO.setTeam(submitReport.getTeam());
+        if (submitReport.getCategory() == "1") {
+            submitReportDTO.setCategory("프로젝트");
+        }
+        else {
+            submitReportDTO.setCategory("학부수업");
+
+        }
         submitReportDTO.setDateCreated(submitReport.getDateCreated());
         submitReportDTO.setLastUpdated(submitReport.getLastUpdated());
         submitReportDTO.setSubCategory(submitReport.getSubCategory());

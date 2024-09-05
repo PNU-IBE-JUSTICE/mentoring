@@ -37,7 +37,7 @@ public class SecurityConfig {
                         )
                 )
                 .authorizeHttpRequests((authorizeRequest) -> authorizeRequest
-                        //.requestMatchers("/admin/**").hasRole(Role.ADMIN.name())
+//                        .requestMatchers("/admin/**").hasRole(Role.ADMIN.name())
                         .requestMatchers("/admin/**","/h2-console/**").hasRole(Role.ADMIN.name())
                         .requestMatchers("/posts/new", "/comments/save").hasRole(Role.GUEST.name())
                         .requestMatchers("/","/error", "/login/*","/notice/**","/lectureList/**","/introduce/**","/peopleList/**",

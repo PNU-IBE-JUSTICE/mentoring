@@ -11,6 +11,12 @@
         .notice-content div {
             white-space: pre-wrap; /* 줄바꿈과 공백을 유지하며, 콘텐츠가 화면에 맞게 줄바꿈됨 */
         }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between; /* Aligns items to the left and right */
+            margin-top: 20px; /* Space between content and buttons */
+        }
     </style>
 
 </head>
@@ -34,7 +40,7 @@
             <div th:utext="${post.content}"></div>
         </div>
         <!-- 첨부파일 다운로드 버튼 -->
-        <div class="mb-4"  th:if="${post.getMFId() != null}">
+        <div class="mb-4" th:if="${!filename.isEmpty()}">
             <a th:href="|/submit/${post.MFId}/download|"
                class="btn btn-outline-primary d-flex align-items-center"
                hx-no-boost="true" download target="_blank">
@@ -42,8 +48,44 @@
                 <span th:text="${filename}">Download File</span>
             </a>
         </div>
-        <div>
-            <a th:href="@{/post}" class="btn btn-secondary">[[#{post.list.back}]]</a>
+        <div class="mb-4" th:if="${answer} != null">
+            <div th:each="answer : ${answer}" class="list-group-item p-3 border-5">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="flex-grow-1">
+                        <div th:utext="${answer.content}"></div>
+                    </div>
+                    <div class="text-muted text-right">
+                        <small th:text="'작성자: ' + ${answer.getUsers().name}">Author</small>
+                        <small th:text="'권한: ' + ${answer.getUsers().role}">카테고리</small>
+                        <!--                                <small th:text="${#dates.format(report.dateCreated, 'yyyy-MM-dd')}">작성날짜</small>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mb-4" th:if="${AnswerUser} != null">
+            <form th:action="@{|/submit/answer/${post.seqId}|}" method="post">
+                <div class="form-group">
+                <label for="content">댓글 작성</label>
+                    <a>[[${AnswerUser.name}]]</a>
+                    <a>[[${AnswerUser.role}]]</a>
+                <textarea name="content" id="content" class="form-control" placeholder="내용" required="required" rows="4"></textarea>
+                <p class="help-block text-danger">
+                </p>
+                </div>
+                <div class ="button-container">
+                    <a th:href="@{/submit}" class="btn btn-secondary">[[#{post.list.back}]]</a>
+                    <div><input class="btn btn-primary" type="submit" value="댓글 등록하기" /></div>
+                </div>
+            </form>
+        </div>
+        <!-- Button Container -->
+        <div th:if="${post.users.seqId == SessionUser.seqId}" class="button-container">
+            <a th:href="@{/submit}" class="btn btn-secondary">[[#{post.list.back}]]</a>
+            <div>
+                <a th:href="@{/submit/edit/{id}(id=${post.seqId})}" class="btn btn-secondary mb-1">글 수정하기</a>
+            </div>
+
+
         </div>
     </div>
     <!-- Detail End -->
