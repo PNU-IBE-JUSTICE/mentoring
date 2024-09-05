@@ -26,6 +26,18 @@
                 <input
                         type="text"
                         class="form-control"
+                        th:field="*{role}"
+                        readonly
+                        placeholder="role"
+                        required="required"
+                />
+                <p class="help-block text-danger"></p>
+              </div>
+
+              <div class="control-group">
+                <input
+                        type="text"
+                        class="form-control"
                         th:field="*{name}"
                         placeholder="이 름"
                         required="required"
@@ -54,9 +66,9 @@
                         th:field="*{sdNum}"
                         data-validation-required-message="Please enter your studentnumber"
                 />
-                <input type="hidden" th:field="*{role}" />
                 <p class="help-block text-danger"></p>
               </div>
+
 
               <div class="control-group">
                 <input

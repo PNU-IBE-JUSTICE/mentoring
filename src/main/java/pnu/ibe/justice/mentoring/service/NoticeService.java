@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,9 +16,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import pnu.ibe.justice.mentoring.domain.Mentor;
 import pnu.ibe.justice.mentoring.domain.Notice;
 import pnu.ibe.justice.mentoring.domain.NoticeFile;
 import pnu.ibe.justice.mentoring.domain.User;
+import pnu.ibe.justice.mentoring.model.MentorDTO;
 import pnu.ibe.justice.mentoring.model.NoticeDTO;
 import pnu.ibe.justice.mentoring.repos.NoticeFileRepository;
 import pnu.ibe.justice.mentoring.repos.NoticeRepository;
@@ -42,6 +45,17 @@ public class NoticeService {
         this.noticeFileRepository = noticeFileRepository;
     }
 
+    public List<NoticeDTO> findNoticeByIsmust(Boolean ismust) {
+        // 카테고리가 주어진 값과 일치하는 멘토를 찾음
+        List<Notice> notices = noticeRepository.findByIsMust(ismust);
+
+        // notice 엔티티를 noticeDTO 변환
+        return notices.stream()
+                .map(notice -> mapToDTO(notice, new NoticeDTO()))
+                .collect(Collectors.toList());
+    }
+
+
     public List<NoticeDTO> findAll() {
         final List<Notice> notices = noticeRepository.findAll(Sort.by("seqId"));
         return notices.stream()
@@ -57,9 +71,9 @@ public class NoticeService {
             Files.createDirectories(folderPath);
             Path filePath = folderPath.resolve(multipartFile.getOriginalFilename());
             multipartFile.transferTo(filePath.toFile());
-
             fileUrl = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring/upload/" + dateFolder + "/" + multipartFile.getOriginalFilename();
             System.out.println("File saved at: " + fileUrl);
+            System.out.println(dateFolder);
         }catch(Exception e) {
             System.out.println(e.getMessage());
         }
@@ -129,7 +143,7 @@ public class NoticeService {
     }
 
     public Page<Notice> getList(int page) {
-        Pageable pageable = PageRequest.of(page, 6);
+        Pageable pageable = PageRequest.of(page, 6, Sort.by(Sort.Direction.DESC, "dateCreated"));
         return this.noticeRepository.findAll(pageable);
     }
 

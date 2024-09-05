@@ -72,24 +72,17 @@ public class NoticeController {
         if (bindingResult.hasErrors()) {
             return "admin/notice/add";
         }
-        System.out.println(noticeDTO);
         String fileUrl = null;
         if (noticeDTO.getFile() != null) {
              fileUrl = noticeService.saveFile(noticeDTO.getFile(), uploadFolder);
         }
-        System.out.println(fileUrl);
         Integer seqId = noticeService.create(noticeDTO);
-        System.out.println(seqId);
         if (noticeDTO.getFile() != null) {
             NoticeFileDTO noticeFileDTO = new NoticeFileDTO(seqId,fileUrl,user.getSeqId(),seqId);
             Integer noticeFileId = noticeFileService.create(noticeFileDTO);
             noticeDTO.setMFId(noticeFileId);
         }
-        System.out.println("mfid");
-        System.out.println(noticeDTO.getMFId());
-        System.out.println("mfidEnd");
         noticeService.update(seqId, noticeDTO);
-        System.out.println(noticeDTO);
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("mentor.create.success"));
         return "redirect:/admin/notices";
     }

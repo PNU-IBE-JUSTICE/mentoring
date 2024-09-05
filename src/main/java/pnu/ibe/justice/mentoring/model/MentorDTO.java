@@ -46,6 +46,7 @@ public class MentorDTO {
     private User users;
 
     //    private MentorFileDTO mentorFile;
+    @NotNull(groups = CreateValidationGroup.class)
     private MultipartFile file;
 
     public interface CreateValidationGroup {}

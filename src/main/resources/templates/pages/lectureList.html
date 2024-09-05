@@ -5,65 +5,77 @@
     <title>LectureList</title>
     <!-- Add Bootstrap CSS -->
 </head>
-
-<script>
-    function onChangeSort(obj) {
-        console.log("Sort form is being submitted.");  // 콘솔에 메시지 출력
-        var sortForm = $(obj).val();
-        console.log(sortForm);  // 콘솔에 메시지 출력
-        alert("dfdfdf");
-        sortForm.submit();
+<style>
+    .btn-outline-primary {
+        color: #007bff !important; /* 기본 글자색 */
+        border-color: #007bff !important; /* 기본 테두리색 */
     }
-</script>
+    .btn-outline-primary.active {
+        color: #ffffff !important; /* 활성화된 버튼의 글자색 */
+        background-color: #007bff !important; /* 활성화된 버튼의 배경색 */
+        border-color: #007bff !important; /* 활성화된 버튼의 테두리색 */
+    }
+
+</style>
+<!--<style>-->
+
+<!--    .btn-outline-primary1 {-->
+<!--        color: #17a2b8;-->
+<!--        border-color: #17a2b8;-->
+<!--    }-->
+
+<!--    .btn-outline-primary1:hover {-->
+<!--        color: #fff;-->
+<!--        background-color: #17a2b8;-->
+<!--        border-color: #17a2b8;-->
+<!--    }-->
+
+<!--    .btn-outline-primary1:focus {-->
+<!--        box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.5);-->
+<!--    }-->
+
+<!--    .btn-outline-primary1, .btn-outline-primary1:disabled {-->
+<!--        color: #17a2b8;-->
+<!--        background-color: transparent;-->
+<!--    }-->
+
+<!--    .btn-outline-primary1:not(:disabled):not:active, .btn-outline-primary1:not(:disabled):not.active,-->
+<!--    .show > .btn-outline-primary1 {-->
+<!--        color: #fff;-->
+<!--        background-color: #17a2b8;-->
+<!--        border-color: #17a2b8;-->
+<!--    }-->
+
+<!--    .btn-outline-primary1:not(:disabled):not:active:focus, .btn-outline-primary1:not(:disabled):not.active:focus,-->
+<!--    .show > .btn-outline-primary1:focus {-->
+<!--        box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.5);-->
+<!--    }-->
+<!--</style>-->
 <body>
 
 <div layout:fragment="content">
     <!--lecturelist 본문-->
 
-<!--    <form th:action="@{/lectureList}" id="sortForm" method="get">-->
-<!--        <select class="bg-gray-300 px-1 py-1 rounded" name="caSort" onchange="onChangeSort(this)" th:value="${param.caSort}">-->
-<!--            <option value="0" th:selected=" ${param.caSort == '0'} ">전체보기</option>-->
-<!--            <option value="1"  th:selected=" ${param.caSort == '1'} ">프로젝트</option>-->
-<!--            <option value="2"  th:selected=" ${param.caSort == '2'} ">학부수업</option>-->
-<!--        </select>-->
-
-<!--    </form>-->
-<!--    <div class="row">-->
-<!--        <div class="col-12 text-center mb-2">-->
-<!--            <ul class="list-inline mb-4" id="portfolio-filters">-->
-<!--                <li class="btn btn-outline-primary m-1 active" data-filter="*">-->
-<!--                    All-->
-<!--                </li>-->
-<!--                <li class="btn btn-outline-primary m-1" data-filter=".프로젝트">-->
-<!--                    프로젝트-->
-<!--                </li>-->
-<!--                <li class="btn btn-outline-primary m-1" data-filter=".학부수업">-->
-<!--                    학과수업-->
-<!--                </li>-->
-<!--            </ul>-->
-<!--        </div>-->
-<!--    </div>-->
-
-    <div class="row pb-3" style="position: relative; min-height: 200px;">
-        <!--        sessionuser의 seqId값을 가져와서, 그 아이디로 있는 멘토가 있는지 확인. 멘토가 없다면 화면 띄우기 -->
-        <!-- mentor 목록이 없는 경우 -->
-        <div class="d-flex justify-content-center align-items-center"
-             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-            <div class="col-12">
-                <div class="alert alert-info text-center" role="alert">
-                    아직 생성되지 않았습니다.
-                </div>
-
-            </div>
+    <div class="row">
+        <div class="col-12 text-center mb-2">
+            <ul class="list-inline mb-4" id="portfolio-filters">
+                <li class="list-inline-item" th:classappend="${caSort==0} ? 'active' : '' " data-filter="*">
+                    <a class="btn btn-outline-primary m-1 " th:href="@{/lectureList(caSort=0)}">전체</a>
+                </li>
+                <li class="list-inline-item" th:classappend="${caSort==1} ? 'active color: #ffffff;' : '' " data-filter=".프로젝트">
+                    <a class="btn btn-outline-primary m-1 " th:href="@{/lectureList(caSort=1)}">프로젝트</a>
+                </li>
+                <li class="list-inline-item" th:classappend="${caSort==2} ? 'active' : '' " data-filter=".학부수업">
+                    <a class="btn btn-outline-primary m-1 " th:href="@{/lectureList(caSort=2)}">학부수업</a>
+                </li>
+            </ul>
         </div>
     </div>
-
 
     <div class="row">
         <!-- mentor의 status가 1일 때만 표시 -->
         <div class="col-lg-4 mb-4" th:each="mentor : ${category}" th:if="${mentor.status == 1}">
             <div class="card border-0 shadow-sm mb-2">
-                <img class="card-img-top mb-2" src="/images/blog-1.jpg" alt="" />
                 <div class="card-body bg-light text-center p-4">
                     <h6 class="mb-3">group name:[[${mentor.team}]]</h6>
                     <h4 class="">[[${mentor.title}]]</h4>

@@ -27,7 +27,8 @@
                th:classappend="${inputClassappend}" class="form-control" />
         <textarea th:if="${type == 'textarea'}" th:field="*{__${field}__}" th:disabled="${disabled}"
                   th:classappend="${inputClassappend}" class="form-control" />
-        <input th:if="${type == 'file'}" th:field="*{__${field}__}" type="file" class="form-control" th:disabled="${disabled}" multiple />
+        <input th:if="${type == 'file'}" th:field="*{__${field}__}" type="file" class="form-control" required="required" th:disabled="${disabled}" multiple />
+        <input th:if="${type == 'file1'}" th:field="*{__${field}__}" type="file" class="form-control" th:disabled="${disabled}" multiple />
         <select th:if="${type == 'select' || type == 'multiselect'}" th:field="*{__${field}__}" th:disabled="${disabled}"
                 th:multiple="${type == 'multiselect'}" th:classappend="${inputClassappend}" class="form-select">
             <option th:if="${type == 'select'}" value="">[[#{select.empty.label}]]</option>

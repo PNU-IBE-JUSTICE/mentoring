@@ -19,8 +19,6 @@
                         <tr>
                             <th scope="col">[[#{userFile.seqId.label}]]</th>
                             <th scope="col">[[#{userFile.fileSrc.label}]]</th>
-                            <th scope="col">[[#{userFile.type.label}]]</th>
-                            <th scope="col">[[#{userFile.expireDt.label}]]</th>
                             <th scope="col">[[#{userFile.userSeqId.label}]]</th>
                             <th scope="col">[[#{userFile.user.label}]]</th>
                             <th><!-- --></th>
@@ -30,10 +28,9 @@
                         <tr th:each="userFile : ${userFiles}">
                             <td>[[${userFile.seqId}]]</td>
                             <td>[[${userFile.fileSrc}]]</td>
-                            <td>[[${userFile.type}]]</td>
-                            <td>[[${userFile.expireDt}]]</td>
-                            <td>[[${userFile.userSeqId}]]</td>
-                            <td>[[${userFile.user}]]</td>
+                            <td>[[${userFile.users.SeqId}]]</td>
+
+                            <td><a th:href="|/admin/userFiles/${userFile.seqId}/download|" hx-no-boost="true" download  target="_blank" th:text="${userFile.getSeqId()}"/></td>
                             <td>
                                 <div class="float-end text-nowrap">
                                     <a th:href="@{/admin/userFiles/edit/{seqId}(seqId=${userFile.seqId})}" class="btn btn-sm btn-secondary">[[#{userFile.list.edit}]]</a>

@@ -3,30 +3,95 @@
       layout:decorate="~{layout-main}">
 <head>
     <title>Report</title>
-    <!-- Add Bootstrap CSS -->
+    <style>
+        .filter-form {
+            display: flex;
+            align-items: center;
+        }
+        .filter-form select {
+            flex: 1;
+        }
+        .filter-form button {
+            margin-left: 10px;
+        }
+    </style>
 </head>
 <body>
 
 <div layout:fragment="content">
+    <div class="container mt-4">
+        <div class="row mb-4">
+            <!-- 분류기준 선택 및 필터 버튼 -->
+            <div class="col-md-9">
+                <form method="get" th:action="@{/submit}" class="filter-form">
+                    <div class="form-group mb-0">
+                        <label for="subCategory" class="sr-only">분류 기준</label>
+                        <select id="subCategory" name="caSort" class="form-control form-control-sm" required>
+                            <option value="All" th:selected="${caSort == 'All'}">전체보기</option>
+                            <!-- Thymeleaf를 사용하여 enum 값을 반복해서 옵션으로 추가 -->
+                            <option
+                                    th:each="subCategory : ${T(pnu.ibe.justice.mentoring.model.SubCategory).values()}"
+                                    th:value="${subCategory.name()}"
+                                    th:text="${subCategory.displayName}"
+                                    th:selected="${caSort == subCategory.name()}"></option>
+                        </select>
+                    </div>
+                    <!-- 폼 제출 버튼 -->
+                    <button type="submit" class="btn btn-primary btn-sm">필터 적용</button>
+                </form>
+            </div>
+            <!-- 글쓰기 버튼 -->
+            <div class="col-md-3 text-right">
+                <a th:href="@{/submit/add}" class="btn btn-primary btn-sm">글쓰기</a>
+            </div>
+        </div>
 
-    <div class="row pb-3" style="position: relative; min-height: 200px;">
-        <!--        sessionuser의 seqId값을 가져와서, 그 아이디로 있는 멘토가 있는지 확인. 멘토가 없다면 화면 띄우기 -->
-        <!-- mentor 목록이 없는 경우 -->
-        <div class="d-flex justify-content-center align-items-center"
-             style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-            <div class="col-12">
-                <div class="alert alert-info text-center" role="alert">
-                    아직 생성되지 않았습니다.
+        <!-- 게시물 리스트 -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="list-group">
+                    <div th:each="report : ${paging.content}" class="list-group-item p-3 border-5">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="flex-grow-1">
+                                <a th:href="@{/submit/detail/{id}(id=${report.seqId})}" th:text="${report.title}" class="h5 mb-1">Title</a>
+                            </div>
+                            <div class="text-muted text-right">
+                                <small th:text="'작성자: ' + ${report.users.name}">Author</small>
+                                <small th:text="'카테고리: ' + ${report.subCategory}">카테고리</small>
+<!--                                <small th:text="${#dates.format(report.dateCreated, 'yyyy-MM-dd')}">작성날짜</small>-->
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
+                <!-- 페이징 네비게이션 -->
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <!-- 이전 페이지 -->
+                        <li class="page-item" th:classappend="${paging.hasPrevious()} ? '' : 'disabled'">
+                            <a class="page-link" th:href="@{/submit(page=${paging.number - 1}, caSort=${caSort})}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+
+                        <!-- 페이지 번호 -->
+                        <li class="page-item" th:each="i : ${#numbers.sequence(1, paging.totalPages)}"
+                            th:classappend="${paging.number + 1 == i} ? 'active'">
+                            <a class="page-link" th:href="@{/submit(page=${i - 1}, caSort=${caSort})}" th:text="${i}">1</a>
+                        </li>
+
+                        <!-- 다음 페이지 -->
+                        <li class="page-item" th:classappend="${paging.hasNext()} ? '' : 'disabled'">
+                            <a class="page-link" th:href="@{/submit(page=${paging.number + 1}, caSort=${caSort})}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
     </div>
-
 </div>
-
-
-
 
 </body>
 </html>

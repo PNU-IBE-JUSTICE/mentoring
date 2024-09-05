@@ -3,25 +3,30 @@ spring:
     activate:
       on-profile: prod
 
-#  datasource: #todo prod rds 설정
-#    url: ${JDBC_DATABASE_URL:jdbc:mysql://localhost:3306/Mentoring?serverTimezone=UTC}
-#    username: ${JDBC_DATABASE_USERNAME:root}
-#    password: ${JDBC_DATABASE_PASSWORD:<<YOUR_PASSWORD>>}
-#    hikari:
-#      connection-timeout: 30000
-#      maximum-pool-size: 10
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-  datasource:
-    url: jdbc:h2:./db_dev;MODE=MySQL
-    driverClassName: org.h2.Driver
-    username: sa
-    password:
+  datasource: #todo prod rds 설정
+    url: ${JDBC_DATABASE_URL:jdbc:mysql://mentoring-db.chcmwao4e6xx.ap-northeast-2.rds.amazonaws.com:3306/mentoring_db?serverTimezone=UTC}
+    username: ${JDBC_DATABASE_USERNAME}
+    password: ${JDBC_DATABASE_PASSWORD}
+    hikari:
+      connection-timeout: 30000
+      maximum-pool-size: 10
+  servlet:
+    multipart:
+      #file upload size
+      max-file-size: 5MB
+
+#  h2:
+#    console:
+#      enabled: true
+#      path: /h2-console
+#  datasource:
+#    url: jdbc:h2:./db_dev;MODE=MySQL
+#    driverClassName: org.h2.Driver
+#    username: sa
+#    password:
   jpa:
     hibernate:
-      ddl-auto: create #todo 배포 완료후 none
+      ddl-auto: none #todo 배포 완료후 none
     open-in-view: false
     properties:
       hibernate:
@@ -30,14 +35,12 @@ spring:
             non_contextual_creation: true
         id:
           new_generator_mappings: true
-    defer-datasource-initialization: true
-  sql:
-    init:
-      platform: h2
-      username: sa
-      password:
-      data-locations: classpath*:db/data.sql
-      mode: always
+    #defer-datasource-initialization: true
+#  sql:
+#    init:
+#      platform: mysql
+#      data-locations: classpath*:db/data.sql
+#      mode: always
   security:
     oauth2:
       client:

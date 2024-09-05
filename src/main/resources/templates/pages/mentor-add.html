@@ -18,44 +18,56 @@
                     <h5 class="mb-4">신청서 파일을 제외한 정보들만 멘티분들께 제공되니, "내용" 항목에 충분한 정보를 기재해주세요. ex.멘티최소역량 등등 </h5>
                 </div>
                 <div>
+                    <div class="col-12">
+                        <div class="alert alert-info text-center" role="alert">
+                            신청기간이 아닙니다.
+                        </div>
+
+                    </div>
                     <div class="contact-form">
-                        <form th:action="@{/mentorApplication/add}" th:object="${mentor}" method="post" enctype="multipart/form-data">
-                            <!-- 멘토 추가 폼 필드들 -->
-                            <div class="control-group">
-                                <input type="text" class="form-control" th:field="*{title}" placeholder="제목" required="required" />
-                                <p class="help-block text-danger"></p>
-                            </div>
-                            <div class="form-group">
-                                <label for="content">내용</label>
-                                <textarea id="content" class="form-control" th:field="*{content}" placeholder="내용" required="required" rows="4"></textarea>
-                                <p class="help-block text-danger"></p>
-                            </div>
-                            <div class="control-group">
-                                <input type="text" class="form-control" th:field="*{team}" placeholder="그룹명" required="required" />
-                                <p class="help-block text-danger"></p>
-                            </div>
-                            <div class="control-group">
-                                <select required="required" class="form-control" th:field="*{category}">
-                                    <option value="" disabled selected>멘토링주제선택</option>
-                                    <option value="1">프로젝트</option>
-                                    <option value="2">학부수업</option>
-                                </select>
-                                <p class="help-block text-danger"></p>
-                            </div>
-                            <div class="control-group">
-                                <input type="text" class="form-control" th:field="*{minMent}" placeholder="최소멘티수" required="required" />
-                                <p class="help-block text-danger"></p>
-                            </div>
-                            <div class="control-group">
-                                <input type="text" class="form-control" th:field="*{maxMent}" placeholder="최대멘티수" required="required" />
-                                <p class="help-block text-danger"></p>
-                            </div>
-                            <div class="control-group">
-                                <div th:replace="~{fragments/forms::inputRow(object='mentor', field='file', required=true, type='file')}" />
-                                <p class="help-block text-danger"></p>
-                            </div>
-                            <input class="btn btn-primary" type="submit" value="멘토 생성" />
-                        </form>
+<!--                        <form th:action="@{/mentorApplication/add}" th:object="${mentor}" method="post" enctype="multipart/form-data">-->
+<!--                            &lt;!&ndash; 멘토 추가 폼 필드들 &ndash;&gt;-->
+<!--                            <div class="control-group">-->
+<!--                                <input type="text" class="form-control" th:field="*{title}" placeholder="제목" required="required" />-->
+<!--                                <p class="help-block text-danger"></p>-->
+<!--                            </div>-->
+<!--                            <div class="form-group">-->
+<!--                                <label for="content">내용</label>-->
+<!--                                <textarea id="content" class="form-control" th:field="*{content}" placeholder="내용" required="required" rows="4"></textarea>-->
+<!--                                <p class="help-block text-danger"></p>-->
+<!--                            </div>-->
+<!--                            <div class="control-group">-->
+<!--                                <input type="text" class="form-control" th:field="*{team}" placeholder="그룹명" required="required" />-->
+<!--                                <p class="help-block text-danger"></p>-->
+<!--                            </div>-->
+<!--                            <div class="control-group">-->
+<!--                                <select required="required" class="form-control" th:field="*{category}">-->
+<!--                                    <option value="" disabled selected>멘토링주제선택</option>-->
+<!--                                    <option value="1">프로젝트</option>-->
+<!--                                    <option value="2">학부수업</option>-->
+<!--                                </select>-->
+<!--                                <p class="help-block text-danger"></p>-->
+<!--                            </div>-->
+<!--                            <div class="control-group">-->
+<!--                                <input type="number" class="form-control" th:field="*{minMent}" placeholder="최소멘티수" required="required" />-->
+<!--                                &lt;!&ndash; 숫자가 아닐 때 오류 메시지 표시 &ndash;&gt;-->
+<!--                                <p class="help-block text-danger"-->
+<!--                                   th:if="${#fields.hasErrors('minMent')}"-->
+<!--                                   th:text="${#fields.errors('minMent')}">이 입력칸을 작성하세요</p>-->
+<!--                            </div>-->
+<!--                            <div class="control-group">-->
+<!--                                <input type="number" class="form-control" th:field="*{maxMent}" placeholder="최대멘티수" required="required" />-->
+<!--                                &lt;!&ndash; 숫자가 아닐 때 오류 메시지 표시 &ndash;&gt;-->
+<!--                                <p class="help-block text-danger"-->
+<!--                                   th:if="${#fields.hasErrors('maxMent')}"-->
+<!--                                   th:text="${#fields.errors('maxMent')}">이 입력칸을 작성하세요</p>-->
+<!--                            </div>-->
+<!--                            <div class="control-group">-->
+<!--                                <div th:replace="~{fragments/forms::inputRow(object='mentor', field='file', required=true, type='file')}" />-->
+<!--                                <p class="help-block text-danger"></p>-->
+<!--                            </div>-->
+<!--                            <input class="btn btn-primary" type="submit" value="멘토 생성" />-->
+<!--                        </form>-->
                     </div>
                 </div>
             </div>

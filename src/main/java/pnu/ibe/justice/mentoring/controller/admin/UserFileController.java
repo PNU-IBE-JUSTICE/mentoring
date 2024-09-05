@@ -1,22 +1,32 @@
 package pnu.ibe.justice.mentoring.controller.admin;
 
 import jakarta.validation.Valid;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.UriUtils;
+import pnu.ibe.justice.mentoring.domain.MentorFile;
 import pnu.ibe.justice.mentoring.domain.User;
+import pnu.ibe.justice.mentoring.domain.UserFile;
 import pnu.ibe.justice.mentoring.model.UserFileDTO;
 import pnu.ibe.justice.mentoring.repos.UserRepository;
 import pnu.ibe.justice.mentoring.service.UserFileService;
 import pnu.ibe.justice.mentoring.util.CustomCollectors;
 import pnu.ibe.justice.mentoring.util.WebUtils;
+
+import java.io.File;
+import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 
 @Controller
@@ -25,6 +35,7 @@ public class UserFileController {
 
     private final UserFileService userFileService;
     private final UserRepository userRepository;
+    private String uploadFolder = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring/upload/";
 
     public UserFileController(final UserFileService userFileService,
             final UserRepository userRepository) {
@@ -45,6 +56,27 @@ public class UserFileController {
         return "admin/userFile/list";
     }
 
+    //멘티폼 다운로드하기.
+
+    @GetMapping("/{mFId}/download")
+    public ResponseEntity<Resource> downloadFile(@PathVariable Integer mFId, @RequestHeader(value = "Hx-Request", required = false) String hxRequestHeader) throws MalformedURLException {
+
+
+        UserFile userFile = userFileService.findFileById(mFId);
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy");
+        String formattedDate = userFile.getDateCreated().format(outputFormatter);
+        String userFileName = userFile.getFileSrc();
+        String MenteeFileApplication = "menteeApplication";
+        File file = new File(uploadFolder + "/"+ formattedDate + "/" + MenteeFileApplication +"/" + userFileName);
+        UrlResource urlResource = new UrlResource(file.toURI());
+        String encodedUploadFileName = UriUtils.encode(userFileName, StandardCharsets.UTF_8);
+        String contentDisposition = "attachment;  filename=\""  + encodedUploadFileName + "\"";
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
+                .body(urlResource);
+    }
+
     @GetMapping("/add")
     public String add(@ModelAttribute("userFile") final UserFileDTO userFileDTO) {
         return "admin/userFile/add";
@@ -60,6 +92,9 @@ public class UserFileController {
         redirectAttributes.addFlashAttribute(WebUtils.MSG_SUCCESS, WebUtils.getMessage("userFile.create.success"));
         return "redirect:/admin/userFiles";
     }
+
+
+
 
     @GetMapping("/edit/{seqId}")
     public String edit(@PathVariable(name = "seqId") final Integer seqId, final Model model) {

@@ -45,20 +45,19 @@ public class LectureListController {
     }
 
     @GetMapping
-    public String list(final Model model, @RequestParam(value = "caSort" , required = false, defaultValue = "0") String caSort) {
-        System.out.println(mentorService.findMentorsByCategory("프로젝트"));
+    public String list(final Model model, @RequestParam(value = "caSort" , required = false, defaultValue = "0") int caSort) {
+        System.out.println(caSort);
+        System.out.println(mentorService.findMentorsByCategory("2"));
         model.addAttribute("mentors", mentorService.findAll());
-        if (caSort.equals("0")) {
+        if (caSort == 0) {
             System.out.println(caSort);
             model.addAttribute("category",mentorService.findAll());
-        } else if (caSort.equals("1")) {
-            String categoryPj="프로젝트";
-            model.addAttribute("category",mentorService.findMentorsByCategory(categoryPj));
-
+        } else if (caSort == 1) {
+            model.addAttribute("category",mentorService.findMentorsByCategory("1"));
+        } else  {
+            model.addAttribute(("category"),mentorService.findMentorsByCategory("2"));
         }
-        else  {
-            model.addAttribute(("category"),mentorService.findMentorsByCategory("학부수업"));
-        }
+        model.addAttribute("caSort",caSort);
         System.out.println("success getmapping lecture");
         return "pages/lectureList";
     }

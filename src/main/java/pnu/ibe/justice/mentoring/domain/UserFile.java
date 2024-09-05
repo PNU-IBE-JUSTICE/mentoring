@@ -12,6 +12,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -20,6 +23,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table(name = "UserFiles")
 @EntityListeners(AuditingEntityListener.class)
+@Getter
+@Setter
 public class UserFile {
 
     @Id
@@ -50,69 +55,4 @@ public class UserFile {
     @LastModifiedDate
     @Column(nullable = false)
     private OffsetDateTime lastUpdated;
-
-    public Integer getSeqId() {
-        return seqId;
-    }
-
-    public void setSeqId(final Integer seqId) {
-        this.seqId = seqId;
-    }
-
-    public String getFileSrc() {
-        return fileSrc;
-    }
-
-    public void setFileSrc(final String fileSrc) {
-        this.fileSrc = fileSrc;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(final String type) {
-        this.type = type;
-    }
-
-    public LocalDate getExpireDt() {
-        return expireDt;
-    }
-
-    public void setExpireDt(final LocalDate expireDt) {
-        this.expireDt = expireDt;
-    }
-
-    public Integer getUserSeqId() {
-        return userSeqId;
-    }
-
-    public void setUserSeqId(final Integer userSeqId) {
-        this.userSeqId = userSeqId;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(final User user) {
-        this.user = user;
-    }
-
-    public OffsetDateTime getDateCreated() {
-        return dateCreated;
-    }
-
-    public void setDateCreated(final OffsetDateTime dateCreated) {
-        this.dateCreated = dateCreated;
-    }
-
-    public OffsetDateTime getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(final OffsetDateTime lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
-
 }

@@ -25,6 +25,10 @@
     <!-- Customized Bootstrap Stylesheet -->
     <link href="/css/style.css" rel="stylesheet" />
     <style>
+      /*.justice-big-icon {*/
+      /*  width: ; !* 필요에 따라 조정 *!*/
+      /*  height: 60px; !* 필요에 따라 조정 *!*/
+      /*}*/
       .justice-icon-icon {
         width: 90px; /* 필요에 따라 조정 */
         height: 60px; /* 필요에 따라 조정 */
@@ -33,6 +37,84 @@
         width: 100px; /* 필요에 따라 조정 */
         height: 100px; /* 필요에 따라 조정 */
       }
+      .justice-sw-icon {
+        width: 430px; /* 필요에 따라 조정 */
+        height: 100px; /* 필요에 따라 조정 */
+      }
+
+      .tooltip-container {
+        position: relative;
+        display: inline-block;
+      }
+
+      .tooltip {
+        visibility: hidden;
+        width: auto; /* 자동 너비 설정 */
+        max-width: 250px; /* 최대 너비 설정 */
+        background-color: #555;
+        color: #fff;
+        text-align: center;
+        border-radius: 5px;
+        padding: 10px;
+        position: absolute;
+        z-index: 1000; /* 높은 z-index 값으로 툴팁을 위로 올립니다 */
+        top: 50%; /* 버튼의 중앙에 위치하도록 설정 */
+        left: -260px; /* 버튼의 왼쪽으로 이동 */
+        transform: translateY(-50%); /* 툴팁을 정확히 버튼의 중앙에 위치시키기 위한 변환 */
+        opacity: 0;
+        transition: opacity 0.3s, visibility 0.3s;
+      }
+
+      .tooltip::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 100%;
+        margin-top: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: transparent #555 transparent transparent;
+      }
+
+      .tooltip-container:hover .tooltip {
+        visibility: visible;
+        opacity: 1;
+      }
+      /* Footer 이미지와 텍스트가 모바일 뷰에서도 잘 보이도록 설정 */
+      .footer-image {
+        max-width: 100%; /* 모바일 뷰에서 이미지가 컨테이너 너비에 맞춰 조정되도록 설정 */
+        height: auto; /* 높이는 자동으로 조정 */
+      }
+
+      .footer-container {
+        display: flex;
+        flex-direction: column; /* 모바일 뷰에서 세로 방향으로 정렬 */
+        align-items: center;
+        text-align: center;
+      }
+
+      .footer-container .footer-image {
+        margin-bottom: 10px; /* 이미지와 텍스트 사이의 여백 설정 */
+      }
+
+      .footer-text {
+        max-width: 100%; /* 텍스트가 모바일 뷰에서 잘 보이도록 설정 */
+      }
+
+      /* 특정 해상도에서만 적용할 수 있는 미디어 쿼리 */
+      @media (max-width: 768px) {
+        .footer-image {
+          max-width: 80%; /* 모바일 뷰에서 이미지의 너비를 조정 */
+        }
+
+        .footer-container {
+          padding: 10px; /* 모바일 뷰에서의 여백 조정 */
+        }
+      }
+
+
+
+
     </style>
   </head>
 
@@ -62,6 +144,16 @@
               id="navbarCollapse"
       >
         <div class="navbar-nav font-weight-bold mx-auto py-0">
+          <div class="nav-item dropdown">
+          <a
+                  th:href="@{/}"
+                  class="nav-link dropdown-toggle"
+                  data-toggle="dropdown">소개</a>
+          <div class="dropdown-menu rounded-0 m-0">
+            <a th:href="@{/peopleList}" class="dropdown-item">운영진</a>
+            <a th:href="@{/introduce}" class="dropdown-item">사업 소개</a>
+          </div>
+          </div>
           <a th:href="@{/notice}" class="nav-item nav-link">공지사항</a>
           <a th:href="@{/lectureList}" class="nav-item nav-link">강의목록</a>
           <a th:href="@{/question}" class="nav-item nav-link">질문게시판</a>
@@ -73,7 +165,8 @@
                     data-toggle="dropdown">마이페이지</a>
             <div class="dropdown-menu rounded-0 m-0">
               <a th:href="@{/MemberIfForm/edit}" class="dropdown-item">회원정보</a>
-              <a th:href="@{/mentorApplication}" class="dropdown-item">신청내역</a>
+              <a th:href="@{/mentorApplication}" class="dropdown-item">멘토신청내역</a>
+              <a th:href="@{/menteeApplication}" class="dropdown-item">멘티신청내역</a>
             </div>
           </div>
 
@@ -82,8 +175,9 @@
           <span th:text="${user.getName()}">User</span>
           <a th:href="@{/logout}" class="btn btn-primary px-4">Logout</a>
         </div>
-        <div th:if="${user == null}">
-          <a href="/oauth2/authorization/google" class="btn btn-primary px-4">Login</a>
+        <div th:if="${user == null}" class="tooltip-container">
+          <a href="/oauth2/authorization/google" class="btn btn-primary px-4" id="login-button">Login</a>
+          <div class="tooltip">부산대학교 이메일 계정으로만 접근이 가능합니다.</div>
         </div>
 
       </div>
@@ -94,63 +188,51 @@
     <div class="container-fluid bg-primary px-0 px-md-5 mb-5">
       <div class="row align-items-center px-3">
         <div class="col-lg-6 text-center text-lg-left">
-          <h4 class="text-white mb-4 mt-5">Mentoring Center</h4>
-          <h1 class="display-3 font-weight-bold text-white">
-            New Approach to Mentoring Education
-          </h1>
+          <h4 class="text-white mb-4 mt-5">Mentoring program</h4>
+          <h2 class="display-3 font-weight-bold text-white">
+            <div>정보의생명공학대학</div>
+            <div>학생회 "정의"</div>
+          </h2>
           <p class="text-white mb-4">
-            ...
+            2024년 2학기 멘토링 프로그램
           </p>
         </div>
         <div class="col-lg-6 text-center text-lg-right">
-          <img class="img-fluid mt-5" src="img/header.png" alt="" />
+          <img class="img-fluid mt-5 mb-5" src="/images/justicemarkwhite.png" alt=""/>
         </div>
       </div>
     </div>
     <!-- Header End -->
 
-    <div class="container-fluid pt-5">
+    <div class="container-fluid pt-1">
       <div class="container">
         <div layout:fragment="content" />
       </div>
     </div>
 
     <!-- Footer Start -->
-    <div
-      class="container-fluid bg-secondary text-white mt-5 py-5 px-sm-3 px-md-5"
-    >
+    <!-- Footer Start -->
+    <div class="container-fluid bg-secondary text-white mt-5 py-5 px-sm-3 px-md-5 footer-container">
       <div class="row pt-5">
         <div class="col-lg-4 col-md-6 mb-5">
           <a
-            href=""
-            class="navbar-brand font-weight-bold text-primary m-0 mb-4 p-0"
-            style="font-size: 40px; line-height: 40px"
+                  href=""
+                  class="navbar-brand font-weight-bold text-primary m-0 mb-4 p-0"
+                  style="font-size: 40px; line-height: 40px"
           >
-            <img src="/images/justicemarkwhite.png" alt="Teddy Bear" class="justice-icon-icon">
+            <img src="/images/justicemarkwhite.png" alt="Teddy Bear" class="justice-icon-icon footer-image">
             <span class="text-white">IBE_JUSTICE</span>
           </a>
           <p>
-            현 사업은 정보의생명공학대학 학생회 정의 1기에서 하반기 사업으로 진행하는 사업안입니다.
+          <div>현 사업은 정보의생명공학대학 학생회 정의에서 하반기 사업으로 진행하는 사업안입니다.</div>
+          <div>부산대학교 소프트웨어 융합 교육원과 정보의생명공학대학이 함께합니다.</div>
+          <img src="/images/navy2swjs.jpeg" alt="Teddy Bear" class="justice-sw-icon footer-image">
           </p>
           <div class="d-flex justify-content-start mt-4">
-            <a
-              class="btn btn-outline-primary rounded-circle text-center mr-2 px-0"
-              style="width: 38px; height: 38px"
-              href="mailto:pnuibe.justice1@gmail.com ?subject=멘토링문의사항 "
-              ><i class="fa fa-envelope fa-1x"></i
-            ></a>
-            <a
-              class="btn btn-outline-primary rounded-circle text-center mr-2 px-0"
-              style="width: 38px; height: 38px"
-              href="https://ibe.pusan.ac.kr/ibe/index..do"
-              ><i class="fa fa-graduation-cap fa-1x"></i
-            ></a>
-            <a
-              class="btn btn-outline-primary rounded-circle text-center mr-2 px-0"
-              style="width: 38px; height: 38px"
-              href="https://www.instagram.com/pnu_ibe/"
-              ><i class="fab fa-instagram"></i
-            ></a>
+            <a class="btn btn-outline-primary rounded-circle text-center mr-2 px-0" style="width: 38px; height: 38px" href="mailto:pnuibe.justice1@gmail.com?subject=멘토링문의사항"><i class="fa fa-envelope fa-1x"></i></a>
+            <a class="btn btn-outline-primary rounded-circle text-center mr-2 px-0" style="width: 38px; height: 38px" href="https://ibe.pusan.ac.kr/ibe/index..do"><i class="fa fa-graduation-cap fa-1x"></i></a>
+            <a class="btn btn-outline-primary rounded-circle text-center mr-2 px-0" style="width: 38px; height: 38px" href="https://www.instagram.com/pnu_ibe/"><i class="fab fa-instagram"></i></a>
+            <a class="btn btn-outline-primary rounded-circle text-center mr-2 px-0" style="width: 38px; height: 38px" href="https://swedu.pusan.ac.kr/swedu/index.do"><i class="fas fa-building"></i></a>
           </div>
         </div>
         <div class="col-lg-4 col-md-6 mb-5">
@@ -160,7 +242,7 @@
             <div class="pl-3">
               <h5 class="text-white">Address</h5>
               <p>경상남도 양산시 물금읍 부산대학로 49 경암공학관,</p>
-              <p> 부산광역시 금정구 부산대학로63번길 2(장전동) 제6공학관(컴퓨터공학관)</p>
+              <p>부산광역시 금정구 부산대학로63번길 2(장전동) 제6공학관(컴퓨터공학관)</p>
             </div>
           </div>
           <div class="d-flex">
@@ -170,49 +252,31 @@
               <p>pnuibe.justice1@gmail.com</p>
             </div>
           </div>
-          <div class="d-flex">
-            <h4 class="fa fa-phone-alt text-primary"></h4>
-            <div class="pl-3">
-              <h5 class="text-white">Phone</h5>
-              <p>none</p>
-            </div>
-          </div>
         </div>
         <div class="col-lg-4 col-md-6 mb-5">
           <h3 class="text-primary mb-4">Quick Links</h3>
           <div class="d-flex flex-column justify-content-start">
-            <a class="text-white mb-2" href="#"
-              ><i class="fa fa-angle-right mr-2"></i>Home</a
-            >
-            <a class="text-white mb-2" th:href="@{/notice}"
-              ><i class="fa fa-angle-right mr-2"></i>공지 사항</a
-            >
-            <a class="text-white mb-2" th:href="@{/mentor}"
-              ><i class="fa fa-angle-right mr-2"></i>강의 목록</a
-            >
+            <a class="text-white mb-2" th:href="@{/}"><i class="fa fa-angle-right mr-2"></i>Home</a>
+            <a class="text-white mb-2" th:href="@{/notice}"><i class="fa fa-angle-right mr-2"></i>공지 사항</a>
+            <a class="text-white mb-2" th:href="@{/lectureList}"><i class="fa fa-angle-right mr-2"></i>강의 목록</a>
           </div>
         </div>
       </div>
-      <div
-        class="container-fluid pt-5"
-        style="border-top: 1px solid rgba(23, 162, 184, 0.2) ;"
-      >
+      <div class="container-fluid pt-5" style="border-top: 1px solid rgba(23, 162, 184, 0.2);">
         <p class="m-0 text-center text-white">
           &copy;
           <a class="text-primary font-weight-bold" href="#">Mentoring</a>.
           All Rights Reserved.
-
           <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
           Designed by
-          <a class="text-primary font-weight-bold" href="https://www.instagram.com/pnu_ibe/"
-            >정보의생명공학대학 학생회</a
-          >
+          <a class="text-primary font-weight-bold" href="https://www.instagram.com/pnu_ibe/">정보의생명공학대학 학생회</a>
           <br />담당자:
-          <a href="mailto:pnuibe.justice1@gmail.com ?subject=멘토링문의사항 " target="_blank">정의</a>
+          <a href="mailto:pnuibe.justice1@gmail.com?subject=멘토링문의사항" target="_blank">정의</a>
         </p>
-
       </div>
     </div>
+    <!-- Footer End -->
+
     <!-- Footer End -->
 
     <!-- Back to Top -->
