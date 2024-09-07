@@ -27,28 +27,4 @@ public class QuestionDTO {
     @JsonProperty("mFId")
     private Integer mFId;
 
-    public Integer getSeqId() {
-        return seqId;
-    }
-
-    public void setSeqId(final Integer seqId) {
-        this.seqId = seqId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(final String title) {
-        this.title = title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(final String content) {
-        this.content = content;
-    }
-
 }

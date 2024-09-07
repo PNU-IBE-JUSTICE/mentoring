@@ -13,11 +13,15 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
 import java.util.Set;
+
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-
+@Getter
+@Setter
 @Entity
 @Table(name = "Answers")
 @EntityListeners(AuditingEntityListener.class)
@@ -34,11 +38,11 @@ public class Answer {
     @OneToMany(mappedBy = "answer")
     private Set<AnswerFile> answerFiles;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "question_id")
     private Question question;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "users_id")
     private User users;
 
@@ -49,61 +53,5 @@ public class Answer {
     @LastModifiedDate
     @Column(nullable = false)
     private OffsetDateTime lastUpdated;
-
-    public Integer getSeqId() {
-        return seqId;
-    }
-
-    public void setSeqId(final Integer seqId) {
-        this.seqId = seqId;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(final String content) {
-        this.content = content;
-    }
-
-    public Set<AnswerFile> getAnswerFiles() {
-        return answerFiles;
-    }
-
-    public void setAnswerFiles(final Set<AnswerFile> answerFiles) {
-        this.answerFiles = answerFiles;
-    }
-
-    public Question getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(final Question question) {
-        this.question = question;
-    }
-
-    public User getUsers() {
-        return users;
-    }
-
-    public void setUsers(final User users) {
-        this.users = users;
-    }
-
-    public OffsetDateTime getDateCreated() {
-        return dateCreated;
-    }
-
-    public void setDateCreated(final OffsetDateTime dateCreated) {
-        this.dateCreated = dateCreated;
-    }
-
-    public OffsetDateTime getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(final OffsetDateTime lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
 
 }

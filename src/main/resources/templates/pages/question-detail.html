@@ -23,17 +23,52 @@
     <div class="d-flex flex-column text-left mb-3">
       <h1 class="mb-3" th:text="${question.title}"></h1>
       <div class="d-flex">
-        <p class="mr-3"><i class="fa fa-user text-primary"></i> <span th:text="${question.users.getName()}"></span></p>
+        <p class="mr-3"><i class="fa fa-user text-primary"></i> <span th:text="${question.getUsers().name}"></span></p>
       </div>
     </div>
     <div class="mb-5 notice-content">
       <div th:utext="${question.content}"></div>
     </div>
-    <div>
-      <a th:href="@{/question}" class="btn btn-secondary">[[#{question.list.back}]]</a>
+    <div class="mb-4" th:if="${filename != null}">
+<!--      <a th:href="|/question/${question.MFId}/download|"-->
+<!--         class="btn btn-outline-primary d-flex align-items-center"-->
+<!--         hx-no-boost="true" download target="_blank">-->
+<!--        <i class="fa fa-download mr-2"></i>-->
+        <span th:text="${filename}">Download File</span>
+      </a>
+    </div>
+    <div class="mb-4" th:if="${answer} != null">
+      <div th:each="answer : ${answer}" class="list-group-item p-3 border-5">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="flex-grow-1">
+            <div th:utext="${answer.content}"></div>
+          </div>
+          <div class="text-muted text-right">
+            <small th:text="'작성자: ' + ${answer.getUsers().name}">Author</small>
+            <small th:text="'권한: ' + ${answer.getUsers().role}">Author</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mb-4" th:if="${QuestionUser} != null">
+      <form th:action="@{|/question/answer/${question.seqId}|}" method="post">
+        <div class="form-group">
+          <label for="content">댓글 작성 -</label>
+          <a>[[${QuestionUser.name}]]</a>
+          <a>[[${QuestionUser.role}]]</a>
+          <textarea name="content" id="content" class="form-control" placeholder="내용" required="required" rows="4"></textarea>
+          <p class="help-block text-danger">
+          </p>
+<!--          <input type="file" class="form-control" name="file"/>-->
+<!--          <p class="help-block text-danger"></p>-->
+        </div>
+        <div class="d-flex justify-content-between">
+          <div><input class="btn btn-primary" type="submit" value="댓글 등록하기" /></div>
+          <a th:href="@{/question}" class="btn btn-secondary">Back to list</a>
+        </div>
+      </form>
     </div>
   </div>
-  <!-- Detail End -->
 </div>
 </body>
 </html>

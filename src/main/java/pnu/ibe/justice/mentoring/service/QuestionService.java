@@ -1,12 +1,13 @@
 package pnu.ibe.justice.mentoring.service;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.util.*;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -54,22 +55,40 @@ public class QuestionService {
                 .toList();
     }
 
-    public String saveFile(MultipartFile multipartFile, String uploadFolder){
-        String fileUrl="";
-        String question = "/question/";
-        Path folderPath = Paths.get(uploadFolder + dateFolder + question );
+    public Map<String, String> saveFile(MultipartFile multipartFile, String uploadFolder) {
+        String fileUrl = "";
+        String dateFolder = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy"));
+        String question = "question/";
+        Path folderPath = Paths.get(uploadFolder + dateFolder + "/" + question).toAbsolutePath();
+        Map<String, String> originName_map = new HashMap<>();
 
         try {
             Files.createDirectories(folderPath);
-            Path filePath = folderPath.resolve(multipartFile.getOriginalFilename());
+            String originName = multipartFile.getOriginalFilename();
+            String uuid = uploadFileNameMake();
+            originName_map.put("origin",originName);
+            originName_map.put("uuid",uuid);
+            String filesrc = uuid+"_"+originName;
+            fileUrl = folderPath.toString() + "/" + filesrc;
+            Path filePath = folderPath.resolve(filesrc);
             multipartFile.transferTo(filePath.toFile());
-
-            fileUrl = "/Users/KD-005/IdeaProjects/mentoring/upload/" + dateFolder + "/" + question + "/"  + multipartFile.getOriginalFilename();
-            System.out.println("File saved at: " + fileUrl);
-        }catch(Exception e) {
-            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return multipartFile.getOriginalFilename();
+
+        return originName_map;
+    }
+
+    private String uploadFileNameMake(){
+        UUID uuid = UUID.randomUUID();
+        String uuid_S = uuid.toString();
+        return uuid_S;
+    }
+
+    public QuestionDTO findByMFId(final Integer MfId) {
+        return questionRepository.findBymFId(MfId)
+                .map(submitReport -> mapToDTO(submitReport, new QuestionDTO()))
+                .orElseThrow(NotFoundException::new);
     }
 
     public QuestionDTO get(final Integer seqId) {
@@ -108,12 +127,14 @@ public class QuestionService {
         questionDTO.setTitle(question.getTitle());
         questionDTO.setContent(question.getContent());
         questionDTO.setUsers(question.getUsers() == null ? null : question.getUsers());
+        questionDTO.setMFId(question.getMFId());
         return questionDTO;
     }
 
     private Question mapToEntity(final QuestionDTO questionDTO, final Question question) {
         question.setTitle(questionDTO.getTitle());
         question.setContent(questionDTO.getContent());
+        question.setMFId(questionDTO.getMFId());
         final User users = questionDTO.getUsers() == null ? null : userRepository.findById(questionDTO.getUsers().getSeqId())
                 .orElseThrow(() -> new NotFoundException("users not found"));
         question.setUsers(users);
