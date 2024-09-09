@@ -245,6 +245,14 @@ public class SubmitController {
 
     @GetMapping("/edit/{seqId}")
     public String edit(@PathVariable(name = "seqId") final Integer seqId, final Model model,@LoginUser SessionUser user) {
+
+        //잘못된 접속
+        if (submitService.get(seqId).getUsers().getSeqId() != user.getSeqId()) {
+            model.addAttribute("status","권한없음");
+            model.addAttribute("error","잘못된 접근입니다.");
+            return "error";
+        }
+
         model.addAttribute("post", submitService.get(seqId));
         try {
             model.addAttribute("fileName",submitFileService.get(submitService.get(seqId).getMFId()).getFileSrc());
