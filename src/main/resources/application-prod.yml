@@ -13,7 +13,7 @@ spring:
   servlet:
     multipart:
       #file upload size
-      max-file-size: 5MB
+      max-file-size: 30MB
 
 #  h2:
 #    console:

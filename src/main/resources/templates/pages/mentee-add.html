@@ -12,32 +12,32 @@
             <div class="container">
                 <div class="d-flex justify-content-center align-items-center"
                      style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-                    <div class="col-12">
-                        <div class="alert alert-info text-center" role="alert">
-                            신청기간이 아닙니다.
-                        </div>
+<!--                    <div class="col-12">-->
+<!--                        <div class="alert alert-info text-center" role="alert">-->
+<!--                            신청기간이 아닙니다.-->
+<!--                        </div>-->
 
+<!--                    </div>-->
+                </div>
+                <div class="text-center pb-2">
+                    <p class="section-title px-5">
+                        <span class="px-2">멘티 신청서</span>
+                    </p>
+                    <h1 class="mb-4">첨부파일 필수</h1>
+                    <h5 class="mb-4">한번 제출한 신청서는 수정이 불가합니다. </h5>
+                </div>
+                <div>
+                    <div class="contact-form">
+                        <form th:action="@{/menteeApplication/add}" th:object="${mentee}" method="post" enctype="multipart/form-data">
+                            <!-- 멘티 추가 폼 필드들 -->
+                            <div class="control-group">
+                                <div th:replace="~{fragments/forms::inputRow(object='mentee', field='file', required=true, type='file')}" />
+                                <p class="help-block text-danger"></p>
+                            </div>
+                            <input class="btn btn-primary" type="submit" value="멘티 생성" />
+                        </form>
                     </div>
                 </div>
-<!--                <div class="text-center pb-2">-->
-<!--                    <p class="section-title px-5">-->
-<!--                        <span class="px-2">멘티 신청서</span>-->
-<!--                    </p>-->
-<!--                    <h1 class="mb-4">첨부파일 필수</h1>-->
-<!--                    <h5 class="mb-4">한번 제출한 신청서는 수정이 불가합니다. </h5>-->
-<!--                </div>-->
-<!--                <div>-->
-<!--                    <div class="contact-form">-->
-<!--                        <form th:action="@{/menteeApplication/add}" th:object="${mentee}" method="post" enctype="multipart/form-data">-->
-<!--                            &lt;!&ndash; 멘티 추가 폼 필드들 &ndash;&gt;-->
-<!--                            <div class="control-group">-->
-<!--                                <div th:replace="~{fragments/forms::inputRow(object='mentee', field='file', required=true, type='file')}" />-->
-<!--                                <p class="help-block text-danger"></p>-->
-<!--                            </div>-->
-<!--                            <input class="btn btn-primary" type="submit" value="멘티 생성" />-->
-<!--                        </form>-->
-<!--                    </div>-->
-<!--                </div>-->
             </div>
         </div>
     </div>

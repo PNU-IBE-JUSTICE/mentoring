@@ -120,13 +120,7 @@ public class MentorService {
     private MentorDTO mapToDTO(final Mentor mentor, final MentorDTO mentorDTO) {
         mentorDTO.setSeqId(mentor.getSeqId());
         mentorDTO.setTitle(mentor.getTitle());
-        if (mentor.getCategory() == "1") {
-            mentorDTO.setCategory("프로젝트");
-        }
-        else {
-            mentorDTO.setCategory("학부수업");
-
-        }
+        mentorDTO.setCategory(mentor.getCategory());
         mentorDTO.setMinMent(mentor.getMinMent());
         mentorDTO.setMaxMent(mentor.getMaxMent());
         mentorDTO.setContent(mentor.getContent());

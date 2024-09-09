@@ -129,13 +129,7 @@ public class SubmitService {
         submitReportDTO.setMFId(submitReport.getMFId());
         submitReportDTO.setTitle(submitReport.getTitle());
         submitReportDTO.setTeam(submitReport.getTeam());
-        if (submitReport.getCategory() == "1") {
-            submitReportDTO.setCategory("프로젝트");
-        }
-        else {
-            submitReportDTO.setCategory("학부수업");
-
-        }
+        submitReportDTO.setCategory(submitReport.getCategory());
         submitReportDTO.setDateCreated(submitReport.getDateCreated());
         submitReportDTO.setLastUpdated(submitReport.getLastUpdated());
         submitReportDTO.setSubCategory(submitReport.getSubCategory());

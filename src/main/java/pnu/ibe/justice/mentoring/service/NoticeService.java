@@ -35,7 +35,7 @@ public class NoticeService {
     private final NoticeRepository noticeRepository;
     private final UserRepository userRepository;
     private final NoticeFileRepository noticeFileRepository;
-    String dateFolder = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+    String dateFolder = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy"));
 
 
     public NoticeService(final NoticeRepository noticeRepository,
@@ -65,13 +65,14 @@ public class NoticeService {
 
     public String saveFile(MultipartFile multipartFile, String uploadFolder){
         String fileUrl="";
-        Path folderPath = Paths.get(uploadFolder + dateFolder);
+        String noticefolder = "notice/";
+        Path folderPath = Paths.get(uploadFolder + dateFolder + "/" + noticefolder);
 
         try {
             Files.createDirectories(folderPath);
             Path filePath = folderPath.resolve(multipartFile.getOriginalFilename());
             multipartFile.transferTo(filePath.toFile());
-            fileUrl = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring/upload/" + dateFolder + "/" + multipartFile.getOriginalFilename();
+            fileUrl = "/Users/gim-yeseul/Desktop/mentoring_pj/mentoring/upload/" + dateFolder + "/" + noticefolder + multipartFile.getOriginalFilename();
             System.out.println("File saved at: " + fileUrl);
             System.out.println(dateFolder);
         }catch(Exception e) {
