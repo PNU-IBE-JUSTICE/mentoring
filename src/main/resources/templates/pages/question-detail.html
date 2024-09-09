@@ -29,14 +29,14 @@
     <div class="mb-5 notice-content">
       <div th:utext="${question.content}"></div>
     </div>
-    <div class="mb-4" th:if="${filename != null}">
+<!--    <div class="mb-4" th:if="${filename != null}">-->
 <!--      <a th:href="|/question/${question.MFId}/download|"-->
 <!--         class="btn btn-outline-primary d-flex align-items-center"-->
 <!--         hx-no-boost="true" download target="_blank">-->
 <!--        <i class="fa fa-download mr-2"></i>-->
-        <span th:text="${filename}">Download File</span>
-      </a>
-    </div>
+<!--        <span th:text="${filename}">Download File</span>-->
+<!--      </a>-->
+<!--    </div>-->
     <div class="mb-4" th:if="${answer} != null">
       <div th:each="answer : ${answer}" class="list-group-item p-3 border-5">
         <div class="d-flex justify-content-between align-items-center">

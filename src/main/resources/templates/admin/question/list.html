@@ -27,7 +27,7 @@
                         <tr th:each="question : ${questions}">
                             <td>[[${question.seqId}]]</td>
                             <td>[[${question.title}]]</td>
-                            <td>[[${question.users}]]</td>
+                            <td>[[${question.getUsers().name}]]</td>
                             <td>
                                 <div class="float-end text-nowrap">
                                     <a th:href="@{/admin/questions/edit/{seqId}(seqId=${question.seqId})}" class="btn btn-sm btn-secondary">[[#{question.list.edit}]]</a>
