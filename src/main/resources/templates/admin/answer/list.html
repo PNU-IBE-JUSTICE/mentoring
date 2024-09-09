@@ -18,16 +18,18 @@
                     <thead>
                         <tr>
                             <th scope="col">[[#{answer.seqId.label}]]</th>
-                            <th scope="col">[[#{answer.question.label}]]</th>
+                            <th scope="col">Question seqId</th>
                             <th scope="col">[[#{answer.users.label}]]</th>
+                            <th scope="col">[[#{answer.content.label}]]</th>
                             <th><!-- --></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="answer : ${answers}">
                             <td>[[${answer.seqId}]]</td>
-                            <td>[[${answer.question}]]</td>
-                            <td>[[${answer.users}]]</td>
+                            <td>[[${answer.question.title}]]</td>
+                            <td>[[${answer.getUsers().name}]]</td>
+                            <td>[[${answer.content}]]</td>
                             <td>
                                 <div class="float-end text-nowrap">
                                     <a th:href="@{/admin/answers/edit/{seqId}(seqId=${answer.seqId})}" class="btn btn-sm btn-secondary">[[#{answer.list.edit}]]</a>

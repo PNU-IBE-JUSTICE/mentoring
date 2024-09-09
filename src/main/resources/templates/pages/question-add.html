@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout-main}">
+<head>
+  <title>질문 추가</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+  <div class="row pb-3" style="position: relative; min-height: 200px;">
+    <div class="container-fluid pt-5">
+      <div class="container">
+        <div class="text-center pb-2">
+          <p class="section-title px-5">
+            <span class="px-2">질문게시판</span>
+          </p>
+          <h1 class="mb-4">질문 등록</h1>
+          <h5 class="mb-4">질문 삭제 및 수정 기능을 제공하지 않습니다.</h5>
+        </div>
+        <div>
+          <div class="contact-form">
+            <form th:action="@{/question/add}" th:object="${post}" method="post" enctype="multipart/form-data">
+              <!-- 멘토 추가 폼 필드들 -->
+              <div class="control-group">
+                <label for="content">제목*</label>
+                <input type="text" class="form-control" th:field="*{title}" placeholder="제목" required="required" />
+                <p class="help-block text-danger"></p>
+              </div>
+<!--              <div class="control-group">-->
+<!--                <input type="text" class="form-control" READONLY th:object="${User}" th:field="*{name}" placeholder="이름" required="required" />-->
+<!--                <p class="help-block text-danger"></p>-->
+              <div class="control-group">
+                <div class="form-group">
+                  <label for="content">내용*</label>
+                  <textarea id="content" class="form-control" th:field="*{content}" placeholder="내용" required="required" rows="4"></textarea>
+                  <p class="help-block text-danger"></p>
+                </div>
+<!--                <div class="control-group">-->
+<!--                  <label for="content">첨부 파일</label>-->
+<!--                  <input type="file" class="form-control" name="file"/>-->
+<!--                  <p class="help-block text-danger"></p>-->
+<!--                </div>-->
+                <input class="btn btn-primary" type="submit" value="질문 등록" />
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

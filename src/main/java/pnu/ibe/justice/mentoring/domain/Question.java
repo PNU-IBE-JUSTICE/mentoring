@@ -13,11 +13,15 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
 import java.util.Set;
+
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-
+@Getter
+@Setter
 @Entity
 @Table(name = "Questions")
 @EntityListeners(AuditingEntityListener.class)
@@ -37,12 +41,15 @@ public class Question {
     @OneToMany(mappedBy = "question")
     private Set<QuestionFile> questionFiles;
 
-    @OneToMany(mappedBy = "question")
+    @OneToMany(mappedBy = "question", fetch = FetchType.EAGER)
     private Set<Answer> answers;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "users_id")
+    @JoinColumn(name = "users_id", nullable = false)
     private User users;
+
+    @Column
+    private Integer mFId;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
@@ -51,69 +58,5 @@ public class Question {
     @LastModifiedDate
     @Column(nullable = false)
     private OffsetDateTime lastUpdated;
-
-    public Integer getSeqId() {
-        return seqId;
-    }
-
-    public void setSeqId(final Integer seqId) {
-        this.seqId = seqId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(final String title) {
-        this.title = title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(final String content) {
-        this.content = content;
-    }
-
-    public Set<QuestionFile> getQuestionFiles() {
-        return questionFiles;
-    }
-
-    public void setQuestionFiles(final Set<QuestionFile> questionFiles) {
-        this.questionFiles = questionFiles;
-    }
-
-    public Set<Answer> getAnswers() {
-        return answers;
-    }
-
-    public void setAnswers(final Set<Answer> answers) {
-        this.answers = answers;
-    }
-
-    public User getUsers() {
-        return users;
-    }
-
-    public void setUsers(final User users) {
-        this.users = users;
-    }
-
-    public OffsetDateTime getDateCreated() {
-        return dateCreated;
-    }
-
-    public void setDateCreated(final OffsetDateTime dateCreated) {
-        this.dateCreated = dateCreated;
-    }
-
-    public OffsetDateTime getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(final OffsetDateTime lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
 
 }

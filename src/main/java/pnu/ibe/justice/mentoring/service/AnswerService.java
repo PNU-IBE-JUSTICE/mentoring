@@ -40,6 +40,12 @@ public class AnswerService {
                 .toList();
     }
 
+    public List<Answer> getAnswersForQuestion(Integer questionId) {
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(() -> new RuntimeException("Question not found"));
+        return answerRepository.findByQuestion(question);
+    }
+
     public AnswerDTO get(final Integer seqId) {
         return answerRepository.findById(seqId)
                 .map(answer -> mapToDTO(answer, new AnswerDTO()))
@@ -66,17 +72,18 @@ public class AnswerService {
     private AnswerDTO mapToDTO(final Answer answer, final AnswerDTO answerDTO) {
         answerDTO.setSeqId(answer.getSeqId());
         answerDTO.setContent(answer.getContent());
-        answerDTO.setQuestion(answer.getQuestion() == null ? null : answer.getQuestion().getSeqId());
-        answerDTO.setUsers(answer.getUsers() == null ? null : answer.getUsers().getSeqId());
+        answerDTO.setQuestion(answer.getQuestion() == null
+                ? null : answer.getQuestion());
+        answerDTO.setUsers(answer.getUsers() == null ? null : answer.getUsers());
         return answerDTO;
     }
 
     private Answer mapToEntity(final AnswerDTO answerDTO, final Answer answer) {
         answer.setContent(answerDTO.getContent());
-        final Question question = answerDTO.getQuestion() == null ? null : questionRepository.findById(answerDTO.getQuestion())
+        final Question question = answerDTO.getQuestion() == null ? null : questionRepository.findById(answerDTO.getQuestion().getSeqId())
                 .orElseThrow(() -> new NotFoundException("question not found"));
         answer.setQuestion(question);
-        final User users = answerDTO.getUsers() == null ? null : userRepository.findById(answerDTO.getUsers())
+        final User users = answerDTO.getUsers() == null ? null : userRepository.findById(answerDTO.getUsers().getSeqId())
                 .orElseThrow(() -> new NotFoundException("users not found"));
         answer.setUsers(users);
         return answer;
